@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import Home from './Home';
 import TargetCompressor from './TargetCompressor';
 import BulkCompressor from './BulkCompressor';
@@ -13,6 +14,7 @@ export default function App() {
         <Route path="/bulk-compress" element={<BulkCompressor />} />
         <Route path="/assistant" element={<Assistant />} />
       </Routes>
+      <Analytics />
     </Router>
   );
 }
