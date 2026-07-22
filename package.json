@@ -14,13 +14,15 @@
     "@jsquash/jpeg": "^1.6.0",
     "@jsquash/png": "^3.1.1",
     "@jsquash/webp": "^1.5.0",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^6.1.200",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-router-dom": "^7.18.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@types/node": "^24.13.2",
+    "@types/node": "^24.13.3",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vercel/node": "^5.8.26",

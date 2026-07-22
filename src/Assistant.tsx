@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { compressToTarget, compressToWebp } from './compressionService';
 import { addHistoryEntry } from './historyService';
+import { removeBlankPages } from './pdfUtils';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -13,7 +14,7 @@ export default function Assistant() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'assistant',
-      text: 'Upload an image, then tell me what you need — try "make this smaller" or "compress this to 100KB".',
+      text: 'Upload an image or PDF, then tell me what you need — try "make this smaller", "compress this to 100KB", or "remove blank pages".',
     },
   ]);
   const [input, setInput] = useState('');
@@ -103,6 +104,24 @@ export default function Assistant() {
           link.click();
           document.body.removeChild(link);
         });
+      } else if (data.type === 'function_call' && data.name === 'remove_blank_pages') {
+        const file = files[0];
+        const result = await removeBlankPages(file);
+        const blob = new Blob([result.bytes as BlobPart], { type: 'application/pdf' });
+        if (downloadUrl) URL.revokeObjectURL(downloadUrl.url);
+        const url = URL.createObjectURL(blob);
+        const name = file.name.replace(/\.pdf$/i, '') + '_cleaned.pdf';
+        setDownloadUrl({ url, name });
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: 'assistant',
+            text:
+              result.removedPages.length > 0
+                ? `Removed ${result.removedPages.length} blank page${result.removedPages.length !== 1 ? 's' : ''} out of ${result.totalPages}. Download link is below.`
+                : `Checked all ${result.totalPages} pages — didn't find any that looked blank, so here's your file unchanged.`,
+          },
+        ]);
       } else {
         setMessages((prev) => [...prev, { role: 'assistant', text: data.text ?? 'Something went wrong.' }]);
       }
@@ -127,7 +146,7 @@ export default function Assistant() {
           <input
             type="file"
             multiple
-            accept="image/jpeg, image/png, image/webp"
+            accept="image/jpeg, image/png, image/webp, application/pdf"
             onChange={(e) => setFiles(e.target.files ? Array.from(e.target.files) : [])}
             className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
           />
@@ -172,7 +191,7 @@ export default function Assistant() {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder='Try "make this smaller" or "compress to 100KB"'
+            placeholder='Try "make this smaller" or "remove blank pages"'
             disabled={isBusy}
             className="flex-1 border border-gray-300 px-4 py-2 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none text-sm"
           />
