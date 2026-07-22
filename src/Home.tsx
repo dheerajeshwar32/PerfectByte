@@ -12,9 +12,16 @@ export default function Home() {
     {
       id: 'bulk-compress',
       title: 'Bulk Compress Images',
-      desc: 'Reduce the filesize of your document while keeping visual quality.', //
+      desc: 'Reduce the filesize of your document while keeping visual quality.',
       path: '/bulk-compress',
       iconColor: 'text-green-500'
+    },
+    {
+      id: 'ai-assistant',
+      title: 'AI File Assistant',
+      desc: 'Just type what you need — "make this smaller", "compress to 100KB" — and let AI handle it.',
+      path: '/assistant',
+      iconColor: 'text-purple-500'
     }
   ];
 

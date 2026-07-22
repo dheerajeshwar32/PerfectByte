@@ -1,9 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-// Using the stable generateContent API for function calling rather than the
-// newer Interactions API — Google's own docs currently recommend
-// generateContent for production function calling, since the Interactions
-// API's function calling is still in beta.
 const GEMINI_MODEL = 'gemini-2.5-flash';
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
