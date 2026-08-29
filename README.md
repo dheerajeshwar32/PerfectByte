@@ -1,75 +1,30 @@
-# React + TypeScript + Vite
+# PerfectByte ⚡️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+PerfectByte is a privacy-first, browser-based file compression and AI utility platform. It was engineered from scratch to solve a critical privacy problem: **preventing users from having to upload sensitive documents to third-party cloud servers.** 
 
-Currently, two official plugins are available:
+By leveraging WebAssembly and Web Workers, all heavy file processing, compression, and PDF cleaning happens 100% locally on the user's device. 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 The Core Engine: Target Size Solver
+The flagship feature of PerfectByte is the **Target Size Compressor**. Generic compression tools apply arbitrary quality reductions, forcing users into a cycle of guessing and checking. 
 
-## React Compiler
+PerfectByte uses a custom binary search algorithm to iterate through compression qualities via `@jsquash/webp` in a background Web Worker, guaranteeing the final image hits the exact maximum byte size required for strict government, university, or corporate portals.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ✨ Features
+* **Privacy-First Architecture:** Files never leave your device for compression.
+* **Target Size Compression:** Expand or compress images to an exact KB footprint.
+* **Bulk Processing:** Offloaded to dedicated Web Workers to ensure a 60FPS UI during heavy batch jobs.
+* **AI File Assistant:** Powered by the Gemini API. Users can upload files and use natural language commands (e.g., *"compress this to 100KB"* or *"remove blank pages"*) to trigger local utility functions.
+* **Premium UI:** Built with React, Tailwind CSS, Framer Motion, and Sonner for a flawless, dark-mode-ready aesthetic.
 
-## Expanding the ESLint configuration
+## 🛠 Tech Stack
+* **Frontend:** React, TypeScript, Vite
+* **Styling & Animation:** Tailwind CSS, Framer Motion
+* **Local File Processing:** `@jsquash/webp` (WebAssembly), PDF-lib
+* **Multithreading:** Web Workers
+* **AI Integration:** Google Gemini Serverless API
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+## 💻 Local Development
+1. Clone the repository: `git clone https://github.com/dheerajeshwar32/perfectbyte.git`
+2. Install dependencies: `npm install`
+3. Add your Gemini API key to a `.env` file: `GEMINI_API_KEY=your_api_key_here`
+4. Start the local server via Vercel CLI: `npx vercel dev`
