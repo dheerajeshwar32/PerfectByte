@@ -20,7 +20,7 @@ async function isPageBlank(pdf: pdfjsLib.PDFDocumentProxy, pageNumber: number): 
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('Canvas context failed');
 
-  await page.render({ canvasContext: ctx, viewport }).promise;
+  await page.render({ canvasContext: ctx, viewport, canvas }).promise;
 
   const { data, width, height } = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const totalPixels = width * height;
@@ -95,7 +95,7 @@ export async function compressPDF(file: File, quality = 0.5): Promise<Blob> {
     canvas.width = viewport.width;
     canvas.height = viewport.height;
     
-    await page.render({ canvasContext: ctx, viewport }).promise;
+    await page.render({ canvasContext: ctx, viewport, canvas }).promise;
     
     // Compress deeply using native browser JPEG encoding
     const base64Jpg = canvas.toDataURL('image/jpeg', quality);
