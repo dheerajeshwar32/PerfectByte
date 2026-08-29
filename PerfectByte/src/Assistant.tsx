@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { compressToTarget, compressToWebp } from './compressionService';
 import { addHistoryEntry } from './historyService';
-import { removeBlankPages } from './pdfUtils';
+import { removeBlankPages, compressPDF } from './pdfUtils';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -80,7 +80,16 @@ export default function Assistant() {
 
       if (data.type === 'function_call' && files.length === 0) {
         setMessages((prev) => [...prev, { role: 'assistant', text: 'Upload a file first, then ask me again.' }]);
+      
       } else if (data.type === 'function_call' && data.name === 'compress_to_target') {
+        const file = files[0];
+        // Guard clause: Prevent image functions from running on PDFs
+        if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+           setMessages(prev => [...prev, { role: 'assistant', text: 'Exact KB targeting is only available for images right now. However, I can run a deep general compression on this PDF! Just ask me to "compress this PDF".' }]);
+           setIsBusy(false);
+           return;
+        }
+
         const targetKB = Number(data.args?.targetKB) || 200;
         const result = await runCompressToTarget(targetKB);
         setDownloadUrl({ url: result.url, name: result.name });
@@ -91,7 +100,16 @@ export default function Assistant() {
             text: `Done — compressed to ${(result.compressed / 1024).toFixed(1)}KB (from ${(result.original / 1024).toFixed(1)}KB). Download link is below.`,
           },
         ]);
+
       } else if (data.type === 'function_call' && data.name === 'bulk_compress') {
+        // Guard clause: Prevent bulk compression if any PDFs are in the queue
+        const hasPdf = files.some(f => f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf'));
+        if (hasPdf) {
+           setMessages(prev => [...prev, { role: 'assistant', text: 'Bulk compression is currently built for image folders. To compress a PDF, upload it individually and ask me to compress it.' }]);
+           setIsBusy(false);
+           return;
+        }
+
         const results = await runBulkCompress();
         setMessages((prev) => [
           ...prev,
@@ -105,8 +123,15 @@ export default function Assistant() {
           link.click();
           document.body.removeChild(link);
         });
+
       } else if (data.type === 'function_call' && data.name === 'remove_blank_pages') {
         const file = files[0];
+        if (!file || (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf'))) {
+           setMessages(prev => [...prev, { role: 'assistant', text: 'Please upload a PDF document to remove blank pages.' }]);
+           setIsBusy(false);
+           return;
+        }
+
         const result = await removeBlankPages(file);
         const blob = new Blob([result.bytes as BlobPart], { type: 'application/pdf' });
         const url = URL.createObjectURL(blob);
@@ -122,6 +147,28 @@ export default function Assistant() {
                 : `Checked all ${result.totalPages} pages — didn't find any that looked blank, so here's your file unchanged.`,
           },
         ]);
+
+      } else if (data.type === 'function_call' && data.name === 'compress_pdf') {
+        const file = files[0];
+        if (!file || (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf'))) {
+           setMessages(prev => [...prev, { role: 'assistant', text: 'Please upload a PDF file first.' }]);
+           setIsBusy(false);
+           return;
+        }
+        
+        const resultBlob = await compressPDF(file);
+        const url = URL.createObjectURL(resultBlob);
+        const name = file.name.replace(/\.pdf$/i, '') + '_compressed.pdf';
+        
+        setDownloadUrl({ url, name });
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: 'assistant',
+            text: `Done! I deeply compressed your PDF from ${(file.size / 1024 / 1024).toFixed(2)}MB down to ${(resultBlob.size / 1024 / 1024).toFixed(2)}MB. Download link is below.`,
+          },
+        ]);
+
       } else {
         setMessages((prev) => [...prev, { role: 'assistant', text: data.text ?? 'Something went wrong.' }]);
       }
@@ -136,7 +183,7 @@ export default function Assistant() {
   return (
     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-slate-50 to-white dark:from-slate-900 dark:via-[#0a0f1c] dark:to-black flex flex-col items-center py-12 px-4 font-sans relative overflow-hidden transition-colors duration-150">
       
-      <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] rounded-full bg-violet-200/30 dark:bg-violet-900/20 blur-[120px] pointer-events-none transition-colors duration-700"></div>
+      <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] rounded-full bg-violet-200/30 dark:bg-violet-900/20 blur-[120px] pointer-events-none transition-colors duration-150"></div>
 
       <Link to="/" className="mb-8 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white self-start max-w-3xl w-full mx-auto font-medium transition-colors flex items-center gap-2 relative z-10">
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
@@ -152,7 +199,7 @@ export default function Assistant() {
         <motion.div 
           initial={{ opacity: 0, y: -10 }} 
           animate={{ opacity: 1, y: 0 }} 
-          className="mb-6 bg-white/50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm transition-colors duration-300"
+          className="mb-6 bg-white/50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm transition-colors duration-150"
         >
           <input
             type="file"
@@ -187,7 +234,7 @@ export default function Assistant() {
                 className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-[85%] px-5 py-3.5 text-[15px] leading-relaxed shadow-sm transition-colors duration-300 ${
+                  className={`max-w-[85%] px-5 py-3.5 text-[15px] leading-relaxed shadow-sm transition-colors duration-150 ${
                     msg.role === 'user' 
                       ? 'bg-slate-900 dark:bg-blue-600 text-white rounded-2xl rounded-tr-sm' 
                       : 'bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-2xl rounded-tl-sm'
@@ -205,7 +252,7 @@ export default function Assistant() {
                 exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
                 className="flex w-full justify-start"
               >
-                <div className="max-w-[70%] md:max-w-[50%] w-full px-5 py-4 rounded-2xl rounded-tl-sm bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm relative overflow-hidden transition-colors duration-300">
+                <div className="max-w-[70%] md:max-w-[50%] w-full px-5 py-4 rounded-2xl rounded-tl-sm bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm relative overflow-hidden transition-colors duration-150">
                   <motion.div
                     className="absolute inset-0 z-10 bg-gradient-to-r from-transparent via-white/60 dark:via-slate-700/50 to-transparent w-full"
                     animate={{ x: ['-100%', '200%'] }}
@@ -239,7 +286,7 @@ export default function Assistant() {
           )}
         </AnimatePresence>
 
-        <form onSubmit={handleSubmit} className="flex gap-2 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md p-2 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors duration-300">
+        <form onSubmit={handleSubmit} className="flex gap-2 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md p-2 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors duration-150">
           <input
             type="text"
             value={input}

@@ -5,6 +5,19 @@ import { compressPDF } from './pdfUtils';
 import { addHistoryEntry, getHistoryStats } from './historyService';
 import { toast } from 'sonner';
 
+interface SizePreset {
+  label: string;
+  kb: number;
+  hint?: string;
+}
+
+const SIZE_PRESETS: SizePreset[] = [
+  { label: 'Indian Passport (Seva)', kb: 250, hint: '630×810px JPEG, domestic online upload' },
+  { label: 'WhatsApp DP', kb: 100 },
+  { label: 'Email attachment', kb: 500 },
+  { label: 'Exam/Govt form', kb: 50, hint: 'Generic placeholder — verify the exact limit' },
+];
+
 interface CompressionResult {
   fileName: string;
   originalUrl: string;
@@ -91,57 +104,30 @@ export default function TargetCompressor() {
     setResult(null);
 
     const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
-    const toastId = toast.loading(isPdf ? 'Calculating precise PDF compression...' : 'Optimizing quality and resolution...');
+    const toastId = toast.loading(isPdf ? 'Compressing PDF (this might take a moment)...' : 'Optimizing quality and resolution...');
 
     try {
       const targetBytes = targetKB * 1024;
-      let finalBlob: Blob | File | null = null;
-      let wasBailedOut = false;
+      let finalBlob: Blob | null = null;
 
       if (isPdf) {
-        let minQ = 0.05;
-        let maxQ = 1.0;
-        let bestBlob: Blob | null = null;
-        let bestDiff = Infinity;
-        const MAX_PASSES = 8; 
-
-        for (let i = 0; i < MAX_PASSES; i++) {
-          const midQ = (minQ + maxQ) / 2;
-          toast.loading(`Precision targeting PDF (Pass ${i + 1}/${MAX_PASSES})...`, { id: toastId });
-          
-          const currentBlob = await compressPDF(file, midQ);
-          
-          if (currentBlob.size <= targetBytes) {
-            const diff = targetBytes - currentBlob.size;
-            if (diff < bestDiff) {
-              bestDiff = diff;
-              bestBlob = currentBlob;
-            }
-            minQ = midQ; 
-          } else {
-            maxQ = midQ; 
-          }
+        // PDF Compression Loop (Progressively stepping down JPEG quality)
+        let quality = 0.8;
+        for (let i = 0; i < 3; i++) {
+          toast.loading(`Compressing PDF (Attempt ${i + 1}/3)...`, { id: toastId });
+          finalBlob = await compressPDF(file, quality);
+          if (finalBlob.size <= targetBytes) break;
+          quality -= 0.3; // Drops from 0.8 to 0.5 to 0.2
         }
-        
-        if (!bestBlob) {
-          bestBlob = await compressPDF(file, 0.05);
-        }
-        
-        finalBlob = bestBlob;
-
-        if (finalBlob.size > file.size) {
-          finalBlob = file;
-          wasBailedOut = true;
-        }
-
+        if (!finalBlob) throw new Error('PDF compression failed');
       } else {
+        // Image Compression Loop (Web Worker Binary Search)
         const bitmap = await createImageBitmap(file);
         let width = bitmap.width;
         let height = bitmap.height;
         let attempts = 0;
-        const MAX_IMAGE_PASSES = 8; 
 
-        while (attempts < MAX_IMAGE_PASSES) {
+        while (attempts < 5) {
           const canvas = document.createElement('canvas');
           canvas.width = width;
           canvas.height = height;
@@ -155,7 +141,7 @@ export default function TargetCompressor() {
           const resultBuffer = await compressToTarget(imageData, targetBytes);
           const currentBlob = new Blob([resultBuffer], { type: 'image/webp' });
 
-          if (currentBlob.size <= targetBytes || attempts === (MAX_IMAGE_PASSES - 1)) {
+          if (currentBlob.size <= targetBytes || attempts === 4) {
             finalBlob = currentBlob;
             break; 
           }
@@ -178,23 +164,14 @@ export default function TargetCompressor() {
         isPdf
       });
 
-      if (finalBlob.size < file.size) {
-        addHistoryEntry({
-          fileName: file.name,
-          originalSize: file.size,
-          compressedSize: finalBlob.size,
-        });
-        setStats(getHistoryStats());
-      }
+      addHistoryEntry({
+        fileName: file.name,
+        originalSize: file.size,
+        compressedSize: finalBlob.size,
+      });
+      setStats(getHistoryStats());
 
-      if (isPdf && wasBailedOut) {
-        toast.success('Document is already optimally compressed!', { id: toastId });
-      } else if (isPdf) {
-        toast.success('PDF precisely compressed!', { id: toastId });
-      } else {
-        toast.success('Done! Drag the slider to compare.', { id: toastId });
-      }
-
+      toast.success(isPdf ? 'PDF compressed successfully!' : 'Done! Drag the slider to compare.', { id: toastId });
     } catch (error) {
       console.error(error);
       toast.error('An error occurred during compression.', { id: toastId });
@@ -207,6 +184,7 @@ export default function TargetCompressor() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Validate the file manually bypassing strict OS limitations
     const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
     const isImage = file.type.startsWith('image/') || file.name.toLowerCase().match(/\.(jpg|jpeg|png|webp)$/);
 
@@ -269,38 +247,34 @@ export default function TargetCompressor() {
         <p className="text-slate-500 dark:text-slate-400 mb-10 text-lg">Define your exact required file size in KB.</p>
 
         <div className="max-w-md mx-auto space-y-8">
-          
           <div className="text-left bg-white/50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm transition-colors duration-150">
-            <div className="flex justify-between items-end mb-4">
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
-                Target Size
-              </label>
-              <span className="text-xs font-bold text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-600 shadow-sm">
-                {targetKB} KB
-              </span>
-            </div>
-            
+            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">
+              Target Size (KB)
+            </label>
             <input
               type="number"
               value={targetKB}
               onChange={(e) => setTargetKB(Number(e.target.value))}
-              className="w-full border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 px-4 py-3 rounded-xl focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-500/40 focus:border-blue-500 dark:focus:border-blue-400 outline-none transition-all text-slate-700 dark:text-slate-100 font-bold text-lg mb-6"
+              className="w-full border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 px-4 py-3 rounded-xl focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-500/40 focus:border-blue-500 dark:focus:border-blue-400 outline-none transition-all text-slate-700 dark:text-slate-100 font-medium"
               min="1"
             />
 
-            <div className="relative flex items-center">
-              <input
-                type="range"
-                min="10"
-                max="2000"
-                value={targetKB}
-                onChange={(e) => setTargetKB(Number(e.target.value))}
-                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600 dark:accent-blue-500 transition-all"
-              />
-            </div>
-            <div className="flex justify-between text-xs font-bold text-slate-400 dark:text-slate-500 mt-3">
-              <span>10</span>
-              <span>2000+</span>
+            <div className="flex flex-wrap gap-2 mt-4">
+              {SIZE_PRESETS.map((preset) => (
+                <button
+                  key={preset.label}
+                  type="button"
+                  onClick={() => setTargetKB(preset.kb)}
+                  title={preset.hint}
+                  className={`text-xs font-semibold px-4 py-2 rounded-lg border transition-all ${
+                    targetKB === preset.kb
+                      ? 'bg-slate-800 dark:bg-slate-100 text-white dark:text-slate-900 border-slate-800 dark:border-slate-100 shadow-md'
+                      : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700 shadow-sm'
+                  }`}
+                >
+                  {preset.label} · {preset.kb}KB
+                </button>
+              ))}
             </div>
           </div>
 
@@ -312,9 +286,9 @@ export default function TargetCompressor() {
               isDragging ? 'border-blue-400 dark:border-blue-500 bg-blue-50/50 dark:bg-blue-900/20 scale-[1.02]' : 'border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/30 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:border-slate-300 dark:hover:border-slate-600'
             }`}
           >
+            {/* The accept attribute is removed entirely. The OS will allow all files, and handleFileUpload will strictly validate them. */}
             <input
               type="file"
-              accept=".pdf,.png,.jpg,.jpeg,.webp"
               onChange={handleFileUpload}
               disabled={isProcessing}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"

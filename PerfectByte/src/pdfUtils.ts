@@ -1,11 +1,17 @@
 import * as pdfjsLib from 'pdfjs-dist';
 import { PDFDocument } from 'pdf-lib';
 
-// Initialize the PDF.js worker for Vite
+// Initialize the PDF.js worker for Vite (using the .mjs extension standard in newer versions)
 import pdfjsWorkerUrl from 'pdfjs-dist/build/pdf.worker.mjs?url';
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorkerUrl;
 
+// A page counts as "blank" if less than this fraction of its pixels are
+// meaningfully non-white. Not set to 0, since scanned "blank" pages usually
+// carry a little scanner noise or shadow.
 const BLANK_THRESHOLD = 0.005;
+
+// Render at a small size just to check blankness — full resolution isn't
+// needed for this and would be much slower for nothing gained.
 const RENDER_TARGET_PX = 400;
 
 async function isPageBlank(pdf: pdfjsLib.PDFDocumentProxy, pageNumber: number): Promise<boolean> {
@@ -54,6 +60,8 @@ export async function removeBlankPages(file: File): Promise<RemoveBlankPagesResu
     }
   }
 
+  // If every page looked blank, detection likely misfired on this file —
+  // play it safe and return the original untouched rather than an empty PDF.
   if (blankPages.length === totalPages) {
     return { bytes: new Uint8Array(arrayBuffer), totalPages, removedPages: [] };
   }
@@ -86,7 +94,7 @@ export async function compressPDF(file: File, quality = 0.5): Promise<Blob> {
   // 3. Rasterize each page and embed it as a compressed JPEG
   for (let i = 1; i <= numPages; i++) {
     const page = await pdf.getPage(i);
-    const viewport = page.getViewport({ scale: 1.5 }); 
+    const viewport = page.getViewport({ scale: 1.5 }); // 1.5x scale preserves readability
     
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');

@@ -1,5 +1,14 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
+// Using the stable generateContent API for function calling rather than the
+// newer Interactions API — Google's own docs currently recommend
+// generateContent for production function calling, since the Interactions
+// API's function calling is still in beta.
+//
+// Model note: gemini-2.5-flash was removed for new accounts as of mid-2026.
+// gemini-3.5-flash is the current generally-available flash-tier model —
+// if this ever 404s again, check https://ai.google.dev/gemini-api/docs/models
+// for whatever is current then.
 const GEMINI_MODEL = 'gemini-3.5-flash';
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
@@ -31,14 +40,6 @@ const TOOLS = [
           properties: {},
         },
       },
-      {
-        name: 'remove_blank_pages',
-        description: 'Analyzes an uploaded PDF document and removes any blank pages. Use this when the user mentions cleaning a PDF, removing empty pages, or deleting blank pages.',
-        parameters: {
-          type: 'object',
-          properties: {},
-        },
-      }
     ],
   },
 ];

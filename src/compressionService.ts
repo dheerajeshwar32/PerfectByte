@@ -1,48 +1,69 @@
-import { decode as decodeJpeg } from '@jsquash/jpeg';
 import { encode as encodeWebp } from '@jsquash/webp';
 
-// Your existing standard compression function
+// Helper to reliably read any image format (PNG, JPG, WEBP) into raw pixel data
+async function getImageData(file: File): Promise<ImageData> {
+  const bitmap = await createImageBitmap(file);
+  const canvas = document.createElement('canvas');
+  canvas.width = bitmap.width;
+  canvas.height = bitmap.height;
+  
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Canvas context failed');
+  
+  ctx.drawImage(bitmap, 0, 0);
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  
+  bitmap.close();
+  return imageData;
+}
+
+// Standard compression function for Bulk Processing
 export async function compressToWebp(file: File) {
-  const arrayBuffer = await file.arrayBuffer();
-  const rawImageData = await decodeJpeg(arrayBuffer);
-  const compressedBuffer = await encodeWebp(rawImageData);
+  const imageData = await getImageData(file);
+  // Encode to WebP (defaults to ~75 quality, excellent for bulk size reduction)
+  const compressedBuffer = await encodeWebp(imageData);
   
   return new Blob([compressedBuffer], { type: 'image/webp' });
 }
 
-// NEW: The binary search algorithm for target file sizes
+// Optimized binary search for Target File Sizes
 export async function compressToTarget(imageData: ImageData, targetBytes: number): Promise<ArrayBuffer> {
+  // 1. Early Exit: Try a high-quality baseline first
+  const highQualityBuffer = await encodeWebp(imageData, { quality: 90 });
+  if (highQualityBuffer.byteLength <= targetBytes) {
+    return highQualityBuffer;
+  }
+
   let minQ = 0;
-  let maxQ = 100;
+  let maxQ = 89; 
   let bestBuffer: ArrayBuffer | null = null;
   let bestSizeDiff = Infinity;
 
-  // Run a binary search loop up to 8 times to find the perfect quality
+  // 2. Binary search for optimal quality
   for (let i = 0; i < 8; i++) {
+    if (minQ > maxQ) break; 
+
     const midQ = Math.floor((minQ + maxQ) / 2);
-    
-    // Encode image at the current middle quality
     const buffer = await encodeWebp(imageData, { quality: midQ });
     const size = buffer.byteLength;
 
     if (size <= targetBytes) {
-      // If it's under the target, save it as the best so far
+      // Under target: save as best, but try to push quality higher
       const diff = targetBytes - size;
       if (diff < bestSizeDiff) {
         bestSizeDiff = diff;
         bestBuffer = buffer;
       }
-      // Try to get higher quality (closer to the target size limit)
       minQ = midQ + 1; 
     } else {
-      // Too big, lower the quality
+      // Over target: lower the quality
       maxQ = midQ - 1; 
     }
   }
 
-  // Fallback: If we couldn't get it under the target even at lowest quality, just return quality 0
+  // 3. Fallback: If it's still too big at lowest quality
   if (!bestBuffer) {
-     bestBuffer = await encodeWebp(imageData, { quality: 0 });
+    bestBuffer = await encodeWebp(imageData, { quality: 0 });
   }
 
   return bestBuffer;
