@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Logo from './Logo';
+import Footer from './Footer';
 
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -41,7 +42,7 @@ export default function Home() {
   const handlePrev = () => setActiveIndex((prev) => (prev - 1 + tools.length) % tools.length);
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-white dark:from-slate-900 dark:via-[#0a0f1c] dark:to-black flex flex-col items-center justify-start pt-24 pb-12 relative overflow-hidden font-sans transition-colors duration-300">
+    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-white dark:from-slate-900 dark:via-[#0a0f1c] dark:to-black flex flex-col items-center justify-start pt-24 relative overflow-hidden font-sans transition-colors duration-300">
       
       {/* Top Navigation */}
       <div className="absolute top-0 left-0 w-full p-6 md:px-12 flex justify-between items-center z-50">
@@ -183,7 +184,7 @@ export default function Home() {
       </div>
 
       {/* Carousel Controls */}
-      <div className="flex gap-6 mt-12 z-30">
+      <div className="flex gap-6 mt-12 z-30 mb-24">
         <button 
           onClick={handlePrev}
           className="w-12 h-12 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:scale-110 transition-all active:scale-95"
@@ -198,6 +199,7 @@ export default function Home() {
         </button>
       </div>
 
+      <Footer />
     </div>
   );
 }
