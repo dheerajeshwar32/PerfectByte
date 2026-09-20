@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Logo from './Logo';
 import Footer from './Footer';
+import { useDocumentTitle } from './useDocumentTitle';
 
 export default function Home() {
+  useDocumentTitle('Home');
   const [activeIndex, setActiveIndex] = useState(0);
   const navigate = useNavigate();
 
@@ -44,19 +46,15 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-white dark:from-slate-900 dark:via-[#0a0f1c] dark:to-black flex flex-col items-center justify-start pt-24 relative overflow-hidden font-sans transition-colors duration-300">
       
-      {/* Top Navigation */}
       <div className="absolute top-0 left-0 w-full p-6 md:px-12 flex justify-between items-center z-50">
         <Logo />
       </div>
 
-      {/* Background Glow Effects */}
       <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-400/10 dark:bg-blue-900/20 blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-400/10 dark:bg-purple-900/20 blur-[120px] pointer-events-none"></div>
 
-      {/* Hero Section */}
       <div className="max-w-4xl mx-auto text-center relative z-10 flex flex-col items-center mb-16">
         
-        {/* Dynamic Architecture Badge */}
         <div className="h-10 flex items-center justify-center mb-6">
           <AnimatePresence mode="wait">
             <motion.div
@@ -102,7 +100,6 @@ export default function Home() {
         </h1>
       </div>
 
-      {/* Cinematic Spotlight Carousel */}
       <div className="relative w-full max-w-7xl h-[420px] mx-auto flex items-center justify-center z-20">
         {tools.map((tool, index) => {
           const isActive = index === activeIndex;
@@ -136,11 +133,8 @@ export default function Home() {
                 }}
                 className={`relative overflow-hidden bg-white/40 dark:bg-[#0a0f1c]/60 backdrop-blur-3xl p-10 rounded-[2.5rem] border ${isActive ? 'border-white/60 dark:border-slate-700 shadow-2xl ring-1 ring-black/5 dark:ring-white/10 cursor-default' : 'border-white/20 dark:border-slate-800/50 cursor-pointer shadow-none'} flex flex-col items-start text-left transition-all duration-500 h-[420px] group`}
               >
-                
-                {/* Internal Ambient Glow */}
                 <div className={`absolute -top-24 -right-24 w-64 h-64 rounded-full blur-[80px] opacity-0 transition-opacity duration-700 ${isActive ? 'opacity-30 dark:opacity-20' : ''} ${tool.glowColor}`} />
 
-                {/* Top Half: Icon & Text */}
                 <div className="relative z-10 w-full flex flex-col flex-grow">
                   <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-8 shadow-sm border border-slate-200/50 dark:border-slate-700/50 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 transition-transform duration-500 ${isActive ? 'scale-100' : 'scale-95'} ${tool.iconColor}`}>
                     <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -157,7 +151,6 @@ export default function Home() {
                   </p>
                 </div>
 
-                {/* Bottom Half: Action Bar */}
                 {isActive && (
                   <motion.div 
                     initial={{ opacity: 0, y: 10 }}
@@ -183,7 +176,6 @@ export default function Home() {
         })}
       </div>
 
-      {/* Carousel Controls */}
       <div className="flex gap-6 mt-12 z-30 mb-24">
         <button 
           onClick={handlePrev}

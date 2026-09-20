@@ -2,8 +2,9 @@ import { useState, type ChangeEvent, type DragEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { compressToTarget } from './compressionService';
 import { compressPDF } from './pdfUtils';
-import { addHistoryEntry, getHistoryStats } from './historyService';
+import { addHistoryEntry } from './historyService';
 import { toast } from 'sonner';
+import { useDocumentTitle } from './useDocumentTitle';
 
 interface CompressionResult {
   fileName: string;
@@ -27,29 +28,16 @@ function BeforeAfterSlider({ originalUrl, compressedUrl }: { originalUrl: string
 
   return (
     <div className="relative w-full aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200/60 dark:border-slate-700 shadow-sm bg-slate-50 dark:bg-slate-900 select-none">
-      <img
-        src={compressedUrl}
-        alt="Compressed"
-        draggable={false}
-        className="absolute inset-0 w-full h-full object-contain"
-      />
-      <div
-        className="absolute inset-0 overflow-hidden"
-        style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
-      >
-        <img
-          src={originalUrl}
-          alt="Original"
-          draggable={false}
-          className="absolute inset-0 w-full h-full object-contain"
-        />
+      <img src={compressedUrl} alt="Compressed" draggable={false} className="absolute inset-0 w-full h-full object-contain" />
+      <div className="absolute inset-0 overflow-hidden" style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}>
+        <img src={originalUrl} alt="Original" draggable={false} className="absolute inset-0 w-full h-full object-contain" />
       </div>
 
-      <div
-        className="absolute top-0 bottom-0 w-0.5 bg-white dark:bg-blue-400 shadow-[0_0_10px_rgba(0,0,0,0.3)] dark:shadow-[0_0_15px_rgba(96,165,250,0.5)] pointer-events-none"
-        style={{ left: `${position}%` }}
-      >
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white/90 dark:bg-slate-800/90 backdrop-blur rounded-full shadow-md border border-slate-100 dark:border-slate-600 flex items-center justify-center text-slate-500 dark:text-slate-300 text-xs transition-colors">
+      <div className="absolute top-0 bottom-0 w-0.5 bg-white shadow-[0_0_10px_rgba(0,0,0,0.3)] pointer-events-none" style={{ left: `${position}%` }}>
+        <div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white backdrop-blur rounded-full shadow-lg flex items-center justify-center text-slate-800 text-xs font-bold"
+          style={{ boxShadow: '-2px 0px 0px rgba(0,255,255,0.6), 2px 0px 0px rgba(255,0,255,0.6)' }}
+        >
           ↔
         </div>
       </div>
@@ -60,33 +48,27 @@ function BeforeAfterSlider({ originalUrl, compressedUrl }: { originalUrl: string
         max={100}
         value={position}
         onChange={(e) => setPosition(Number(e.target.value))}
-        aria-label="Drag to compare original and compressed image"
         className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize"
       />
-
-      <span className="absolute top-3 left-3 bg-slate-900/70 dark:bg-black/70 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-lg pointer-events-none font-medium">
-        Original
-      </span>
-      <span className="absolute top-3 right-3 bg-slate-900/70 dark:bg-black/70 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-lg pointer-events-none font-medium">
-        Compressed
-      </span>
+      <span className="absolute top-3 left-3 bg-slate-900/70 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-lg pointer-events-none font-medium">Original</span>
+      <span className="absolute top-3 right-3 bg-slate-900/70 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-lg pointer-events-none font-medium">Compressed</span>
     </div>
   );
 }
 
 export default function TargetCompressor() {
+  useDocumentTitle('Target Compressor');
+  
   const [targetKB, setTargetKB] = useState<number>(200);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [result, setResult] = useState<CompressionResult | null>(null);
-  const [stats, setStats] = useState(() => getHistoryStats());
 
   const processFile = async (file: File) => {
     if (result) {
       URL.revokeObjectURL(result.originalUrl);
       URL.revokeObjectURL(result.compressedUrl);
     }
-
     setIsProcessing(true);
     setResult(null);
 
@@ -99,75 +81,38 @@ export default function TargetCompressor() {
       let wasBailedOut = false;
 
       if (isPdf) {
-        let minQ = 0.05;
-        let maxQ = 1.0;
-        let bestBlob: Blob | null = null;
-        let bestDiff = Infinity;
-        const MAX_PASSES = 8; 
-
-        for (let i = 0; i < MAX_PASSES; i++) {
+        let minQ = 0.05, maxQ = 1.0, bestBlob: Blob | null = null, bestDiff = Infinity;
+        for (let i = 0; i < 8; i++) {
           const midQ = (minQ + maxQ) / 2;
-          toast.loading(`Precision targeting PDF (Pass ${i + 1}/${MAX_PASSES})...`, { id: toastId });
-          
+          toast.loading(`Precision targeting PDF (Pass ${i + 1}/8)...`, { id: toastId });
           const currentBlob = await compressPDF(file, midQ);
-          
           if (currentBlob.size <= targetBytes) {
             const diff = targetBytes - currentBlob.size;
-            if (diff < bestDiff) {
-              bestDiff = diff;
-              bestBlob = currentBlob;
-            }
+            if (diff < bestDiff) { bestDiff = diff; bestBlob = currentBlob; }
             minQ = midQ; 
           } else {
             maxQ = midQ; 
           }
         }
-        
-        if (!bestBlob) {
-          bestBlob = await compressPDF(file, 0.05);
-        }
-        
-        finalBlob = bestBlob;
-
-        if (finalBlob.size > file.size) {
-          finalBlob = file;
-          wasBailedOut = true;
-        }
-
+        finalBlob = bestBlob || await compressPDF(file, 0.05);
+        if (finalBlob.size > file.size) { finalBlob = file; wasBailedOut = true; }
       } else {
         const bitmap = await createImageBitmap(file);
-        let width = bitmap.width;
-        let height = bitmap.height;
-        let attempts = 0;
-        const MAX_IMAGE_PASSES = 8; 
-
-        while (attempts < MAX_IMAGE_PASSES) {
+        let width = bitmap.width, height = bitmap.height, attempts = 0;
+        while (attempts < 8) {
           const canvas = document.createElement('canvas');
-          canvas.width = width;
-          canvas.height = height;
+          canvas.width = width; canvas.height = height;
           const ctx = canvas.getContext('2d');
-
           if (!ctx) throw new Error('Canvas context failed');
-
           ctx.drawImage(bitmap, 0, 0, width, height);
-          const imageData = ctx.getImageData(0, 0, width, height);
-
-          const resultBuffer = await compressToTarget(imageData, targetBytes);
-          const currentBlob = new Blob([resultBuffer], { type: 'image/webp' });
-
-          if (currentBlob.size <= targetBytes || attempts === (MAX_IMAGE_PASSES - 1)) {
-            finalBlob = currentBlob;
-            break; 
-          }
-
-          width = Math.floor(width * 0.75);
-          height = Math.floor(height * 0.75);
-          attempts++;
+          const currentBlob = new Blob([await compressToTarget(ctx.getImageData(0, 0, width, height), targetBytes)], { type: 'image/webp' });
+          if (currentBlob.size <= targetBytes || attempts === 7) { finalBlob = currentBlob; break; }
+          width = Math.floor(width * 0.75); height = Math.floor(height * 0.75); attempts++;
         }
-
         bitmap.close();
-        if (!finalBlob) throw new Error('Compression failed');
       }
+
+      if (!finalBlob) throw new Error('Compression failed');
 
       setResult({
         fileName: file.name.replace(/\.[^/.]+$/, '') + (isPdf ? '_compressed.pdf' : '.webp'),
@@ -179,24 +124,11 @@ export default function TargetCompressor() {
       });
 
       if (finalBlob.size < file.size) {
-        addHistoryEntry({
-          fileName: file.name,
-          originalSize: file.size,
-          compressedSize: finalBlob.size,
-        });
-        setStats(getHistoryStats());
+        addHistoryEntry({ fileName: file.name, originalSize: file.size, compressedSize: finalBlob.size });
       }
-
-      if (isPdf && wasBailedOut) {
-        toast.success('Document is already optimally compressed!', { id: toastId });
-      } else if (isPdf) {
-        toast.success('PDF precisely compressed!', { id: toastId });
-      } else {
-        toast.success('Done! Drag the slider to compare.', { id: toastId });
-      }
+      toast.success(isPdf && wasBailedOut ? 'Document already optimally compressed!' : 'Done!', { id: toastId });
 
     } catch (error) {
-      console.error(error);
       toast.error('An error occurred during compression.', { id: toastId });
     } finally {
       setIsProcessing(false);
@@ -205,167 +137,106 @@ export default function TargetCompressor() {
 
   const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
-
-    const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
-    const isImage = file.type.startsWith('image/') || file.name.toLowerCase().match(/\.(jpg|jpeg|png|webp)$/);
-
-    if (!isPdf && !isImage) {
-      toast.error('Unsupported format. Please upload a PDF or an Image.');
-      return;
-    }
-
-    processFile(file);
+    if (file) processFile(file);
   };
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
+    e.preventDefault(); setIsDragging(false);
     const file = e.dataTransfer.files?.[0];
-    if (file) {
-      const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
-      const isImage = file.type.startsWith('image/') || file.name.toLowerCase().match(/\.(jpg|jpeg|png|webp)$/);
-      
-      if (!isPdf && !isImage) {
-        toast.error('Unsupported format. Please drop a PDF or an Image.');
-        return;
-      }
-      processFile(file);
-    }
-  };
-
-  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    if (!isDragging) setIsDragging(true);
-  };
-
-  const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-  };
-
-  const handleDownload = () => {
-    if (!result) return;
-    const link = document.createElement('a');
-    link.href = result.compressedUrl;
-    link.download = result.fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    if (file) processFile(file);
   };
 
   return (
     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-slate-50 to-white dark:from-slate-900 dark:via-[#0a0f1c] dark:to-black flex flex-col items-center py-12 px-4 font-sans relative overflow-hidden transition-colors duration-150">
-      
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-200/40 dark:bg-blue-900/20 blur-[120px] pointer-events-none transition-colors duration-150"></div>
-      
-      <Link to="/" className="mb-8 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white self-start max-w-4xl w-full mx-auto font-medium transition-colors flex items-center gap-2 relative z-10">
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      <Link 
+        to="/" 
+        className="fixed top-6 left-6 z-50 flex items-center gap-2 px-4 py-2 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-full text-sm font-bold text-slate-700 dark:text-slate-300 hover:scale-105 hover:shadow-md transition-all"
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M11 17l-5-5m0 0l5-5m-5 5h12"></path>
+        </svg>
         Back to Tools
       </Link>
 
-      <div className="bg-white/60 dark:bg-slate-900/50 backdrop-blur-xl p-8 md:p-12 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-white dark:border-slate-800 max-w-4xl w-full text-center relative z-10 transition-colors duration-150">
-        <h2 className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-400 mb-3">Compress to Target Size</h2>
-        <p className="text-slate-500 dark:text-slate-400 mb-10 text-lg">Define your exact required file size in KB.</p>
-
-        <div className="max-w-md mx-auto space-y-8">
-          
-          <div className="text-left bg-white/50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm transition-colors duration-150">
-            <div className="flex justify-between items-end mb-4">
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
-                Target Size
-              </label>
-              <span className="text-xs font-bold text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-600 shadow-sm">
-                {targetKB} KB
-              </span>
-            </div>
-            
-            <input
-              type="number"
-              value={targetKB}
-              onChange={(e) => setTargetKB(Number(e.target.value))}
-              className="w-full border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 px-4 py-3 rounded-xl focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-500/40 focus:border-blue-500 dark:focus:border-blue-400 outline-none transition-all text-slate-700 dark:text-slate-100 font-bold text-lg mb-6"
-              min="1"
-            />
-
-            <div className="relative flex items-center">
+      <div className="bg-white/60 dark:bg-slate-900/50 backdrop-blur-xl p-8 md:p-12 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-white dark:border-slate-800 max-w-4xl w-full text-center relative z-10">
+        
+        {!result && (
+          <div className="flex flex-col items-center justify-center py-8 mb-8 border-b border-slate-200 dark:border-slate-800">
+            <span className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4">Target File Size</span>
+            <div className="flex items-baseline gap-2">
               <input
-                type="range"
-                min="10"
-                max="2000"
+                type="number"
                 value={targetKB}
                 onChange={(e) => setTargetKB(Number(e.target.value))}
-                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600 dark:accent-blue-500 transition-all"
+                className="text-6xl md:text-8xl font-black font-mono tabular-nums text-center bg-transparent outline-none text-slate-900 dark:text-white w-full max-w-[350px]"
+                min="1"
               />
+              <span className="text-3xl md:text-4xl font-black text-slate-300 dark:text-slate-700">KB</span>
             </div>
-            <div className="flex justify-between text-xs font-bold text-slate-400 dark:text-slate-500 mt-3">
-              <span>10</span>
-              <span>2000+</span>
-            </div>
-          </div>
-
-          <div
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            className={`relative border-2 border-dashed rounded-2xl p-10 transition-all duration-200 ${
-              isDragging ? 'border-blue-400 dark:border-blue-500 bg-blue-50/50 dark:bg-blue-900/20 scale-[1.02]' : 'border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/30 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:border-slate-300 dark:hover:border-slate-600'
-            }`}
-          >
             <input
-              type="file"
-              accept=".pdf,.png,.jpg,.jpeg,.webp"
-              onChange={handleFileUpload}
-              disabled={isProcessing}
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
+              type="range"
+              min="10" max="2000"
+              value={targetKB}
+              onChange={(e) => setTargetKB(Number(e.target.value))}
+              className="w-full max-w-md h-2 mt-8 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-600 dark:accent-blue-500"
             />
-            <div className="text-center pointer-events-none flex flex-col items-center">
-              <div className="w-12 h-12 bg-white dark:bg-slate-800 rounded-full shadow-sm border border-slate-100 dark:border-slate-700 flex items-center justify-center mb-4 text-blue-500 dark:text-blue-400 transition-colors">
-                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-              </div>
-              <span className="block text-slate-800 dark:text-slate-200 font-bold text-lg mb-1 transition-colors">
-                {isProcessing ? 'Processing...' : isDragging ? 'Drop it here' : 'Click to select image or PDF'}
-              </span>
-              <span className="text-slate-500 dark:text-slate-400 text-sm font-medium transition-colors">
-                or drag and drop it here
-              </span>
-            </div>
           </div>
+        )}
 
-          {result && (
-            <div className="space-y-5 text-left bg-white/50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm transition-colors duration-150">
-              
-              {result.isPdf ? (
-                <div className="flex flex-col items-center justify-center py-12 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-inner">
-                  <svg className="w-16 h-16 text-red-500/90 mb-4 drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"></path></svg>
-                  <p className="text-slate-800 dark:text-white font-bold text-lg mb-1">{result.fileName}</p>
-                  <p className="text-slate-500 dark:text-slate-400 text-sm">PDF Optimized & Ready</p>
-                </div>
-              ) : (
-                <BeforeAfterSlider originalUrl={result.originalUrl} compressedUrl={result.compressedUrl} />
-              )}
-
-              <div className="flex items-center justify-between pt-2">
-                <span className="text-sm font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-100 dark:border-slate-700 shadow-sm transition-colors">
-                  {formatBytes(result.originalSize)} &rarr;{' '}
-                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">{formatBytes(result.compressedSize)}</span>
-                </span>
-                <button
-                  onClick={handleDownload}
-                  className="bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-5 py-2.5 rounded-xl hover:bg-slate-800 dark:hover:bg-white hover:shadow-lg transition-all text-sm font-bold flex items-center gap-2"
-                >
-                  Download
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                </button>
+        <div className="max-w-xl mx-auto space-y-8">
+          {!result && (
+            <div
+              onDrop={handleDrop} onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }} onDragLeave={() => setIsDragging(false)}
+              className={`relative border-2 border-dashed rounded-2xl p-10 transition-all duration-200 ${isDragging ? 'border-blue-400 bg-blue-50/50 scale-[1.02]' : 'border-slate-200 bg-slate-50/50 hover:bg-slate-50'}`}
+            >
+              <input type="file" accept=".pdf,.png,.jpg,.jpeg,.webp" onChange={handleFileUpload} disabled={isProcessing} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+              <div className="text-center flex flex-col items-center">
+                <div className="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center mb-4 text-blue-500"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg></div>
+                <span className="font-bold text-lg mb-1">{isProcessing ? 'Processing...' : 'Click to select image or PDF'}</span>
               </div>
             </div>
           )}
 
-          {stats.count > 0 && (
-            <p className="text-sm font-medium text-slate-400 dark:text-slate-500 text-center">
-              {formatBytes(stats.totalOriginal - stats.totalCompressed)} saved across {stats.count} file
-              {stats.count !== 1 ? 's' : ''} so far
-            </p>
+          {result && (
+            <div className="space-y-6 text-left bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl">
+              <div className="flex justify-between items-center pb-6 border-b border-slate-100 dark:border-slate-700">
+                <div>
+                  <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">Reduction</h3>
+                  <span 
+                    className="text-5xl md:text-6xl font-black font-mono text-[#5668FF] dark:text-[#7888FF]"
+                    style={{ textShadow: '-3px 0px 0px rgba(0,255,255,0.6), 3px 0px 0px rgba(255,0,255,0.6)' }}
+                  >
+                    -{((result.originalSize - result.compressedSize) / result.originalSize * 100).toFixed(0)}%
+                  </span>
+                </div>
+                <button
+                  onClick={() => {
+                    const a = document.createElement('a'); a.href = result.compressedUrl; a.download = result.fileName; a.click();
+                  }}
+                  className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-6 py-4 rounded-2xl hover:scale-105 transition-all text-sm font-bold shadow-lg"
+                >
+                  Download Output
+                </button>
+              </div>
+
+              {!result.isPdf && <BeforeAfterSlider originalUrl={result.originalUrl} compressedUrl={result.compressedUrl} />}
+              
+              <div className="flex justify-between items-center text-sm font-mono tabular-nums bg-slate-50 dark:bg-slate-900 p-4 rounded-xl">
+                <div className="flex flex-col">
+                  <span className="text-slate-400 text-xs font-sans font-bold uppercase">Original</span>
+                  <span className="text-slate-600 dark:text-slate-300 font-bold">{formatBytes(result.originalSize)}</span>
+                </div>
+                <svg className="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                <div className="flex flex-col text-right">
+                  <span className="text-slate-400 text-xs font-sans font-bold uppercase">Target</span>
+                  <span className="text-emerald-500 font-bold">{formatBytes(result.compressedSize)}</span>
+                </div>
+              </div>
+              
+              <button onClick={() => setResult(null)} className="w-full py-3 text-sm font-bold text-slate-400 hover:text-slate-700 transition-colors">
+                Compress Another File
+              </button>
+            </div>
           )}
         </div>
       </div>

@@ -7,9 +7,6 @@ export default function Logo() {
       {/* 
         Injects the weights (400, 500, 600) of the geometric font 
       */}
-      <style>
-        {`@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');`}
-      </style>
       {/* Glitch Monogram - font-semibold for a bolder, more solid fill */}
       <span 
         className="text-[46px] font-semibold text-[#5668FF] leading-none"
