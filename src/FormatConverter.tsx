@@ -86,9 +86,9 @@ export default function FormatConverter() {
       } else if (targetFormat === 'avif') {
         try {
           toast.info('Encoding AVIF (this may take a moment)...');
-          buffer = await encodeAvif(imageData as unknown as Parameters<typeof encodeAvif>[0], { quality });
+          buffer = await encodeAvif(imageData as any, { quality });
         } catch (e: unknown) {
-          throw new Error('AVIF encoding is not supported in your browser');
+          throw new Error('AVIF encoding is not supported in your browser', { cause: e });
         }
       } else {
         throw new Error('Unsupported format');
