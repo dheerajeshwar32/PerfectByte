@@ -139,11 +139,11 @@ export default function Home() {
           const isLeft = index === (activeIndex - 1 + tools.length) % tools.length;
           const isRight = index === (activeIndex + 1) % tools.length;
 
-          let xOffset = "0%";
-          let scale = 1;
-          let zIndex = 0;
-          let blur = "blur(0px)";
-          let opacity = 1;
+          let xOffset: string;
+          let scale: number;
+          let zIndex: number;
+          let blur: string;
+          let opacity: number;
 
           if (isActive) {
             xOffset = "0%"; scale = 1; zIndex = 30; opacity = 1; blur = "blur(0px)";
