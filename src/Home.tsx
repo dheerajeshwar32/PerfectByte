@@ -104,7 +104,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1, duration: 0.5 }}
-            className="w-full h-full"
+            className={`w-full h-full ${index === 6 ? 'md:col-span-2 lg:col-span-1 lg:col-start-2' : ''}`}
           >
             <div 
               onClick={(e) => {
