@@ -86,8 +86,10 @@ export default function Home() {
         <Logo />
       </div>
 
-      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-400/10 dark:bg-blue-900/20 blur-[120px] pointer-events-none"></div>
-      <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-400/10 dark:bg-purple-900/20 blur-[120px] pointer-events-none"></div>
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-400/10 dark:bg-blue-900/20 blur-[120px]"></div>
+        <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-400/10 dark:bg-purple-900/20 blur-[120px]"></div>
+      </div>
 
       <div className="max-w-4xl mx-auto text-center relative z-10 flex flex-col items-center mb-8 md:mb-16">
         
@@ -253,6 +255,7 @@ export default function Home() {
         </button>
       </div>
 
+      <div className="flex-grow"></div>
       <Footer />
     </div>
   );
