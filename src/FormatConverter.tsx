@@ -129,18 +129,30 @@ export default function FormatConverter() {
   const isLossy = targetFormat !== 'png';
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-slate-50 to-white dark:from-slate-900 dark:via-[#0a0f1c] dark:to-black flex flex-col items-center py-12 px-4 font-sans relative overflow-hidden transition-colors duration-150">
+    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-white dark:from-[#080B14] dark:via-[#0D1220] dark:to-black flex flex-col items-center justify-start pt-20 md:pt-24 relative overflow-x-hidden font-sans transition-colors duration-300 pb-20">
       <Navbar />
       
-      <div className="bg-white/60 dark:bg-slate-900/50 backdrop-blur-xl p-8 md:p-12 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-white dark:border-slate-800 max-w-5xl w-full text-center relative z-10 mt-12">
-        <h2 className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-8">Format Converter</h2>
+      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-400/10 dark:bg-blue-900/20 blur-[120px] pointer-events-none z-0"></div>
+      <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-400/10 dark:bg-purple-900/20 blur-[120px] pointer-events-none z-0"></div>
+
+      <div className="bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-slate-800/60 max-w-5xl w-full text-center relative z-10 mt-4 mx-4">
+        
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-slate-900 to-slate-600 dark:from-white dark:to-slate-400 mb-8 md:mb-12 leading-tight px-4 pb-2">
+          Format <br className="hidden sm:block" />
+          <span 
+            className="text-[#5668FF] drop-shadow-sm"
+            style={{ textShadow: '-2px 0px 0px rgba(0,255,255,0.3), 2px 0px 0px rgba(255,0,255,0.3)' }}
+          >
+            Converter
+          </span>
+        </h1>
 
         {!file && (
           <div 
-            className={`border-2 border-dashed rounded-3xl p-12 transition-all cursor-pointer ${
+            className={`border-2 border-dashed rounded-[2rem] p-12 transition-all duration-300 cursor-pointer shadow-inner backdrop-blur-sm mx-auto max-w-3xl ${
               isDragging 
-                ? 'border-[#5668FF] bg-blue-50/50 dark:border-cyan-500 dark:bg-cyan-950/30 scale-[1.02]' 
-                : 'border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-500 hover:bg-slate-50/50 dark:hover:bg-slate-800/50'
+                ? 'border-[#5668FF] bg-[#5668FF]/5 scale-[1.02] shadow-[0_0_30px_rgba(86,104,255,0.2)]' 
+                : 'border-slate-300/50 dark:border-slate-700/50 bg-white/40 dark:bg-slate-800/40 hover:border-[#5668FF]/50 hover:bg-white/60 dark:hover:bg-slate-800/60'
             }`}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
