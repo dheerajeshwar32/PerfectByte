@@ -11,14 +11,14 @@ export default function History() {
   const [stats, setStats] = useState({ totalOriginal: 0, totalCompressed: 0, count: 0 });
   const [confirmClear, setConfirmClear] = useState(false);
 
-  useEffect(() => {
-    loadHistory();
-  }, []);
-
   const loadHistory = () => {
     setEntries(getHistory());
     setStats(getHistoryStats());
   };
+
+  useEffect(() => {
+    loadHistory();
+  }, []);
 
   const handleClear = () => {
     if (confirmClear) {

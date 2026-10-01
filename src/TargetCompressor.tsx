@@ -135,7 +135,7 @@ export default function TargetCompressor() {
       }
       toast.success(isPdf && wasBailedOut ? 'Document already optimally compressed!' : 'Done!', { id: toastId });
 
-    } catch (error) {
+    } catch {
       toast.error('An error occurred during compression.', { id: toastId });
     } finally {
       setIsProcessing(false);
