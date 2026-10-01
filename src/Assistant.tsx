@@ -173,7 +173,7 @@ export default function Assistant() {
     : null;
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-100 via-slate-50 to-white dark:from-[#0a0f1c] dark:via-[#050810] dark:to-black flex flex-col items-center justify-center p-4 md:p-8 font-sans relative overflow-hidden transition-colors duration-300">
+    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-100 via-slate-50 to-white dark:from-[#0a0f1c] dark:via-[#050810] dark:to-[#050810] flex flex-col items-center justify-center p-4 md:p-8 font-sans relative overflow-hidden transition-colors duration-300">
       
       {/* Background Ambient Glows */}
       <div className="absolute top-[20%] left-[-10%] w-[40%] h-[40%] rounded-full bg-purple-300/20 dark:bg-purple-900/10 blur-[120px] pointer-events-none"></div>
