@@ -35,6 +35,42 @@ export default function Home() {
       iconColor: 'text-purple-600 dark:text-purple-400',
       glowColor: 'bg-purple-500',
       svg: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"></path>
+    },
+    {
+      id: 'history',
+      title: 'Action History',
+      desc: 'Instantly retrieve and download your previously processed files. Everything stays locally on your device.',
+      path: '/history',
+      iconColor: 'text-amber-600 dark:text-amber-400',
+      glowColor: 'bg-amber-500',
+      svg: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    },
+    {
+      id: 'format-converter',
+      title: 'Format Converter',
+      desc: 'Seamlessly convert between WebP, PNG, JPEG, and AVIF formats entirely in your browser using WASM.',
+      path: '/convert',
+      iconColor: 'text-cyan-600 dark:text-cyan-400',
+      glowColor: 'bg-cyan-500',
+      svg: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+    },
+    {
+      id: 'image-resizer',
+      title: 'Image Resizer',
+      desc: 'Resize images by exact pixel dimensions or percentage scale while maintaining perfect aspect ratios.',
+      path: '/resize',
+      iconColor: 'text-rose-600 dark:text-rose-400',
+      glowColor: 'bg-rose-500',
+      svg: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+    },
+    {
+      id: 'pdf-tools',
+      title: 'PDF Studio',
+      desc: 'Merge, split, compress, and manipulate PDF documents locally with zero privacy compromises.',
+      path: '/pdf-tools',
+      iconColor: 'text-orange-600 dark:text-orange-400',
+      glowColor: 'bg-orange-500',
+      svg: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
     }
   ];
 
