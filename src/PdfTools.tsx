@@ -1,0 +1,345 @@
+import React, { useState } from 'react';
+import { Navbar } from './Navbar';
+import { useDocumentTitle } from './useDocumentTitle';
+import { formatBytes } from './utils';
+import { toast } from 'sonner';
+import { PDFDocument } from 'pdf-lib';
+
+export const PdfTools: React.FC = () => {
+  useDocumentTitle('PDF Tools');
+  
+  const [activeTab, setActiveTab] = useState<'merge' | 'split'>('merge');
+
+  // Merge State
+  const [mergeFiles, setMergeFiles] = useState<File[]>([]);
+  const [isMerging, setIsMerging] = useState(false);
+  const [mergedPdfUrl, setMergedPdfUrl] = useState<string>('');
+  const [mergedSize, setMergedSize] = useState(0);
+
+  // Split State
+  const [splitFile, setSplitFile] = useState<File | null>(null);
+  const [splitTotalPages, setSplitTotalPages] = useState(0);
+  const [pageRange, setPageRange] = useState('');
+  const [isSplitting, setIsSplitting] = useState(false);
+  const [splitPdfUrl, setSplitPdfUrl] = useState<string>('');
+  const [splitSize, setSplitSize] = useState(0);
+  const [splitFinalPages, setSplitFinalPages] = useState(0);
+
+  // Merge Logic
+  const handleMergeFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files).filter(f => f.type === 'application/pdf');
+      if (newFiles.length !== e.target.files.length) {
+        toast.error('Only PDF files are allowed');
+      }
+      setMergeFiles([...mergeFiles, ...newFiles]);
+      setMergedPdfUrl('');
+    }
+  };
+
+  const moveMergeFile = (index: number, direction: 'up' | 'down') => {
+    if (direction === 'up' && index > 0) {
+      const newFiles = [...mergeFiles];
+      [newFiles[index - 1], newFiles[index]] = [newFiles[index], newFiles[index - 1]];
+      setMergeFiles(newFiles);
+    } else if (direction === 'down' && index < mergeFiles.length - 1) {
+      const newFiles = [...mergeFiles];
+      [newFiles[index + 1], newFiles[index]] = [newFiles[index], newFiles[index + 1]];
+      setMergeFiles(newFiles);
+    }
+  };
+
+  const removeMergeFile = (index: number) => {
+    setMergeFiles(mergeFiles.filter((_, i) => i !== index));
+  };
+
+  const mergePdfs = async () => {
+    if (mergeFiles.length < 2) {
+      toast.error('Please add at least 2 PDFs to merge');
+      return;
+    }
+    setIsMerging(true);
+    try {
+      const mergedPdf = await PDFDocument.create();
+      for (const file of mergeFiles) {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdfDoc = await PDFDocument.load(arrayBuffer);
+        const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+        copiedPages.forEach(page => mergedPdf.addPage(page));
+      }
+      
+      const pdfBytes = await mergedPdf.save();
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      setMergedSize(blob.size);
+      setMergedPdfUrl(URL.createObjectURL(blob));
+      toast.success('PDFs merged successfully!');
+    } catch (err) {
+      console.error(err);
+      toast.error('Error merging PDFs');
+    } finally {
+      setIsMerging(false);
+    }
+  };
+
+  // Split Logic
+  const handleSplitFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      if (file.type !== 'application/pdf') {
+        toast.error('Please select a PDF file');
+        return;
+      }
+      setSplitFile(file);
+      setSplitPdfUrl('');
+      
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdfDoc = await PDFDocument.load(arrayBuffer);
+        setSplitTotalPages(pdfDoc.getPageCount());
+      } catch (err) {
+        console.error(err);
+        toast.error('Error reading PDF file');
+        setSplitFile(null);
+      }
+    }
+  };
+
+  const parsePageRange = (rangeStr: string, maxPages: number): number[] => {
+    const pages = new Set<number>();
+    const parts = rangeStr.split(',').map(s => s.trim()).filter(Boolean);
+    
+    for (const part of parts) {
+      if (part.includes('-')) {
+        const [start, end] = part.split('-').map(s => parseInt(s, 10));
+        if (isNaN(start) || isNaN(end) || start > end || start < 1 || end > maxPages) {
+          throw new Error(`Invalid range: ${part}`);
+        }
+        for (let i = start; i <= end; i++) {
+          pages.add(i - 1); // 0-based index
+        }
+      } else {
+        const page = parseInt(part, 10);
+        if (isNaN(page) || page < 1 || page > maxPages) {
+          throw new Error(`Invalid page number: ${part}`);
+        }
+        pages.add(page - 1);
+      }
+    }
+    
+    return Array.from(pages).sort((a, b) => a - b);
+  };
+
+  const splitPdf = async () => {
+    if (!splitFile || !pageRange) return;
+    setIsSplitting(true);
+    
+    try {
+      const indicesToCopy = parsePageRange(pageRange, splitTotalPages);
+      if (indicesToCopy.length === 0) {
+        throw new Error('No valid pages specified');
+      }
+
+      const arrayBuffer = await splitFile.arrayBuffer();
+      const originalPdf = await PDFDocument.load(arrayBuffer);
+      const newPdf = await PDFDocument.create();
+      
+      const copiedPages = await newPdf.copyPages(originalPdf, indicesToCopy);
+      copiedPages.forEach(page => newPdf.addPage(page));
+      
+      const pdfBytes = await newPdf.save();
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      
+      setSplitSize(blob.size);
+      setSplitFinalPages(indicesToCopy.length);
+      setSplitPdfUrl(URL.createObjectURL(blob));
+      toast.success('PDF split successfully!');
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err.message || 'Error splitting PDF');
+    } finally {
+      setIsSplitting(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-slate-50 to-white dark:from-slate-900 dark:via-[#0a0f1c] dark:to-black flex flex-col items-center py-12 px-4 font-sans relative overflow-hidden transition-colors duration-150">
+      <Navbar />
+      
+      <main className="bg-white/60 dark:bg-slate-900/50 backdrop-blur-xl p-8 md:p-12 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-white dark:border-slate-800 max-w-5xl w-full text-center relative z-10 mt-16">
+        <h1 className="text-4xl md:text-5xl font-black mb-8 text-slate-800 dark:text-white">
+          PDF <span className="text-[#5668FF] dark:text-[#7888FF]">Tools</span>
+        </h1>
+
+        <div className="flex justify-center gap-4 mb-12">
+          <button
+            onClick={() => setActiveTab('merge')}
+            className={`px-8 py-3 rounded-full font-bold text-sm transition-all ${
+              activeTab === 'merge' 
+                ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-lg scale-105'
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700'
+            }`}
+          >
+            Merge PDFs
+          </button>
+          <button
+            onClick={() => setActiveTab('split')}
+            className={`px-8 py-3 rounded-full font-bold text-sm transition-all ${
+              activeTab === 'split'
+                ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-lg scale-105'
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700'
+            }`}
+          >
+            Split PDF
+          </button>
+        </div>
+
+        {/* MERGE TAB */}
+        {activeTab === 'merge' && (
+          <div className="max-w-2xl mx-auto text-left bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl">
+            {!mergedPdfUrl ? (
+              <>
+                <div className="mb-8">
+                  <h2 className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4">Upload PDFs</h2>
+                  <input
+                    type="file"
+                    accept=".pdf"
+                    multiple
+                    onChange={handleMergeFiles}
+                    className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-[#5668FF] hover:file:bg-blue-100 dark:file:bg-slate-700 dark:file:text-white dark:hover:file:bg-slate-600"
+                  />
+                </div>
+
+                {mergeFiles.length > 0 && (
+                  <div className="mb-8">
+                    <h2 className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4">File Order</h2>
+                    <div className="space-y-2">
+                      {mergeFiles.map((file, idx) => (
+                        <div key={idx} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-700">
+                          <div className="flex-1 truncate pr-4">
+                            <span className="font-medium text-slate-800 dark:text-slate-200 text-sm">{file.name}</span>
+                            <span className="ml-2 text-xs text-slate-400">{formatBytes(file.size)}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <button onClick={() => moveMergeFile(idx, 'up')} disabled={idx === 0} className="p-1 text-slate-400 hover:text-slate-700 disabled:opacity-30">↑</button>
+                            <button onClick={() => moveMergeFile(idx, 'down')} disabled={idx === mergeFiles.length - 1} className="p-1 text-slate-400 hover:text-slate-700 disabled:opacity-30">↓</button>
+                            <button onClick={() => removeMergeFile(idx)} className="p-1 text-red-400 hover:text-red-600 ml-2">×</button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <button
+                  onClick={mergePdfs}
+                  disabled={isMerging || mergeFiles.length < 2}
+                  className="w-full bg-emerald-500 text-white py-5 rounded-2xl font-black hover:bg-emerald-600 transition-all shadow-lg text-xl disabled:opacity-50"
+                >
+                  {isMerging ? 'Merging...' : 'Merge All'}
+                </button>
+              </>
+            ) : (
+              <div className="text-center animate-in fade-in zoom-in duration-300">
+                <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-6">Merged Successfully!</h2>
+                <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-2xl mb-8">
+                  <p className="text-slate-500 dark:text-slate-400 mb-2">Total Output Size</p>
+                  <p className="text-3xl font-black text-[#5668FF] dark:text-[#7888FF]">{formatBytes(mergedSize)}</p>
+                </div>
+                <div className="flex gap-4">
+                  <button
+                    onClick={() => { setMergeFiles([]); setMergedPdfUrl(''); }}
+                    className="flex-1 bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white py-4 rounded-2xl font-bold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
+                  >
+                    Start Over
+                  </button>
+                  <a
+                    href={mergedPdfUrl}
+                    download="merged_document.pdf"
+                    className="flex-1 bg-emerald-500 text-white py-4 rounded-2xl font-bold hover:bg-emerald-600 transition-colors text-center"
+                  >
+                    Download PDF
+                  </a>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* SPLIT TAB */}
+        {activeTab === 'split' && (
+          <div className="max-w-2xl mx-auto text-left bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl">
+            {!splitPdfUrl ? (
+              <>
+                <div className="mb-8">
+                  <h2 className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4">Upload PDF</h2>
+                  <input
+                    type="file"
+                    accept=".pdf"
+                    onChange={handleSplitFile}
+                    className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-[#5668FF] hover:file:bg-blue-100 dark:file:bg-slate-700 dark:file:text-white dark:hover:file:bg-slate-600"
+                  />
+                  {splitFile && (
+                    <p className="mt-3 text-sm font-medium text-slate-600 dark:text-slate-300">
+                      Loaded: {splitFile.name} — <span className="font-bold text-[#5668FF]">{splitTotalPages} pages</span>
+                    </p>
+                  )}
+                </div>
+
+                {splitFile && (
+                  <div className="mb-8">
+                    <h2 className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4">Pages to Extract</h2>
+                    <input
+                      type="text"
+                      value={pageRange}
+                      onChange={(e) => setPageRange(e.target.value)}
+                      placeholder="e.g. 1-3, 5, 7-10"
+                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-white"
+                    />
+                    <p className="mt-2 text-xs text-slate-400">Comma-separated page numbers or ranges.</p>
+                  </div>
+                )}
+
+                <button
+                  onClick={splitPdf}
+                  disabled={isSplitting || !splitFile || !pageRange}
+                  className="w-full bg-emerald-500 text-white py-5 rounded-2xl font-black hover:bg-emerald-600 transition-all shadow-lg text-xl disabled:opacity-50"
+                >
+                  {isSplitting ? 'Splitting...' : 'Split'}
+                </button>
+              </>
+            ) : (
+              <div className="text-center animate-in fade-in zoom-in duration-300">
+                <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-6">Split Successfully!</h2>
+                <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-2xl mb-8 flex justify-around">
+                  <div>
+                    <p className="text-slate-500 dark:text-slate-400 mb-2">Pages Extracted</p>
+                    <p className="text-3xl font-black text-slate-800 dark:text-white">{splitFinalPages}</p>
+                  </div>
+                  <div>
+                    <p className="text-slate-500 dark:text-slate-400 mb-2">Output Size</p>
+                    <p className="text-3xl font-black text-[#5668FF] dark:text-[#7888FF]">{formatBytes(splitSize)}</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <button
+                    onClick={() => { setSplitFile(null); setSplitPdfUrl(''); setPageRange(''); }}
+                    className="flex-1 bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white py-4 rounded-2xl font-bold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
+                  >
+                    Start Over
+                  </button>
+                  <a
+                    href={splitPdfUrl}
+                    download="split_document.pdf"
+                    className="flex-1 bg-emerald-500 text-white py-4 rounded-2xl font-bold hover:bg-emerald-600 transition-colors text-center"
+                  >
+                    Download PDF
+                  </a>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </main>
+    </div>
+  );
+};

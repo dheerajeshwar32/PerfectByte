@@ -117,3 +117,32 @@ export async function compressPDF(file: File, quality = 0.5): Promise<Blob> {
   const compressedBytes = await newPdf.save({ useObjectStreams: true });
   return new Blob([compressedBytes as BlobPart], { type: 'application/pdf' });
 }
+
+/** Merge multiple PDF files into a single document. */
+export async function mergePDFs(files: File[]): Promise<Uint8Array> {
+  const mergedPdf = await PDFDocument.create();
+  for (const file of files) {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await PDFDocument.load(arrayBuffer);
+    const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+    copiedPages.forEach((page) => mergedPdf.addPage(page));
+  }
+  return mergedPdf.save();
+}
+
+/** Split a PDF by extracting specific pages (0-based indices). */
+export async function splitPDF(file: File, pageIndices: number[]): Promise<Uint8Array> {
+  const arrayBuffer = await file.arrayBuffer();
+  const sourcePdf = await PDFDocument.load(arrayBuffer);
+  const newPdf = await PDFDocument.create();
+  const copiedPages = await newPdf.copyPages(sourcePdf, pageIndices);
+  copiedPages.forEach((page) => newPdf.addPage(page));
+  return newPdf.save();
+}
+
+/** Get the total number of pages in a PDF. */
+export async function getPdfPageCount(file: File): Promise<number> {
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await PDFDocument.load(arrayBuffer);
+  return pdf.getPageCount();
+}

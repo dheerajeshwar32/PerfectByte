@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect, type FormEvent, type ChangeEvent, type DragEvent } from 'react';
-import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { compressToTarget, compressToWebp } from './compressionService';
 import { addHistoryEntry } from './historyService';
 import { removeBlankPages, compressPDF } from './pdfUtils';
 import { useDocumentTitle } from './useDocumentTitle';
+import Navbar from './Navbar';
+import { formatBytes } from './utils';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -18,24 +19,10 @@ interface DownloadInfo {
   compressedSize?: number;
 }
 
-const formatBytes = (bytes: number) => {
-  if (bytes === 0) return '0 Bytes';
-  const k = 1024;
-  const sizes = ['Bytes', 'KB', 'MB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-};
-
 // --- Icons -----------------------------------------------------------
 const SparkIcon = ({ className = '' }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor">
     <path d="M12 2L15 9L22 12L15 15L12 22L9 15L2 12L9 9L12 2Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
-const ChevronLeftIcon = ({ className = '' }: { className?: string }) => (
-  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
   </svg>
 );
 
@@ -192,13 +179,7 @@ export default function Assistant() {
       <div className="absolute top-[20%] left-[-10%] w-[40%] h-[40%] rounded-full bg-purple-300/20 dark:bg-purple-900/10 blur-[120px] pointer-events-none"></div>
 
       {/* Unmistakable Back Button */}
-      <Link
-        to="/"
-        className="fixed top-6 left-6 z-50 inline-flex items-center gap-2 px-4 py-2 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-full text-sm font-bold text-slate-700 dark:text-slate-300 hover:scale-105 hover:shadow-md transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500/40"
-      >
-        <ChevronLeftIcon className="w-4 h-4" />
-        Back to Tools
-      </Link>
+      <Navbar />
 
       {/* Main Terminal Window */}
       <div
@@ -212,7 +193,7 @@ export default function Assistant() {
           {isDragging && (
             <motion.div
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}
-              className="absolute inset-0 z-50 backdrop-blur-sm bg-purple-50/90 dark:bg-[#0B0D12]/90 border-4 border-dashed border-purple-500/50 rounded-[28px] flex flex-col items-center justify-center gap-4"
+              className="absolute inset-0 z-50 backdrop-blur-sm bg-purple-50/90 dark:bg-purple-950/30 border-4 border-dashed border-purple-500/50 dark:border-purple-400 rounded-[28px] flex flex-col items-center justify-center gap-4"
             >
               <UploadIcon className="w-12 h-12 text-purple-600 dark:text-purple-400 animate-bounce" />
               <p className="text-2xl font-black text-slate-900 dark:text-white tracking-widest">DROP TO MOUNT</p>

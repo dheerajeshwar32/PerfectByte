@@ -1,9 +1,11 @@
 import { useState, type ChangeEvent, type DragEvent } from 'react';
-import { Link } from 'react-router-dom';
+import Navbar from './Navbar';
 import { compressToWebp } from './compressionService';
 import { addHistoryEntry, getHistoryStats } from './historyService';
 import { toast } from 'sonner';
 import { useDocumentTitle } from './useDocumentTitle';
+import { formatBytes } from './utils';
+import JSZip from 'jszip';
 
 interface CompressedFile {
   name: string;
@@ -11,14 +13,6 @@ interface CompressedFile {
   originalSize: number;
   compressedSize: number;
 }
-
-const formatBytes = (bytes: number) => {
-  if (bytes === 0) return '0 Bytes';
-  const k = 1024;
-  const sizes = ['Bytes', 'KB', 'MB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-};
 
 export default function BulkCompressor() {
   useDocumentTitle('Bulk Compressor');
@@ -28,6 +22,7 @@ export default function BulkCompressor() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [stats, setStats] = useState(() => getHistoryStats());
+  const [progress, setProgress] = useState({ current: 0, total: 0 });
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) setFiles(Array.from(e.target.files));
@@ -42,6 +37,7 @@ export default function BulkCompressor() {
   const handleCompress = async () => {
     if (files.length === 0) return;
     setIsProcessing(true);
+    setProgress({ current: 0, total: files.length });
     compressedFiles.forEach(file => URL.revokeObjectURL(file.url));
 
     try {
@@ -59,6 +55,7 @@ export default function BulkCompressor() {
         } catch (fileError) {
           console.error(`Failed to compress ${file.name}:`, fileError);
         }
+        setProgress(prev => ({ ...prev, current: prev.current + 1 }));
       }
 
       setCompressedFiles(results);
@@ -73,30 +70,27 @@ export default function BulkCompressor() {
     }
   };
 
-  const handleDownloadAll = () => {
-    compressedFiles.forEach(file => {
-      const link = document.createElement('a');
-      link.href = file.url;
-      link.download = file.name;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
+  const handleDownloadAll = async () => {
+    const zip = new JSZip();
+    for (const file of compressedFiles) {
+      const response = await fetch(file.url);
+      const blob = await response.blob();
+      zip.file(file.name, blob);
+    }
+    const content = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(content);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'perfectbyte-batch.zip';
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
   const totalReduction = compressedFiles.reduce((acc, curr) => acc + (curr.originalSize - curr.compressedSize), 0);
 
   return (
     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-slate-50 to-white dark:from-slate-900 dark:via-[#0a0f1c] dark:to-black flex flex-col items-center py-12 px-4 font-sans relative overflow-hidden transition-colors duration-150">
-      <Link 
-  to="/" 
-  className="fixed top-6 left-6 z-50 flex items-center gap-2 px-4 py-2 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-full text-sm font-bold text-slate-700 dark:text-slate-300 hover:scale-105 hover:shadow-md transition-all"
->
-  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M11 17l-5-5m0 0l5-5m-5 5h12"></path>
-  </svg>
-  Back to Tools
-</Link>
+      <Navbar />
 
       <div className="bg-white/60 dark:bg-slate-900/50 backdrop-blur-xl p-8 md:p-12 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-white dark:border-slate-800 max-w-5xl w-full text-center relative z-10">
         
@@ -118,7 +112,7 @@ export default function BulkCompressor() {
           {compressedFiles.length === 0 && (
             <div
               onDrop={handleDrop} onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }} onDragLeave={() => setIsDragging(false)}
-              className={`relative border-2 border-dashed rounded-2xl p-12 transition-all duration-200 ${isDragging ? 'border-emerald-400 bg-emerald-50/50 scale-[1.02]' : 'border-slate-200 bg-slate-50/50 hover:bg-slate-50'}`}
+              className={`relative border-2 border-dashed rounded-2xl p-12 transition-all duration-200 ${isDragging ? 'border-emerald-400 bg-emerald-50/50 dark:border-emerald-400 dark:bg-emerald-950/30 scale-[1.02]' : 'border-slate-200 bg-slate-50/50 dark:border-slate-700 dark:bg-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
             >
               <input type="file" multiple accept="image/jpeg, image/png, image/webp" onChange={handleFileChange} disabled={isProcessing} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
               <div className="text-center flex flex-col items-center">
@@ -129,13 +123,28 @@ export default function BulkCompressor() {
             </div>
           )}
 
-          {files.length > 0 && compressedFiles.length === 0 && (
+          {files.length > 0 && compressedFiles.length === 0 && !isProcessing && (
             <button
               onClick={handleCompress} disabled={isProcessing}
               className="w-full bg-emerald-500 text-white py-5 rounded-2xl font-black hover:bg-emerald-600 transition-all shadow-lg text-xl"
             >
-              {isProcessing ? 'Compressing Batch...' : `EXECUTE BATCH (${files.length})`}
+              EXECUTE BATCH ({files.length})
             </button>
+          )}
+
+          {isProcessing && progress.total > 0 && (
+            <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-2xl p-6 shadow-sm">
+              <div className="flex justify-between items-center text-sm font-bold text-slate-500 dark:text-slate-400 mb-3">
+                <span>Processing file {progress.current} of {progress.total}</span>
+                <span className="text-emerald-500">{Math.round((progress.current / progress.total) * 100)}%</span>
+              </div>
+              <div className="w-full bg-slate-200 dark:bg-slate-700 h-3 rounded-full overflow-hidden">
+                <div 
+                  className="bg-emerald-500 h-full transition-all duration-300 rounded-full"
+                  style={{ width: `${(progress.current / progress.total) * 100}%` }}
+                />
+              </div>
+            </div>
           )}
         </div>
 
@@ -148,7 +157,7 @@ export default function BulkCompressor() {
                 <span className="text-3xl font-black font-mono text-emerald-500">{formatBytes(totalReduction)}</span>
               </div>
               <button onClick={handleDownloadAll} className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-6 py-4 rounded-2xl hover:scale-105 transition-all text-sm font-bold shadow-lg">
-                Download All ({compressedFiles.length})
+                Download ZIP ({compressedFiles.length})
               </button>
             </div>
             

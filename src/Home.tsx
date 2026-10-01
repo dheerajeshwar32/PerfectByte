@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Logo from './Logo';
@@ -42,6 +42,15 @@ export default function Home() {
 
   const handleNext = () => setActiveIndex((prev) => (prev + 1) % tools.length);
   const handlePrev = () => setActiveIndex((prev) => (prev - 1 + tools.length) % tools.length);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') handlePrev();
+      if (e.key === 'ArrowRight') handleNext();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   return (
     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-white dark:from-slate-900 dark:via-[#0a0f1c] dark:to-black flex flex-col items-center justify-start pt-20 md:pt-24 relative overflow-x-hidden font-sans transition-colors duration-300 pb-20">
@@ -176,7 +185,7 @@ export default function Home() {
         })}
       </div>
 
-      <div className="flex gap-4 md:gap-6 mt-8 md:mt-12 z-30 mb-8">
+      <div className="flex gap-4 md:gap-6 mt-8 md:mt-12 z-30 mb-12">
         <button 
           onClick={handlePrev}
           className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:scale-110 transition-all active:scale-95"
@@ -189,6 +198,42 @@ export default function Home() {
         >
           <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
         </button>
+      </div>
+
+      <div className="z-30 w-full max-w-6xl px-4 md:px-8 mb-16">
+        <p className="text-center text-xs md:text-sm font-medium text-slate-500 dark:text-slate-400 mb-8 uppercase tracking-widest">
+          Trusted by developers & students for zero-compromise file optimization
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          <div onClick={() => navigate('/history')} className="cursor-pointer group relative overflow-hidden bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl p-6 rounded-3xl border border-white/60 dark:border-slate-800 hover:border-amber-500/50 dark:hover:border-amber-400/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 shadow-sm border border-slate-200/50 dark:border-slate-700/50 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 text-amber-500 dark:text-amber-400">
+               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">History</h4>
+            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">View your compression history, total space saved, and lifetime stats.</p>
+          </div>
+          <div onClick={() => navigate('/convert')} className="cursor-pointer group relative overflow-hidden bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl p-6 rounded-3xl border border-white/60 dark:border-slate-800 hover:border-cyan-500/50 dark:hover:border-cyan-400/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 shadow-sm border border-slate-200/50 dark:border-slate-700/50 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 text-cyan-500 dark:text-cyan-400">
+               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+            </div>
+            <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">Format Converter</h4>
+            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Convert images between PNG, JPEG, WebP, and AVIF formats with quality control.</p>
+          </div>
+          <div onClick={() => navigate('/resize')} className="cursor-pointer group relative overflow-hidden bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl p-6 rounded-3xl border border-white/60 dark:border-slate-800 hover:border-rose-500/50 dark:hover:border-rose-400/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 shadow-sm border border-slate-200/50 dark:border-slate-700/50 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 text-rose-500 dark:text-rose-400">
+               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
+            </div>
+            <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">Image Resizer</h4>
+            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Resize images to exact dimensions. Includes presets for social media platforms.</p>
+          </div>
+          <div onClick={() => navigate('/pdf-tools')} className="cursor-pointer group relative overflow-hidden bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl p-6 rounded-3xl border border-white/60 dark:border-slate-800 hover:border-orange-500/50 dark:hover:border-orange-400/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 shadow-sm border border-slate-200/50 dark:border-slate-700/50 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 text-orange-500 dark:text-orange-400">
+               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+            </div>
+            <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">PDF Tools</h4>
+            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Merge multiple PDFs into one or split pages from existing documents.</p>
+          </div>
+        </div>
       </div>
 
       <Footer />

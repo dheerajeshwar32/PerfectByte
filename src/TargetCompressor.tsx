@@ -1,10 +1,11 @@
 import { useState, type ChangeEvent, type DragEvent } from 'react';
-import { Link } from 'react-router-dom';
+import Navbar from './Navbar';
 import { compressToTarget } from './compressionService';
 import { compressPDF } from './pdfUtils';
 import { addHistoryEntry } from './historyService';
 import { toast } from 'sonner';
 import { useDocumentTitle } from './useDocumentTitle';
+import { formatBytes } from './utils';
 
 interface CompressionResult {
   fileName: string;
@@ -15,13 +16,14 @@ interface CompressionResult {
   isPdf: boolean;
 }
 
-const formatBytes = (bytes: number) => {
-  if (bytes === 0) return '0 Bytes';
-  const k = 1024;
-  const sizes = ['Bytes', 'KB', 'MB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-};
+const PRESETS = [
+  { label: '🏛️ Govt Portal', kb: 100 },
+  { label: '🏛️ Govt Portal+', kb: 200 },
+  { label: '📱 WhatsApp DP', kb: 50 },
+  { label: '🎓 University', kb: 500 },
+  { label: '📧 Email (5MB)', kb: 5120 },
+  { label: '💼 LinkedIn', kb: 2048 },
+];
 
 function BeforeAfterSlider({ originalUrl, compressedUrl }: { originalUrl: string; compressedUrl: string }) {
   const [position, setPosition] = useState(50);
@@ -63,6 +65,7 @@ export default function TargetCompressor() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [result, setResult] = useState<CompressionResult | null>(null);
+  const [progressMsg, setProgressMsg] = useState('');
 
   const processFile = async (file: File) => {
     if (result) {
@@ -71,6 +74,7 @@ export default function TargetCompressor() {
     }
     setIsProcessing(true);
     setResult(null);
+    setProgressMsg('');
 
     const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
     const toastId = toast.loading(isPdf ? 'Calculating precise PDF compression...' : 'Optimizing quality and resolution...');
@@ -84,7 +88,9 @@ export default function TargetCompressor() {
         let minQ = 0.05, maxQ = 1.0, bestBlob: Blob | null = null, bestDiff = Infinity;
         for (let i = 0; i < 8; i++) {
           const midQ = (minQ + maxQ) / 2;
-          toast.loading(`Precision targeting PDF (Pass ${i + 1}/8)...`, { id: toastId });
+          const msg = `Precision targeting PDF (Pass ${i + 1}/8)...`;
+          setProgressMsg(msg);
+          toast.loading(msg, { id: toastId });
           const currentBlob = await compressPDF(file, midQ);
           if (currentBlob.size <= targetBytes) {
             const diff = targetBytes - currentBlob.size;
@@ -100,6 +106,7 @@ export default function TargetCompressor() {
         const bitmap = await createImageBitmap(file);
         let width = bitmap.width, height = bitmap.height, attempts = 0;
         while (attempts < 8) {
+          setProgressMsg(`Optimizing quality (attempt ${attempts + 1}/8)...`);
           const canvas = document.createElement('canvas');
           canvas.width = width; canvas.height = height;
           const ctx = canvas.getContext('2d');
@@ -132,6 +139,7 @@ export default function TargetCompressor() {
       toast.error('An error occurred during compression.', { id: toastId });
     } finally {
       setIsProcessing(false);
+      setProgressMsg('');
     }
   };
 
@@ -148,15 +156,7 @@ export default function TargetCompressor() {
 
   return (
     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-slate-50 to-white dark:from-slate-900 dark:via-[#0a0f1c] dark:to-black flex flex-col items-center py-12 px-4 font-sans relative overflow-hidden transition-colors duration-150">
-      <Link 
-        to="/" 
-        className="fixed top-6 left-6 z-50 flex items-center gap-2 px-4 py-2 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-full text-sm font-bold text-slate-700 dark:text-slate-300 hover:scale-105 hover:shadow-md transition-all"
-      >
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M11 17l-5-5m0 0l5-5m-5 5h12"></path>
-        </svg>
-        Back to Tools
-      </Link>
+      <Navbar />
 
       <div className="bg-white/60 dark:bg-slate-900/50 backdrop-blur-xl p-8 md:p-12 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-white dark:border-slate-800 max-w-4xl w-full text-center relative z-10">
         
@@ -173,27 +173,48 @@ export default function TargetCompressor() {
               />
               <span className="text-3xl md:text-4xl font-black text-slate-300 dark:text-slate-700">KB</span>
             </div>
+            
+            <div className="flex flex-wrap justify-center gap-2 mt-6 mb-4">
+              {PRESETS.map(preset => (
+                <button
+                  key={preset.label}
+                  onClick={() => setTargetKB(preset.kb)}
+                  className="px-4 py-2 text-xs font-bold rounded-full bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-blue-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white transition-colors border border-transparent hover:border-blue-200 dark:hover:border-slate-600"
+                >
+                  {preset.label}
+                </button>
+              ))}
+            </div>
+
             <input
               type="range"
               min="10" max="2000"
               value={targetKB}
               onChange={(e) => setTargetKB(Number(e.target.value))}
-              className="w-full max-w-md h-2 mt-8 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-600 dark:accent-blue-500"
+              className="w-full max-w-md h-2 mt-4 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-600 dark:accent-blue-500"
             />
           </div>
         )}
 
         <div className="max-w-xl mx-auto space-y-8">
           {!result && (
-            <div
-              onDrop={handleDrop} onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }} onDragLeave={() => setIsDragging(false)}
-              className={`relative border-2 border-dashed rounded-2xl p-10 transition-all duration-200 ${isDragging ? 'border-blue-400 bg-blue-50/50 scale-[1.02]' : 'border-slate-200 bg-slate-50/50 hover:bg-slate-50'}`}
-            >
-              <input type="file" accept=".pdf,.png,.jpg,.jpeg,.webp" onChange={handleFileUpload} disabled={isProcessing} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
-              <div className="text-center flex flex-col items-center">
-                <div className="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center mb-4 text-blue-500"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg></div>
-                <span className="font-bold text-lg mb-1">{isProcessing ? 'Processing...' : 'Click to select image or PDF'}</span>
+            <div className="space-y-4">
+              <div
+                onDrop={handleDrop} onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }} onDragLeave={() => setIsDragging(false)}
+                className={`relative border-2 border-dashed rounded-2xl p-10 transition-all duration-200 ${isDragging ? 'border-blue-400 bg-blue-50/50 dark:border-blue-400 dark:bg-blue-950/30 scale-[1.02]' : 'border-slate-200 bg-slate-50/50 dark:border-slate-700 dark:bg-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
+              >
+                <input type="file" accept=".pdf,.png,.jpg,.jpeg,.webp" onChange={handleFileUpload} disabled={isProcessing} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+                <div className="text-center flex flex-col items-center">
+                  <div className="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center mb-4 text-blue-500"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg></div>
+                  <span className="font-bold text-lg mb-1">{isProcessing ? 'Processing...' : 'Click to select image or PDF'}</span>
+                </div>
               </div>
+              
+              {isProcessing && progressMsg && (
+                <div className="text-sm font-medium text-slate-500 dark:text-slate-400 animate-pulse">
+                  {progressMsg}
+                </div>
+              )}
             </div>
           )}
 
