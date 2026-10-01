@@ -63,7 +63,7 @@ export default function BulkCompressor() {
       
       if (results.length === 0) toast.error("Failed to compress images.");
       else toast.success(`Successfully compressed ${results.length} images!`);
-    } catch (error) {
+    } catch {
       toast.error("A critical error occurred during compression.");
     } finally {
       setIsProcessing(false);

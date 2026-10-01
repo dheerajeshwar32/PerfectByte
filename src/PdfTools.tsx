@@ -153,9 +153,9 @@ export default function PdfTools() {
       setSplitFinalPages(indicesToCopy.length);
       setSplitPdfUrl(URL.createObjectURL(blob));
       toast.success('PDF split successfully!');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      toast.error(err.message || 'Error splitting PDF');
+      toast.error((err as Error).message || 'Error splitting PDF');
     } finally {
       setIsSplitting(false);
     }

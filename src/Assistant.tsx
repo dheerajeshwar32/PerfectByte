@@ -157,7 +157,7 @@ export default function Assistant() {
       } else {
         setMessages((prev) => [...prev, { role: 'assistant', text: data.text ?? "Command not recognized." }]);
       }
-    } catch (error) {
+    } catch {
       setMessages((prev) => [...prev, { role: 'assistant', text: 'Network connection failed. Please retry.' }]);
     } finally {
       setIsBusy(false);

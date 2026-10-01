@@ -17,7 +17,7 @@ export default function History() {
   };
 
   useEffect(() => {
-    loadHistory();
+    setTimeout(() => loadHistory(), 0);
   }, []);
 
   const handleClear = () => {

@@ -25,6 +25,17 @@ export default function FormatConverter() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const processFile = async (f: File) => {
+    setFile(f);
+    setResult(null);
+    try {
+      const m = await getImageMeta(f);
+      setMeta(m);
+    } catch {
+      toast.error('Failed to read image metadata.');
+    }
+  };
+
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
@@ -55,16 +66,6 @@ export default function FormatConverter() {
     }
   };
 
-  const processFile = async (f: File) => {
-    setFile(f);
-    setResult(null);
-    try {
-      const m = await getImageMeta(f);
-      setMeta(m);
-    } catch (err) {
-      toast.error('Failed to read image metadata.');
-    }
-  };
 
   const handleConvert = async () => {
     if (!file) return;
@@ -75,7 +76,7 @@ export default function FormatConverter() {
     try {
       const imageData = await getImageData(file);
       let buffer: ArrayBuffer;
-      let mimeType = `image/${targetFormat}`;
+      const mimeType = `image/${targetFormat}`;
       
       if (targetFormat === 'webp') {
         buffer = await encodeWebp(imageData, { quality });
@@ -86,7 +87,7 @@ export default function FormatConverter() {
       } else if (targetFormat === 'avif') {
         try {
           toast.info('Encoding AVIF (this may take a moment)...');
-          buffer = await encodeAvif(imageData as any, { quality });
+          buffer = await encodeAvif(imageData as unknown as ImageData, { quality });
         } catch (e: unknown) {
           throw new Error('AVIF encoding is not supported in your browser', { cause: e });
         }
@@ -105,9 +106,9 @@ export default function FormatConverter() {
       
       toast.success('Conversion complete!');
       
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      toast.error(err.message || 'Failed to convert image.');
+      toast.error((err as Error).message || 'Failed to convert image.');
     } finally {
       setIsConverting(false);
     }
