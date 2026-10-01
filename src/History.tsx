@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { getHistory, getHistoryStats, clearHistory, HistoryEntry } from './historyService';
+import { useState, useEffect } from 'react';
+import { getHistory, getHistoryStats, clearHistory, type HistoryEntry } from './historyService';
 import { formatBytes } from './utils';
 import Navbar from './Navbar';
-import useDocumentTitle from './useDocumentTitle';
+import { useDocumentTitle } from './useDocumentTitle';
 
 export default function History() {
   useDocumentTitle('History');

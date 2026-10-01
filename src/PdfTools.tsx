@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Navbar } from './Navbar';
+import { useState } from 'react';
+import Navbar from './Navbar';
 import { useDocumentTitle } from './useDocumentTitle';
 import { formatBytes } from './utils';
 import { toast } from 'sonner';
 import { PDFDocument } from 'pdf-lib';
 
-export const PdfTools: React.FC = () => {
+export default function PdfTools() {
   useDocumentTitle('PDF Tools');
   
   const [activeTab, setActiveTab] = useState<'merge' | 'split'>('merge');
@@ -69,7 +69,7 @@ export const PdfTools: React.FC = () => {
       }
       
       const pdfBytes = await mergedPdf.save();
-      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const blob = new Blob([pdfBytes as BlobPart], { type: 'application/pdf' });
       setMergedSize(blob.size);
       setMergedPdfUrl(URL.createObjectURL(blob));
       toast.success('PDFs merged successfully!');
@@ -147,7 +147,7 @@ export const PdfTools: React.FC = () => {
       copiedPages.forEach(page => newPdf.addPage(page));
       
       const pdfBytes = await newPdf.save();
-      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const blob = new Blob([pdfBytes as BlobPart], { type: 'application/pdf' });
       
       setSplitSize(blob.size);
       setSplitFinalPages(indicesToCopy.length);
@@ -342,4 +342,4 @@ export const PdfTools: React.FC = () => {
       </main>
     </div>
   );
-};
+}

@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Navbar } from './Navbar';
+import { useState } from 'react';
+import Navbar from './Navbar';
 import { useDocumentTitle } from './useDocumentTitle';
 import { formatBytes } from './utils';
 import { toast } from 'sonner';
@@ -18,7 +18,7 @@ const PRESETS: Preset[] = [
   { label: '4K UHD', width: 3840, height: 2160 },
 ];
 
-export const ImageResizer: React.FC = () => {
+export default function ImageResizer() {
   useDocumentTitle('Image Resizer');
 
   const [isDragging, setIsDragging] = useState(false);
@@ -241,7 +241,7 @@ export const ImageResizer: React.FC = () => {
                 </div>
                 <div className="flex justify-between pb-4 border-b border-slate-100 dark:border-slate-700">
                   <span className="text-slate-500 dark:text-slate-400">Original Size</span>
-                  <span className="font-bold text-slate-800 dark:text-white">{formatBytes(file.size)}</span>
+                  <span className="font-bold text-slate-800 dark:text-white">{formatBytes(file!.size)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500 dark:text-slate-400">New Size</span>
@@ -261,7 +261,7 @@ export const ImageResizer: React.FC = () => {
                 </button>
                 <a
                   href={resultUrl}
-                  download={`resized_${width}x${height}_${file.name.replace(/\.[^/.]+$/, "")}.webp`}
+                  download={`resized_${width}x${height}_${file!.name.replace(/\.[^/.]+$/, "")}.webp`}
                   className="flex-1 bg-emerald-500 text-white py-4 rounded-2xl font-bold hover:bg-emerald-600 transition-colors text-center"
                 >
                   Download
@@ -273,4 +273,4 @@ export const ImageResizer: React.FC = () => {
       </main>
     </div>
   );
-};
+}

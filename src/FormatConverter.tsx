@@ -5,7 +5,7 @@ import { encode as encodeJpeg } from '@jsquash/jpeg';
 import { encode as encodeAvif } from '@jsquash/avif';
 import { getImageData, getImageMeta, formatBytes, type ImageMeta } from './utils';
 import Navbar from './Navbar';
-import useDocumentTitle from './useDocumentTitle';
+import { useDocumentTitle } from './useDocumentTitle';
 import { toast } from 'sonner';
 
 type Format = 'png' | 'jpeg' | 'webp' | 'avif';
@@ -86,7 +86,7 @@ export default function FormatConverter() {
       } else if (targetFormat === 'avif') {
         try {
           toast.info('Encoding AVIF (this may take a moment)...');
-          buffer = await encodeAvif(imageData, { cqLevel: Math.round(63 - (quality / 100) * 63) });
+          buffer = await encodeAvif(imageData as any, { quality });
         } catch (e) {
           throw new Error('AVIF encoding is not supported in your browser');
         }
