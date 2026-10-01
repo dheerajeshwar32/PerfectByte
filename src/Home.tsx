@@ -94,30 +94,6 @@ export default function Home() {
                   </span>
                 </>
               )}
-              {activeIndex === 3 && (
-                <>
-                  <svg className="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                  <span className="text-xs md:text-sm font-semibold text-slate-700 dark:text-slate-300">Track Your Savings</span>
-                </>
-              )}
-              {activeIndex === 4 && (
-                <>
-                  <svg className="w-4 h-4 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                  <span className="text-xs md:text-sm font-semibold text-slate-700 dark:text-slate-300">Any Format, Anywhere</span>
-                </>
-              )}
-              {activeIndex === 5 && (
-                <>
-                  <svg className="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
-                  <span className="text-xs md:text-sm font-semibold text-slate-700 dark:text-slate-300">Pixel-Perfect Resizing</span>
-                </>
-              )}
-              {activeIndex === 6 && (
-                <>
-                  <svg className="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                  <span className="text-xs md:text-sm font-semibold text-slate-700 dark:text-slate-300">Complete PDF Control</span>
-                </>
-              )}
             </motion.div>
           </AnimatePresence>
         </div>
@@ -151,8 +127,6 @@ export default function Home() {
             xOffset = "-75%"; scale = 0.85; zIndex = 10; opacity = 0.3; blur = "blur(8px)";
           } else if (isRight) {
             xOffset = "75%"; scale = 0.85; zIndex = 10; opacity = 0.3; blur = "blur(8px)";
-          } else {
-            xOffset = "0%"; scale = 0.7; zIndex = 0; opacity = 0; blur = "blur(10px)";
           }
 
           return (
@@ -224,42 +198,6 @@ export default function Home() {
         >
           <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
         </button>
-      </div>
-
-      <div className="z-30 w-full max-w-6xl px-4 md:px-8 mb-16">
-        <p className="text-center text-xs md:text-sm font-medium text-slate-500 dark:text-slate-400 mb-8 uppercase tracking-widest">
-          Trusted by developers & students for zero-compromise file optimization
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-          <div onClick={() => navigate('/history')} className="cursor-pointer group relative overflow-hidden bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl p-6 rounded-3xl border border-white/60 dark:border-slate-800 hover:border-amber-500/50 dark:hover:border-amber-400/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 shadow-sm border border-slate-200/50 dark:border-slate-700/50 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 text-amber-500 dark:text-amber-400">
-               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            </div>
-            <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">History</h4>
-            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">View your compression history, total space saved, and lifetime stats.</p>
-          </div>
-          <div onClick={() => navigate('/convert')} className="cursor-pointer group relative overflow-hidden bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl p-6 rounded-3xl border border-white/60 dark:border-slate-800 hover:border-cyan-500/50 dark:hover:border-cyan-400/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 shadow-sm border border-slate-200/50 dark:border-slate-700/50 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 text-cyan-500 dark:text-cyan-400">
-               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
-            </div>
-            <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">Format Converter</h4>
-            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Convert images between PNG, JPEG, WebP, and AVIF formats with quality control.</p>
-          </div>
-          <div onClick={() => navigate('/resize')} className="cursor-pointer group relative overflow-hidden bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl p-6 rounded-3xl border border-white/60 dark:border-slate-800 hover:border-rose-500/50 dark:hover:border-rose-400/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 shadow-sm border border-slate-200/50 dark:border-slate-700/50 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 text-rose-500 dark:text-rose-400">
-               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
-            </div>
-            <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">Image Resizer</h4>
-            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Resize images to exact dimensions. Includes presets for social media platforms.</p>
-          </div>
-          <div onClick={() => navigate('/pdf-tools')} className="cursor-pointer group relative overflow-hidden bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl p-6 rounded-3xl border border-white/60 dark:border-slate-800 hover:border-orange-500/50 dark:hover:border-orange-400/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 shadow-sm border border-slate-200/50 dark:border-slate-700/50 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 text-orange-500 dark:text-orange-400">
-               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-            </div>
-            <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">PDF Tools</h4>
-            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Merge multiple PDFs into one or split pages from existing documents.</p>
-          </div>
-        </div>
       </div>
 
       <Footer />
