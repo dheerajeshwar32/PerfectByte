@@ -29,7 +29,7 @@ function BeforeAfterSlider({ originalUrl, compressedUrl }: { originalUrl: string
   const [position, setPosition] = useState(50);
 
   return (
-    <div className="relative w-full aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200/60 dark:border-slate-700 shadow-sm bg-slate-50 dark:bg-slate-900 select-none">
+    <div className="relative w-full aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200/60 dark:border-slate-700 shadow-sm bg-slate-50 dark:bg-indigo-900 select-none">
       <img src={compressedUrl} alt="Compressed" draggable={false} className="absolute inset-0 w-full h-full object-contain" />
       <div className="absolute inset-0 overflow-hidden" style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}>
         <img src={originalUrl} alt="Original" draggable={false} className="absolute inset-0 w-full h-full object-contain" />
@@ -37,7 +37,7 @@ function BeforeAfterSlider({ originalUrl, compressedUrl }: { originalUrl: string
 
       <div className="absolute top-0 bottom-0 w-0.5 bg-white shadow-[0_0_10px_rgba(0,0,0,0.3)] pointer-events-none" style={{ left: `${position}%` }}>
         <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white backdrop-blur rounded-full shadow-lg flex items-center justify-center text-slate-800 text-xs font-bold"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white backdrop-blur rounded-full shadow-lg flex items-center justify-center text-indigo-800 text-xs font-bold"
           style={{ boxShadow: '-2px 0px 0px rgba(0,255,255,0.6), 2px 0px 0px rgba(255,0,255,0.6)' }}
         >
           ↔
@@ -52,8 +52,8 @@ function BeforeAfterSlider({ originalUrl, compressedUrl }: { originalUrl: string
         onChange={(e) => setPosition(Number(e.target.value))}
         className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize"
       />
-      <span className="absolute top-3 left-3 bg-slate-900/70 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-lg pointer-events-none font-medium">Original</span>
-      <span className="absolute top-3 right-3 bg-slate-900/70 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-lg pointer-events-none font-medium">Compressed</span>
+      <span className="absolute top-3 left-3 bg-indigo-900/70 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-lg pointer-events-none font-medium">Original</span>
+      <span className="absolute top-3 right-3 bg-indigo-900/70 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-lg pointer-events-none font-medium">Compressed</span>
     </div>
   );
 }
@@ -155,20 +155,20 @@ export default function TargetCompressor() {
   };
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-slate-50 to-white dark:from-slate-900 dark:via-[#0a0f1c] dark:to-[#050810] flex flex-col items-center py-12 px-4 font-sans relative overflow-hidden transition-colors duration-150">
+    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-slate-50 to-white dark:from-indigo-900 dark:via-[#0a0f1c] dark:to-[#050810] flex flex-col items-center py-12 px-4 font-sans relative overflow-hidden transition-colors duration-150">
       <Navbar />
 
-      <div className="bg-white/60 dark:bg-slate-900/50 backdrop-blur-xl p-8 md:p-12 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-white dark:border-slate-800 max-w-4xl w-full text-center relative z-10">
+      <div className="bg-white/60 dark:bg-indigo-900/50 backdrop-blur-xl p-8 md:p-12 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-white dark:border-indigo-800 max-w-4xl w-full text-center relative z-10">
         
         {!result && (
-          <div className="flex flex-col items-center justify-center py-8 mb-8 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex flex-col items-center justify-center py-8 mb-8 border-b border-slate-200 dark:border-indigo-800">
             <span className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4">Target File Size</span>
             <div className="flex items-baseline gap-2">
               <input
                 type="number"
                 value={targetKB}
                 onChange={(e) => setTargetKB(Number(e.target.value))}
-                className="text-6xl md:text-8xl font-black font-mono tabular-nums text-center bg-transparent outline-none text-slate-900 dark:text-white w-full max-w-[350px]"
+                className="text-6xl md:text-8xl font-black font-mono tabular-nums text-center bg-transparent outline-none text-indigo-900 dark:text-white w-full max-w-[350px]"
                 min="1"
               />
               <span className="text-3xl md:text-4xl font-black text-slate-300 dark:text-slate-700">KB</span>
@@ -179,7 +179,7 @@ export default function TargetCompressor() {
                 <button
                   key={preset.label}
                   onClick={() => setTargetKB(preset.kb)}
-                  className="px-4 py-2 text-xs font-bold rounded-full bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-blue-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white transition-colors border border-transparent hover:border-blue-200 dark:hover:border-slate-600"
+                  className="px-4 py-2 text-xs font-bold rounded-full bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-blue-600 dark:bg-indigo-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white transition-colors border border-transparent hover:border-blue-200 dark:hover:border-slate-600"
                 >
                   {preset.label}
                 </button>
@@ -191,7 +191,7 @@ export default function TargetCompressor() {
               min="10" max="2000"
               value={targetKB}
               onChange={(e) => setTargetKB(Number(e.target.value))}
-              className="w-full max-w-md h-2 mt-4 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-600 dark:accent-blue-500"
+              className="w-full max-w-md h-2 mt-4 bg-slate-200 dark:bg-indigo-800 rounded-lg appearance-none cursor-pointer accent-blue-600 dark:accent-blue-500"
             />
           </div>
         )}
@@ -201,7 +201,7 @@ export default function TargetCompressor() {
             <div className="space-y-4">
               <div
                 onDrop={handleDrop} onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }} onDragLeave={() => setIsDragging(false)}
-                className={`relative border-2 border-dashed rounded-2xl p-10 transition-all duration-200 ${isDragging ? 'border-blue-400 bg-blue-50/50 dark:border-blue-400 dark:bg-blue-950/30 scale-[1.02]' : 'border-slate-200 bg-slate-50/50 dark:border-slate-700 dark:bg-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
+                className={`relative border-2 border-dashed rounded-2xl p-10 transition-all duration-200 ${isDragging ? 'border-blue-400 bg-blue-50/50 dark:border-blue-400 dark:bg-blue-950/30 scale-[1.02]' : 'border-slate-200 bg-slate-50/50 dark:border-slate-700 dark:bg-indigo-800/50 hover:bg-slate-50 dark:hover:bg-indigo-800'}`}
               >
                 <input type="file" accept=".pdf,.png,.jpg,.jpeg,.webp" onChange={handleFileUpload} disabled={isProcessing} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
                 <div className="text-center flex flex-col items-center">
@@ -219,7 +219,7 @@ export default function TargetCompressor() {
           )}
 
           {result && (
-            <div className="space-y-6 text-left bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl">
+            <div className="space-y-6 text-left bg-white dark:bg-indigo-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl">
               <div className="flex justify-between items-center pb-6 border-b border-slate-100 dark:border-slate-700">
                 <div>
                   <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">Reduction</h3>
@@ -234,7 +234,7 @@ export default function TargetCompressor() {
                   onClick={() => {
                     const a = document.createElement('a'); a.href = result.compressedUrl; a.download = result.fileName; a.click();
                   }}
-                  className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-6 py-4 rounded-2xl hover:scale-105 transition-all text-sm font-bold shadow-lg"
+                  className="bg-indigo-900 dark:bg-white text-white dark:text-indigo-900 px-6 py-4 rounded-2xl hover:scale-105 transition-all text-sm font-bold shadow-lg"
                 >
                   Download Output
                 </button>
@@ -242,7 +242,7 @@ export default function TargetCompressor() {
 
               {!result.isPdf && <BeforeAfterSlider originalUrl={result.originalUrl} compressedUrl={result.compressedUrl} />}
               
-              <div className="flex justify-between items-center text-sm font-mono tabular-nums bg-slate-50 dark:bg-slate-900 p-4 rounded-xl">
+              <div className="flex justify-between items-center text-sm font-mono tabular-nums bg-slate-50 dark:bg-indigo-900 p-4 rounded-xl">
                 <div className="flex flex-col">
                   <span className="text-slate-400 text-xs font-sans font-bold uppercase">Original</span>
                   <span className="text-slate-600 dark:text-slate-300 font-bold">{formatBytes(result.originalSize)}</span>

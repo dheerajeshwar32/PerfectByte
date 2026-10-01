@@ -186,7 +186,7 @@ export default function Assistant() {
         onDrop={handleDrop}
         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
         onDragLeave={() => setIsDragging(false)}
-        className="w-full max-w-4xl h-[85vh] bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800/80 rounded-[28px] shadow-[0_12px_40px_-18px_rgba(0,0,0,0.1)] dark:shadow-[0_12px_40px_-18px_rgba(0,0,0,0.6)] flex flex-col relative overflow-hidden"
+        className="w-full max-w-4xl h-[85vh] bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-indigo-800/80 rounded-[28px] shadow-[0_12px_40px_-18px_rgba(0,0,0,0.1)] dark:shadow-[0_12px_40px_-18px_rgba(0,0,0,0.6)] flex flex-col relative overflow-hidden"
       >
         {/* Full Screen Dropzone Overlay */}
         <AnimatePresence>
@@ -196,19 +196,19 @@ export default function Assistant() {
               className="absolute inset-0 z-50 backdrop-blur-sm bg-purple-50/90 dark:bg-purple-950/30 border-4 border-dashed border-purple-500/50 dark:border-purple-400 rounded-[28px] flex flex-col items-center justify-center gap-4"
             >
               <UploadIcon className="w-12 h-12 text-purple-600 dark:text-purple-400 animate-bounce" />
-              <p className="text-2xl font-black text-slate-900 dark:text-white tracking-widest">DROP TO MOUNT</p>
+              <p className="text-2xl font-black text-indigo-900 dark:text-white tracking-widest">DROP TO MOUNT</p>
             </motion.div>
           )}
         </AnimatePresence>
 
         {/* Header Bar */}
-        <header className="h-20 shrink-0 border-b border-slate-100 dark:border-slate-800/80 flex items-center justify-between px-5 sm:px-6 bg-slate-50/50 dark:bg-[#050810]/50">
+        <header className="h-20 shrink-0 border-b border-slate-100 dark:border-indigo-800/80 flex items-center justify-between px-5 sm:px-6 bg-slate-50/50 dark:bg-[#050810]/50">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl border border-purple-500/30 bg-purple-500/10 flex items-center justify-center text-purple-600 dark:text-purple-400 shrink-0 shadow-inner">
               <SparkIcon className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-base font-black text-slate-900 dark:text-white tracking-tight leading-none mb-1.5">AI Command Center</h1>
+              <h1 className="text-base font-black text-indigo-900 dark:text-white tracking-tight leading-none mb-1.5">AI Command Center</h1>
               <div className="flex items-center gap-1.5">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -230,7 +230,7 @@ export default function Assistant() {
               className={`px-5 py-2.5 transition-all duration-200 flex items-center gap-2 text-xs font-bold font-mono uppercase tracking-widest rounded-xl shadow-sm group-hover:scale-[1.02] active:scale-95 ${
                 files.length > 0
                   ? 'bg-emerald-500 text-white shadow-emerald-500/25 border border-emerald-400'
-                  : 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border border-slate-800 dark:border-slate-200 hover:opacity-90'
+                  : 'bg-indigo-900 dark:bg-white text-white dark:text-indigo-900 border border-indigo-800 dark:border-slate-200 hover:opacity-90'
               }`}
             >
               {files.length > 0 ? <CheckIcon className="w-4 h-4" /> : <UploadIcon className="w-4 h-4" />}
@@ -245,7 +245,7 @@ export default function Assistant() {
             {messages.map((msg, i) =>
               msg.role === 'user' ? (
                 <motion.div key={i} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} className="flex justify-end">
-                  <div className="max-w-[75%] bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl rounded-tr-sm px-5 py-3 text-[15px] font-medium leading-relaxed shadow-sm">
+                  <div className="max-w-[75%] bg-indigo-900 dark:bg-white text-white dark:text-indigo-900 rounded-2xl rounded-tr-sm px-5 py-3 text-[15px] font-medium leading-relaxed shadow-sm">
                     {msg.text}
                   </div>
                 </motion.div>
@@ -294,13 +294,13 @@ export default function Assistant() {
                           <div className="flex justify-between text-[11px] tabular-nums text-slate-400 mb-1.5 uppercase font-bold tracking-wider">
                             <span>Original</span><span className="line-through">{formatBytes(downloadUrl.originalSize!)}</span>
                           </div>
-                          <div className="h-2 rounded-full bg-slate-100 dark:bg-slate-800 w-full" />
+                          <div className="h-2 rounded-full bg-slate-100 dark:bg-indigo-800 w-full" />
                         </div>
                         <div>
                           <div className="flex justify-between text-[11px] tabular-nums text-emerald-500 mb-1.5 uppercase font-bold tracking-wider">
                             <span>Target</span><span>{formatBytes(downloadUrl.compressedSize!)}</span>
                           </div>
-                          <div className="h-2 rounded-full bg-slate-100 dark:bg-slate-800 w-full overflow-hidden">
+                          <div className="h-2 rounded-full bg-slate-100 dark:bg-indigo-800 w-full overflow-hidden">
                             <div className="h-full rounded-full bg-emerald-500" style={{ width: `${compressedBarPercent}%` }} />
                           </div>
                         </div>
@@ -312,7 +312,7 @@ export default function Assistant() {
                         <CheckIcon className="w-6 h-6" />
                       </div>
                       <div className="min-w-0">
-                        <div className="font-bold text-slate-900 dark:text-white text-sm">Package Ready</div>
+                        <div className="font-bold text-indigo-900 dark:text-white text-sm">Package Ready</div>
                         <div className="font-mono text-[11px] text-slate-500 truncate">{downloadUrl.name}</div>
                       </div>
                     </div>
@@ -320,7 +320,7 @@ export default function Assistant() {
 
                   <a
                     href={downloadUrl.url} download={downloadUrl.name}
-                    className="w-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 py-3.5 rounded-xl flex items-center justify-center gap-2 font-bold text-sm hover:scale-[1.02] active:scale-95 transition-all shadow-md relative z-10"
+                    className="w-full bg-indigo-900 dark:bg-white text-white dark:text-indigo-900 py-3.5 rounded-xl flex items-center justify-center gap-2 font-bold text-sm hover:scale-[1.02] active:scale-95 transition-all shadow-md relative z-10"
                   >
                     <DownloadIcon className="w-4 h-4" />
                     Download Output
@@ -333,19 +333,19 @@ export default function Assistant() {
         </div>
 
         {/* Input Bar */}
-        <form onSubmit={handleSubmit} className="p-4 border-t border-slate-100 dark:border-slate-800/80 bg-white/50 dark:bg-[#050810]/50 backdrop-blur-md">
-          <div className="flex items-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-800 focus-within:border-purple-500/50 dark:focus-within:border-purple-500/50 focus-within:ring-4 focus-within:ring-purple-500/10 bg-slate-50 dark:bg-[#0B1120] px-4 transition-all shadow-inner">
+        <form onSubmit={handleSubmit} className="p-4 border-t border-slate-100 dark:border-indigo-800/80 bg-white/50 dark:bg-[#050810]/50 backdrop-blur-md">
+          <div className="flex items-center gap-2 rounded-2xl border border-slate-200 dark:border-indigo-800 focus-within:border-purple-500/50 dark:focus-within:border-purple-500/50 focus-within:ring-4 focus-within:ring-purple-500/10 bg-slate-50 dark:bg-[#0B1120] px-4 transition-all shadow-inner">
             <span className="font-mono text-purple-500 font-black select-none">&gt;</span>
             <input
               type="text" value={input} onChange={(e) => setInput(e.target.value)} disabled={isBusy}
               placeholder='ENTER COMMAND (e.g. "compress to 100KB")'
-              className="flex-1 bg-transparent px-3 py-4 outline-none text-[14px] font-mono font-medium text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 disabled:opacity-50"
+              className="flex-1 bg-transparent px-3 py-4 outline-none text-[14px] font-mono font-medium text-indigo-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 disabled:opacity-50"
             />
             <div className="pr-1">
               <button
                 type="submit" disabled={isBusy || !input.trim()}
                 aria-label="Send command"
-                className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 p-2.5 rounded-xl hover:scale-105 disabled:hover:scale-100 disabled:opacity-40 transition-all flex items-center justify-center shadow-sm"
+                className="bg-indigo-900 dark:bg-white text-white dark:text-indigo-900 p-2.5 rounded-xl hover:scale-105 disabled:hover:scale-100 disabled:opacity-40 transition-all flex items-center justify-center shadow-sm"
               >
                 <SendIcon className="w-4 h-4" />
               </button>

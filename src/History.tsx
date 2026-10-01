@@ -35,10 +35,10 @@ export default function History() {
   const totalSaved = stats.totalOriginal - stats.totalCompressed;
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-slate-50 to-white dark:from-slate-900 dark:via-[#0a0f1c] dark:to-[#050810] flex flex-col items-center py-12 px-4 font-sans relative overflow-hidden transition-colors duration-150">
+    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-slate-50 to-white dark:from-indigo-900 dark:via-[#0a0f1c] dark:to-[#050810] flex flex-col items-center py-12 px-4 font-sans relative overflow-hidden transition-colors duration-150">
       <Navbar />
       
-      <div className="bg-white/60 dark:bg-slate-900/50 backdrop-blur-xl p-8 md:p-12 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-white dark:border-slate-800 max-w-5xl w-full text-center relative z-10 mt-12">
+      <div className="bg-white/60 dark:bg-indigo-900/50 backdrop-blur-xl p-8 md:p-12 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-white dark:border-indigo-800 max-w-5xl w-full text-center relative z-10 mt-12">
         <h2 className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4">Total Space Saved</h2>
         
         <div className="mb-12">
@@ -59,7 +59,7 @@ export default function History() {
             <p>No compression history yet.</p>
           </div>
         ) : (
-          <div className="text-left bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl overflow-hidden mb-8">
+          <div className="text-left bg-white dark:bg-indigo-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl overflow-hidden mb-8">
             <div className="overflow-x-auto">
               <table className="w-full text-sm text-left text-slate-600 dark:text-slate-400">
                 <thead className="text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
@@ -81,8 +81,8 @@ export default function History() {
                     });
                     
                     return (
-                      <tr key={entry.id} className={`${index % 2 === 0 ? 'bg-white dark:bg-slate-800' : 'bg-slate-50 dark:bg-slate-900/50'} border-b dark:border-slate-700`}>
-                        <td className="px-6 py-4 font-medium text-slate-900 dark:text-white truncate max-w-xs" title={entry.fileName}>
+                      <tr key={entry.id} className={`${index % 2 === 0 ? 'bg-white dark:bg-indigo-800' : 'bg-slate-50 dark:bg-indigo-900/50'} border-b dark:border-slate-700`}>
+                        <td className="px-6 py-4 font-medium text-indigo-900 dark:text-white truncate max-w-xs" title={entry.fileName}>
                           {entry.fileName}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">{date}</td>
@@ -104,7 +104,7 @@ export default function History() {
             className={`px-6 py-4 rounded-2xl transition-all text-sm font-bold shadow-lg ${
               confirmClear 
                 ? 'bg-red-500 hover:bg-red-600 text-white' 
-                : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'
+                : 'bg-slate-200 dark:bg-indigo-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'
             }`}
           >
             {confirmClear ? 'Are you sure?' : 'Clear History'}

@@ -126,9 +126,9 @@ export default function ImageResizer() {
       <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-400/10 dark:bg-blue-900/20 blur-[120px] pointer-events-none z-0"></div>
       <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-400/10 dark:bg-purple-900/20 blur-[120px] pointer-events-none z-0"></div>
 
-      <main className="bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-slate-800/60 max-w-5xl w-full text-center relative z-10 mt-4 mx-4">
+      <main className="bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-full text-center relative z-10 mt-4 mx-4">
         
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-slate-900 to-slate-600 dark:from-white dark:to-slate-400 mb-8 md:mb-12 leading-tight px-4 pb-2">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-indigo-900 to-slate-600 dark:from-white dark:to-slate-400 mb-8 md:mb-12 leading-tight px-4 pb-2">
           Image <br className="hidden sm:block" />
           <span 
             className="text-[#5668FF] drop-shadow-sm"
@@ -143,7 +143,7 @@ export default function ImageResizer() {
             className={`w-full p-12 border-2 border-dashed rounded-[2rem] transition-all duration-300 cursor-pointer shadow-inner backdrop-blur-sm mx-auto max-w-3xl ${
               isDragging
                 ? 'border-[#5668FF] bg-[#5668FF]/5 scale-[1.02] shadow-[0_0_30px_rgba(86,104,255,0.2)]'
-                : 'border-slate-300/50 dark:border-slate-700/50 bg-white/40 dark:bg-slate-800/40 hover:border-[#5668FF]/50 hover:bg-white/60 dark:hover:bg-slate-800/60'
+                : 'border-slate-300/50 dark:border-slate-700/50 bg-white/40 dark:bg-indigo-800/40 hover:border-[#5668FF]/50 hover:bg-white/60 dark:hover:bg-indigo-800/60'
             }`}
             onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
             onDragLeave={() => setIsDragging(false)}
@@ -167,12 +167,12 @@ export default function ImageResizer() {
           <div className="space-y-8">
             <div className="relative inline-block mx-auto">
               <img src={previewUrl} alt="Preview" className="max-h-64 rounded-xl shadow-lg" />
-              <div className="absolute bottom-4 right-4 bg-slate-900/80 text-white px-3 py-1 rounded-lg text-sm font-medium backdrop-blur-md">
+              <div className="absolute bottom-4 right-4 bg-indigo-900/80 text-white px-3 py-1 rounded-lg text-sm font-medium backdrop-blur-md">
                 {originalWidth} × {originalHeight}
               </div>
             </div>
 
-            <div className="text-left bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl max-w-2xl mx-auto">
+            <div className="text-left bg-white dark:bg-indigo-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl max-w-2xl mx-auto">
               <h2 className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4">Dimensions</h2>
               
               <div className="flex items-center gap-4 mb-8">
@@ -182,7 +182,7 @@ export default function ImageResizer() {
                     type="number"
                     value={width}
                     onChange={(e) => handleWidthChange(e.target.value)}
-                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-white"
+                    className="w-full bg-slate-50 dark:bg-indigo-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-indigo-800 dark:text-white"
                   />
                 </div>
                 
@@ -206,7 +206,7 @@ export default function ImageResizer() {
                     type="number"
                     value={height}
                     onChange={(e) => handleHeightChange(e.target.value)}
-                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-white"
+                    className="w-full bg-slate-50 dark:bg-indigo-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-indigo-800 dark:text-white"
                   />
                 </div>
               </div>
@@ -217,7 +217,7 @@ export default function ImageResizer() {
                   <button
                     key={preset.label}
                     onClick={() => handlePresetClick(preset)}
-                    className="bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 py-2 px-3 rounded-xl text-xs font-medium text-left transition-colors"
+                    className="bg-slate-50 dark:bg-indigo-900/50 hover:bg-slate-100 dark:hover:bg-indigo-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 py-2 px-3 rounded-xl text-xs font-medium text-left transition-colors"
                   >
                     <div className="font-bold">{preset.label}</div>
                     <div className="text-slate-400">{preset.width} × {preset.height}</div>
@@ -238,20 +238,20 @@ export default function ImageResizer() {
 
         {resultBlob && (
           <div className="space-y-8 animate-in fade-in zoom-in duration-300">
-            <h2 className="text-2xl font-bold text-slate-800 dark:text-white">Done!</h2>
+            <h2 className="text-2xl font-bold text-indigo-800 dark:text-white">Done!</h2>
             <div className="relative inline-block mx-auto">
               <img src={resultUrl} alt="Resized" className="max-h-64 rounded-xl shadow-lg" />
             </div>
             
-            <div className="text-left bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl max-w-md mx-auto">
+            <div className="text-left bg-white dark:bg-indigo-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl max-w-md mx-auto">
               <div className="space-y-4 mb-8 text-sm">
                 <div className="flex justify-between pb-4 border-b border-slate-100 dark:border-slate-700">
                   <span className="text-slate-500 dark:text-slate-400">Dimensions</span>
-                  <span className="font-bold text-slate-800 dark:text-white">{originalWidth}×{originalHeight} → {width}×{height}</span>
+                  <span className="font-bold text-indigo-800 dark:text-white">{originalWidth}×{originalHeight} → {width}×{height}</span>
                 </div>
                 <div className="flex justify-between pb-4 border-b border-slate-100 dark:border-slate-700">
                   <span className="text-slate-500 dark:text-slate-400">Original Size</span>
-                  <span className="font-bold text-slate-800 dark:text-white">{formatBytes(file!.size)}</span>
+                  <span className="font-bold text-indigo-800 dark:text-white">{formatBytes(file!.size)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500 dark:text-slate-400">New Size</span>
@@ -265,7 +265,7 @@ export default function ImageResizer() {
                     setFile(null);
                     setResultBlob(null);
                   }}
-                  className="flex-1 bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white py-4 rounded-2xl font-bold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
+                  className="flex-1 bg-slate-100 dark:bg-slate-700 text-indigo-800 dark:text-white py-4 rounded-2xl font-bold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
                 >
                   Start Over
                 </button>

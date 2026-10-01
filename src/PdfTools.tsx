@@ -168,9 +168,9 @@ export default function PdfTools() {
       <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-400/10 dark:bg-blue-900/20 blur-[120px] pointer-events-none z-0"></div>
       <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-400/10 dark:bg-purple-900/20 blur-[120px] pointer-events-none z-0"></div>
 
-      <main className="bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-slate-800/60 max-w-5xl w-full text-center relative z-10 mt-4 mx-4">
+      <main className="bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-full text-center relative z-10 mt-4 mx-4">
         
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-slate-900 to-slate-600 dark:from-white dark:to-slate-400 mb-8 md:mb-12 leading-tight px-4 pb-2">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-indigo-900 to-slate-600 dark:from-white dark:to-slate-400 mb-8 md:mb-12 leading-tight px-4 pb-2">
           PDF <br className="hidden sm:block" />
           <span 
             className="text-[#5668FF] drop-shadow-sm"
@@ -185,8 +185,8 @@ export default function PdfTools() {
             onClick={() => setActiveTab('merge')}
             className={`px-8 py-3 rounded-full font-bold text-sm transition-all ${
               activeTab === 'merge' 
-                ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-lg scale-105'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700'
+                ? 'bg-indigo-900 dark:bg-white text-white dark:text-indigo-900 shadow-lg scale-105'
+                : 'bg-slate-100 dark:bg-indigo-800 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700'
             }`}
           >
             Merge PDFs
@@ -195,8 +195,8 @@ export default function PdfTools() {
             onClick={() => setActiveTab('split')}
             className={`px-8 py-3 rounded-full font-bold text-sm transition-all ${
               activeTab === 'split'
-                ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-lg scale-105'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700'
+                ? 'bg-indigo-900 dark:bg-white text-white dark:text-indigo-900 shadow-lg scale-105'
+                : 'bg-slate-100 dark:bg-indigo-800 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700'
             }`}
           >
             Split PDF
@@ -205,7 +205,7 @@ export default function PdfTools() {
 
         {/* MERGE TAB */}
         {activeTab === 'merge' && (
-          <div className="max-w-2xl mx-auto text-left bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl">
+          <div className="max-w-2xl mx-auto text-left bg-white dark:bg-indigo-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl">
             {!mergedPdfUrl ? (
               <>
                 <div className="mb-8">
@@ -224,9 +224,9 @@ export default function PdfTools() {
                     <h2 className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4">File Order</h2>
                     <div className="space-y-2">
                       {mergeFiles.map((file, idx) => (
-                        <div key={idx} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-700">
+                        <div key={idx} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-indigo-900 rounded-xl border border-slate-100 dark:border-slate-700">
                           <div className="flex-1 truncate pr-4">
-                            <span className="font-medium text-slate-800 dark:text-slate-200 text-sm">{file.name}</span>
+                            <span className="font-medium text-indigo-800 dark:text-slate-200 text-sm">{file.name}</span>
                             <span className="ml-2 text-xs text-slate-400">{formatBytes(file.size)}</span>
                           </div>
                           <div className="flex items-center gap-2">
@@ -250,15 +250,15 @@ export default function PdfTools() {
               </>
             ) : (
               <div className="text-center animate-in fade-in zoom-in duration-300">
-                <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-6">Merged Successfully!</h2>
-                <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-2xl mb-8">
+                <h2 className="text-2xl font-bold text-indigo-800 dark:text-white mb-6">Merged Successfully!</h2>
+                <div className="bg-slate-50 dark:bg-indigo-900 p-6 rounded-2xl mb-8">
                   <p className="text-slate-500 dark:text-slate-400 mb-2">Total Output Size</p>
                   <p className="text-3xl font-black text-[#5668FF] dark:text-[#7888FF]">{formatBytes(mergedSize)}</p>
                 </div>
                 <div className="flex gap-4">
                   <button
                     onClick={() => { setMergeFiles([]); setMergedPdfUrl(''); }}
-                    className="flex-1 bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white py-4 rounded-2xl font-bold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
+                    className="flex-1 bg-slate-100 dark:bg-slate-700 text-indigo-800 dark:text-white py-4 rounded-2xl font-bold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
                   >
                     Start Over
                   </button>
@@ -277,7 +277,7 @@ export default function PdfTools() {
 
         {/* SPLIT TAB */}
         {activeTab === 'split' && (
-          <div className="max-w-2xl mx-auto text-left bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl">
+          <div className="max-w-2xl mx-auto text-left bg-white dark:bg-indigo-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl">
             {!splitPdfUrl ? (
               <>
                 <div className="mb-8">
@@ -303,7 +303,7 @@ export default function PdfTools() {
                       value={pageRange}
                       onChange={(e) => setPageRange(e.target.value)}
                       placeholder="e.g. 1-3, 5, 7-10"
-                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-white"
+                      className="w-full bg-slate-50 dark:bg-indigo-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-indigo-800 dark:text-white"
                     />
                     <p className="mt-2 text-xs text-slate-400">Comma-separated page numbers or ranges.</p>
                   </div>
@@ -319,11 +319,11 @@ export default function PdfTools() {
               </>
             ) : (
               <div className="text-center animate-in fade-in zoom-in duration-300">
-                <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-6">Split Successfully!</h2>
-                <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-2xl mb-8 flex justify-around">
+                <h2 className="text-2xl font-bold text-indigo-800 dark:text-white mb-6">Split Successfully!</h2>
+                <div className="bg-slate-50 dark:bg-indigo-900 p-6 rounded-2xl mb-8 flex justify-around">
                   <div>
                     <p className="text-slate-500 dark:text-slate-400 mb-2">Pages Extracted</p>
-                    <p className="text-3xl font-black text-slate-800 dark:text-white">{splitFinalPages}</p>
+                    <p className="text-3xl font-black text-indigo-800 dark:text-white">{splitFinalPages}</p>
                   </div>
                   <div>
                     <p className="text-slate-500 dark:text-slate-400 mb-2">Output Size</p>
@@ -333,7 +333,7 @@ export default function PdfTools() {
                 <div className="flex gap-4">
                   <button
                     onClick={() => { setSplitFile(null); setSplitPdfUrl(''); setPageRange(''); }}
-                    className="flex-1 bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white py-4 rounded-2xl font-bold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
+                    className="flex-1 bg-slate-100 dark:bg-slate-700 text-indigo-800 dark:text-white py-4 rounded-2xl font-bold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
                   >
                     Start Over
                   </button>

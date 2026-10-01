@@ -4,7 +4,7 @@ export default function Footer() {
   const [showAbout, setShowAbout] = useState(false);
 
   return (
-    <footer className="w-full border-t border-slate-800 bg-slate-900 dark:bg-[#050914] mt-auto z-40 relative">
+    <footer className="w-full border-t border-indigo-800 bg-indigo-900 dark:bg-[#050914] mt-auto z-40 relative">
       <style>
         {`@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600&display=swap');`}
       </style>
@@ -109,7 +109,7 @@ export default function Footer() {
               href="https://github.com/dheerajeshwar32/PerfectByte/issues"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-slate-900 text-sm font-semibold rounded-lg hover:bg-slate-200 transition-colors w-fit shadow-sm"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-indigo-900 text-sm font-semibold rounded-lg hover:bg-slate-200 transition-colors w-fit shadow-sm"
             >
               Submit Feedback
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
@@ -120,7 +120,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom Copyright Bar */}
-      <div className="w-full border-t border-slate-800/80 bg-slate-950 dark:bg-[#050810]">
+      <div className="w-full border-t border-indigo-800/80 bg-indigo-950 dark:bg-[#050810]">
         <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-xs font-semibold text-slate-400">
             <span

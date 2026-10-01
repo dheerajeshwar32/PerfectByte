@@ -99,7 +99,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               exit={{ opacity: 0, y: -10, filter: 'blur(4px)' }}
               transition={{ duration: 0.25 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-1.5 rounded-full bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-slate-200/60 dark:border-slate-700/60 shadow-sm cursor-default"
+              className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-1.5 rounded-full bg-white/60 dark:bg-indigo-900/60 backdrop-blur-xl border border-slate-200/60 dark:border-slate-700/60 shadow-sm cursor-default"
             >
               {activeIndex === 0 && (
                 <>
@@ -149,7 +149,7 @@ export default function Home() {
           </AnimatePresence>
         </div>
 
-        <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-slate-900 to-slate-600 dark:from-white dark:to-slate-400 mb-2 md:mb-4 leading-tight transition-colors px-4 pb-2">
+        <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-indigo-900 to-slate-600 dark:from-white dark:to-slate-400 mb-2 md:mb-4 leading-tight transition-colors px-4 pb-2">
           Flawless files. <br className="hidden sm:block" />
           <span 
             className="text-[#5668FF] drop-shadow-sm"
@@ -193,18 +193,18 @@ export default function Home() {
                 onClick={() => {
                   if (!isActive) setActiveIndex(index);
                 }}
-                className={`relative overflow-hidden bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border ${isActive ? 'border-white/80 dark:border-slate-600/60 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] ring-1 ring-[#5668FF]/10 dark:ring-[#5668FF]/30 cursor-default' : 'border-white/30 dark:border-slate-800/60 cursor-pointer shadow-none'} flex flex-col items-start text-left transition-all duration-500 h-[360px] md:h-[420px] group`}
+                className={`relative overflow-hidden bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border ${isActive ? 'border-white/80 dark:border-slate-600/60 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] ring-1 ring-[#5668FF]/10 dark:ring-[#5668FF]/30 cursor-default' : 'border-white/30 dark:border-indigo-800/60 cursor-pointer shadow-none'} flex flex-col items-start text-left transition-all duration-500 h-[360px] md:h-[420px] group`}
               >
                 <div className={`absolute -top-24 -right-24 w-64 h-64 rounded-full blur-[80px] opacity-0 transition-opacity duration-700 ${isActive ? 'opacity-30 dark:opacity-20' : ''} ${tool.glowColor}`} />
 
                 <div className="relative z-10 w-full flex flex-col flex-grow">
-                  <div className={`w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl flex items-center justify-center mb-5 md:mb-8 shadow-sm border border-slate-200/50 dark:border-slate-700/50 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 transition-transform duration-500 ${isActive ? 'scale-100' : 'scale-95'} ${tool.iconColor}`}>
+                  <div className={`w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl flex items-center justify-center mb-5 md:mb-8 shadow-sm border border-slate-200/50 dark:border-slate-700/50 bg-gradient-to-br from-white to-slate-50 dark:from-indigo-800 dark:to-indigo-900 transition-transform duration-500 ${isActive ? 'scale-100' : 'scale-95'} ${tool.iconColor}`}>
                     <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       {tool.svg}
                     </svg>
                   </div>
                   
-                  <h3 className="text-2xl md:text-3xl font-semibold tracking-tight text-slate-900 dark:text-white mb-2 md:mb-4">
+                  <h3 className="text-2xl md:text-3xl font-semibold tracking-tight text-indigo-900 dark:text-white mb-2 md:mb-4">
                     {tool.title}
                   </h3>
                   
@@ -224,10 +224,10 @@ export default function Home() {
                       navigate(tool.path);
                     }}
                   >
-                    <span className="text-[10px] md:text-[11px] font-bold text-slate-800 dark:text-slate-200 uppercase tracking-[0.2em]">
+                    <span className="text-[10px] md:text-[11px] font-bold text-indigo-800 dark:text-slate-200 uppercase tracking-[0.2em]">
                       Initialize Tool
                     </span>
-                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-slate-900 dark:bg-white flex items-center justify-center text-white dark:text-slate-900 transition-transform duration-300 group-hover/btn:translate-x-1">
+                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-indigo-900 dark:bg-white flex items-center justify-center text-white dark:text-indigo-900 transition-transform duration-300 group-hover/btn:translate-x-1">
                       <svg className="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </div>
                   </motion.div>
@@ -241,13 +241,13 @@ export default function Home() {
       <div className="flex gap-4 md:gap-6 mt-8 md:mt-12 z-30 mb-12">
         <button 
           onClick={handlePrev}
-          className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:scale-110 transition-all active:scale-95"
+          className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white dark:bg-indigo-800 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-indigo-900 dark:hover:text-white hover:scale-110 transition-all active:scale-95"
         >
           <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
         </button>
         <button 
           onClick={handleNext}
-          className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:scale-110 transition-all active:scale-95"
+          className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white dark:bg-indigo-800 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-indigo-900 dark:hover:text-white hover:scale-110 transition-all active:scale-95"
         >
           <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
         </button>
