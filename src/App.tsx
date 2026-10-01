@@ -76,10 +76,10 @@ export default function App() {
       <AnimatedRoutes />
       <Analytics />
 
-      {/* Top Navigation Theme Toggle */}
+      {/* Floating Theme Toggle */}
       <button
         onClick={() => setIsDark(!isDark)}
-        className="fixed top-5 right-5 md:top-8 md:right-12 p-3.5 rounded-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border border-slate-200 dark:border-slate-700 shadow-lg text-slate-700 dark:text-slate-300 hover:scale-110 active:scale-95 transition-all z-[60]"
+        className="fixed bottom-6 left-6 p-3.5 rounded-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border border-slate-200 dark:border-slate-700 shadow-lg text-slate-700 dark:text-slate-300 hover:scale-110 active:scale-95 transition-all z-50"
         aria-label="Toggle Dark Mode"
       >
         {isDark ? (
