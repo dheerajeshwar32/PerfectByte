@@ -155,10 +155,23 @@ export default function TargetCompressor() {
   };
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-slate-50 to-white dark:from-indigo-900 dark:via-[#0a0f1c] dark:to-[#050810] flex flex-col items-center py-12 px-4 font-sans relative overflow-hidden transition-colors duration-150">
+    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-white dark:from-[#080B14] dark:via-[#0D1220] dark:to-[#050810] flex flex-col items-center justify-start pt-20 md:pt-24 relative overflow-x-hidden font-sans transition-colors duration-300">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-400/10 dark:bg-blue-900/20 blur-[120px]"></div>
+        <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-400/10 dark:bg-purple-900/20 blur-[120px]"></div>
+      </div>
       <Navbar />
 
-      <div className="bg-white/60 dark:bg-indigo-900/50 backdrop-blur-xl p-8 md:p-12 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-white dark:border-indigo-800 max-w-4xl w-full text-center relative z-10">
+      <div className="bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-full text-center relative z-10 mt-4 mx-4">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-indigo-900 to-slate-600 dark:from-white dark:to-slate-400 mb-8 md:mb-12 leading-tight px-4 pb-2">
+          Target <br className="hidden sm:block" />
+          <span 
+            className="text-[#5668FF] drop-shadow-sm"
+            style={{ textShadow: '-2px 0px 0px rgba(0,255,255,0.3), 2px 0px 0px rgba(255,0,255,0.3)' }}
+          >
+            Compress
+          </span>
+        </h1>
         
         {!result && (
           <div className="flex flex-col items-center justify-center py-8 mb-8 border-b border-slate-200 dark:border-indigo-800">
@@ -201,12 +214,21 @@ export default function TargetCompressor() {
             <div className="space-y-4">
               <div
                 onDrop={handleDrop} onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }} onDragLeave={() => setIsDragging(false)}
-                className={`relative border-2 border-dashed rounded-2xl p-10 transition-all duration-200 ${isDragging ? 'border-blue-400 bg-blue-50/50 dark:border-blue-400 dark:bg-blue-950/30 scale-[1.02]' : 'border-slate-200 bg-slate-50/50 dark:border-slate-700 dark:bg-indigo-800/50 hover:bg-slate-50 dark:hover:bg-indigo-800'}`}
+                className={`relative w-full max-w-2xl mx-auto p-10 md:p-14 border-2 border-dashed rounded-[2rem] transition-all duration-500 cursor-pointer group/drop bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/40 dark:to-slate-900/40 backdrop-blur-sm ${
+                  isDragging 
+                    ? 'border-[#5668FF] bg-[#5668FF]/5 dark:bg-[#5668FF]/10 scale-[1.02] shadow-[0_0_40px_rgba(86,104,255,0.15)]' 
+                    : 'border-slate-200/60 dark:border-slate-700/40 hover:border-[#5668FF]/50 hover:shadow-[0_0_40px_rgba(86,104,255,0.08)]'
+                }`}
               >
                 <input type="file" accept=".pdf,.png,.jpg,.jpeg,.webp" onChange={handleFileUpload} disabled={isProcessing} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
-                <div className="text-center flex flex-col items-center">
-                  <div className="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center mb-4 text-blue-500"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg></div>
-                  <span className="font-bold text-lg mb-1">{isProcessing ? 'Processing...' : 'Click to select image or PDF'}</span>
+                <div className="flex flex-col items-center gap-4">
+                  <div className="w-16 h-16 rounded-2xl bg-[#5668FF]/10 dark:bg-[#5668FF]/20 flex items-center justify-center group-hover/drop:scale-110 transition-transform duration-300">
+                    <svg className="w-8 h-8 text-[#5668FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-1">{isProcessing ? 'Processing...' : 'Drop your file here'}</p>
+                    <p className="text-sm text-slate-400 dark:text-slate-500">or <span className="text-[#5668FF] font-medium hover:underline">browse files</span></p>
+                  </div>
                 </div>
               </div>
               
@@ -234,7 +256,7 @@ export default function TargetCompressor() {
                   onClick={() => {
                     const a = document.createElement('a'); a.href = result.compressedUrl; a.download = result.fileName; a.click();
                   }}
-                  className="bg-indigo-900 dark:bg-white text-white dark:text-indigo-900 px-6 py-4 rounded-2xl hover:scale-105 transition-all text-sm font-bold shadow-lg"
+                  className="px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 bg-[#5668FF] hover:bg-[#4858E0] text-white shadow-[0_8px_30px_rgba(86,104,255,0.3)] hover:shadow-[0_12px_40px_rgba(86,104,255,0.4)] hover:translate-y-[-1px] active:translate-y-[1px] active:shadow-[0_4px_20px_rgba(86,104,255,0.3)] disabled:opacity-50 disabled:hover:translate-y-0"
                 >
                   Download Output
                 </button>

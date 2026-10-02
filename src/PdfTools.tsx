@@ -181,43 +181,55 @@ export default function PdfTools() {
           </span>
         </h1>
 
-        <div className="flex justify-center gap-4 mb-12">
-          <button
-            onClick={() => setActiveTab('merge')}
-            className={`px-8 py-3 rounded-full font-bold text-sm transition-all ${
-              activeTab === 'merge' 
-                ? 'bg-indigo-900 dark:bg-white text-white dark:text-indigo-900 shadow-lg scale-105'
-                : 'bg-slate-100 dark:bg-indigo-800 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700'
-            }`}
-          >
-            Merge PDFs
-          </button>
-          <button
-            onClick={() => setActiveTab('split')}
-            className={`px-8 py-3 rounded-full font-bold text-sm transition-all ${
-              activeTab === 'split'
-                ? 'bg-indigo-900 dark:bg-white text-white dark:text-indigo-900 shadow-lg scale-105'
-                : 'bg-slate-100 dark:bg-indigo-800 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700'
-            }`}
-          >
-            Split PDF
-          </button>
+        <div className="flex justify-center mb-12">
+          <div className="bg-white/40 dark:bg-[#0a0f1c]/40 backdrop-blur-md p-1.5 rounded-full inline-flex border border-white/60 dark:border-indigo-800/30 shadow-sm">
+            <button
+              onClick={() => setActiveTab('merge')}
+              className={`px-8 py-3 rounded-full font-bold text-sm transition-all duration-300 ${
+                activeTab === 'merge' 
+                  ? 'bg-[#5668FF] text-white shadow-lg'
+                  : 'bg-white/60 dark:bg-[#0a0f1c]/50 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
+              }`}
+            >
+              Merge PDFs
+            </button>
+            <button
+              onClick={() => setActiveTab('split')}
+              className={`px-8 py-3 rounded-full font-bold text-sm transition-all duration-300 ${
+                activeTab === 'split'
+                  ? 'bg-[#5668FF] text-white shadow-lg'
+                  : 'bg-white/60 dark:bg-[#0a0f1c]/50 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
+              }`}
+            >
+              Split PDF
+            </button>
+          </div>
         </div>
 
         {/* MERGE TAB */}
         {activeTab === 'merge' && (
-          <div className="max-w-2xl mx-auto text-left bg-white dark:bg-indigo-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl">
+          <div className="max-w-2xl mx-auto text-left bg-white/60 dark:bg-[#0a0f1c]/50 backdrop-blur-xl p-6 md:p-8 rounded-[1.5rem] border border-slate-100/80 dark:border-indigo-800/40 shadow-sm">
             {!mergedPdfUrl ? (
               <>
                 <div className="mb-8">
-                  <h2 className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4">Upload PDFs</h2>
-                  <input
-                    type="file"
-                    accept=".pdf"
-                    multiple
-                    onChange={handleMergeFiles}
-                    className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-[#5668FF] hover:file:bg-blue-100 dark:file:bg-slate-700 dark:file:text-white dark:hover:file:bg-slate-600"
-                  />
+                  <div className="relative w-full max-w-2xl mx-auto p-10 md:p-14 border-2 border-dashed rounded-[2rem] transition-all duration-500 cursor-pointer group/drop bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/40 dark:to-slate-900/40 border-slate-200/60 dark:border-slate-700/40 hover:border-[#5668FF]/50 hover:shadow-[0_0_40px_rgba(86,104,255,0.08)] backdrop-blur-sm">
+                    <div className="flex flex-col items-center gap-4">
+                      <div className="w-16 h-16 rounded-2xl bg-[#5668FF]/10 dark:bg-[#5668FF]/20 flex items-center justify-center group-hover/drop:scale-110 transition-transform duration-300">
+                        <svg className="w-8 h-8 text-[#5668FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-1">Drop your PDFs here</p>
+                        <p className="text-sm text-slate-400 dark:text-slate-500">or <span className="text-[#5668FF] font-medium hover:underline">browse files</span></p>
+                      </div>
+                    </div>
+                    <input
+                      type="file"
+                      accept=".pdf"
+                      multiple
+                      onChange={handleMergeFiles}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    />
+                  </div>
                 </div>
 
                 {mergeFiles.length > 0 && (
@@ -225,7 +237,7 @@ export default function PdfTools() {
                     <h2 className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4">File Order</h2>
                     <div className="space-y-2">
                       {mergeFiles.map((file, idx) => (
-                        <div key={idx} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-indigo-900 rounded-xl border border-slate-100 dark:border-slate-700">
+                        <div key={idx} className="flex items-center justify-between p-3 md:p-4 bg-white/60 dark:bg-[#0a0f1c]/40 backdrop-blur-sm rounded-[1rem] border border-slate-200/60 dark:border-indigo-800/40 shadow-sm hover:shadow-md transition-shadow">
                           <div className="flex-1 truncate pr-4">
                             <span className="font-medium text-indigo-800 dark:text-slate-200 text-sm">{file.name}</span>
                             <span className="ml-2 text-xs text-slate-400">{formatBytes(file.size)}</span>
@@ -244,7 +256,7 @@ export default function PdfTools() {
                 <button
                   onClick={mergePdfs}
                   disabled={isMerging || mergeFiles.length < 2}
-                  className="w-full bg-emerald-500 text-white py-5 rounded-2xl font-black hover:bg-emerald-600 transition-all shadow-lg text-xl disabled:opacity-50"
+                  className="w-full py-4 md:py-5 rounded-2xl font-bold text-lg transition-all duration-300 bg-[#5668FF] hover:bg-[#4858E0] text-white shadow-[0_8px_30px_rgba(86,104,255,0.3)] hover:shadow-[0_12px_40px_rgba(86,104,255,0.4)] hover:translate-y-[-1px] active:translate-y-[1px] active:shadow-[0_4px_20px_rgba(86,104,255,0.3)] disabled:opacity-50 disabled:hover:translate-y-0"
                 >
                   {isMerging ? 'Merging...' : 'Merge All'}
                 </button>
@@ -266,7 +278,7 @@ export default function PdfTools() {
                   <a
                     href={mergedPdfUrl}
                     download="merged_document.pdf"
-                    className="flex-1 bg-emerald-500 text-white py-4 rounded-2xl font-bold hover:bg-emerald-600 transition-colors text-center"
+                    className="flex-1 py-4 md:py-5 rounded-2xl font-bold text-lg transition-all duration-300 bg-[#5668FF] hover:bg-[#4858E0] text-white shadow-[0_8px_30px_rgba(86,104,255,0.3)] hover:shadow-[0_12px_40px_rgba(86,104,255,0.4)] hover:translate-y-[-1px] active:translate-y-[1px] active:shadow-[0_4px_20px_rgba(86,104,255,0.3)] text-center flex items-center justify-center"
                   >
                     Download PDF
                   </a>
@@ -278,17 +290,27 @@ export default function PdfTools() {
 
         {/* SPLIT TAB */}
         {activeTab === 'split' && (
-          <div className="max-w-2xl mx-auto text-left bg-white dark:bg-indigo-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl">
+          <div className="max-w-2xl mx-auto text-left bg-white/60 dark:bg-[#0a0f1c]/50 backdrop-blur-xl p-6 md:p-8 rounded-[1.5rem] border border-slate-100/80 dark:border-indigo-800/40 shadow-sm">
             {!splitPdfUrl ? (
               <>
                 <div className="mb-8">
-                  <h2 className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4">Upload PDF</h2>
-                  <input
-                    type="file"
-                    accept=".pdf"
-                    onChange={handleSplitFile}
-                    className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-[#5668FF] hover:file:bg-blue-100 dark:file:bg-slate-700 dark:file:text-white dark:hover:file:bg-slate-600"
-                  />
+                  <div className="relative w-full max-w-2xl mx-auto p-10 md:p-14 border-2 border-dashed rounded-[2rem] transition-all duration-500 cursor-pointer group/drop bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/40 dark:to-slate-900/40 border-slate-200/60 dark:border-slate-700/40 hover:border-[#5668FF]/50 hover:shadow-[0_0_40px_rgba(86,104,255,0.08)] backdrop-blur-sm">
+                    <div className="flex flex-col items-center gap-4">
+                      <div className="w-16 h-16 rounded-2xl bg-[#5668FF]/10 dark:bg-[#5668FF]/20 flex items-center justify-center group-hover/drop:scale-110 transition-transform duration-300">
+                        <svg className="w-8 h-8 text-[#5668FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-1">Drop your PDF here</p>
+                        <p className="text-sm text-slate-400 dark:text-slate-500">or <span className="text-[#5668FF] font-medium hover:underline">browse files</span></p>
+                      </div>
+                    </div>
+                    <input
+                      type="file"
+                      accept=".pdf"
+                      onChange={handleSplitFile}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    />
+                  </div>
                   {splitFile && (
                     <p className="mt-3 text-sm font-medium text-slate-600 dark:text-slate-300">
                       Loaded: {splitFile.name} — <span className="font-bold text-[#5668FF]">{splitTotalPages} pages</span>
@@ -313,7 +335,7 @@ export default function PdfTools() {
                 <button
                   onClick={splitPdf}
                   disabled={isSplitting || !splitFile || !pageRange}
-                  className="w-full bg-emerald-500 text-white py-5 rounded-2xl font-black hover:bg-emerald-600 transition-all shadow-lg text-xl disabled:opacity-50"
+                  className="w-full py-4 md:py-5 rounded-2xl font-bold text-lg transition-all duration-300 bg-[#5668FF] hover:bg-[#4858E0] text-white shadow-[0_8px_30px_rgba(86,104,255,0.3)] hover:shadow-[0_12px_40px_rgba(86,104,255,0.4)] hover:translate-y-[-1px] active:translate-y-[1px] active:shadow-[0_4px_20px_rgba(86,104,255,0.3)] disabled:opacity-50 disabled:hover:translate-y-0"
                 >
                   {isSplitting ? 'Splitting...' : 'Split'}
                 </button>
@@ -341,7 +363,7 @@ export default function PdfTools() {
                   <a
                     href={splitPdfUrl}
                     download="split_document.pdf"
-                    className="flex-1 bg-emerald-500 text-white py-4 rounded-2xl font-bold hover:bg-emerald-600 transition-colors text-center"
+                    className="flex-1 py-4 md:py-5 rounded-2xl font-bold text-lg transition-all duration-300 bg-[#5668FF] hover:bg-[#4858E0] text-white shadow-[0_8px_30px_rgba(86,104,255,0.3)] hover:shadow-[0_12px_40px_rgba(86,104,255,0.4)] hover:translate-y-[-1px] active:translate-y-[1px] active:shadow-[0_4px_20px_rgba(86,104,255,0.3)] text-center flex items-center justify-center"
                   >
                     Download PDF
                   </a>

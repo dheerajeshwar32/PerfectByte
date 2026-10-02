@@ -141,16 +141,25 @@ export default function ImageResizer() {
 
         {!file && (
           <div
-            className={`w-full p-12 border-2 border-dashed rounded-[2rem] transition-all duration-300 cursor-pointer shadow-inner backdrop-blur-sm mx-auto max-w-3xl ${
+            className={`relative w-full max-w-2xl mx-auto p-10 md:p-14 border-2 border-dashed rounded-[2rem] transition-all duration-500 cursor-pointer group/drop backdrop-blur-sm ${
               isDragging
-                ? 'border-[#5668FF] bg-[#5668FF]/5 scale-[1.02] shadow-[0_0_30px_rgba(86,104,255,0.2)]'
-                : 'border-slate-300/50 dark:border-slate-700/50 bg-white/40 dark:bg-indigo-800/40 hover:border-[#5668FF]/50 hover:bg-white/60 dark:hover:bg-indigo-800/60'
+                ? 'border-[#5668FF] bg-[#5668FF]/5 scale-[1.02] shadow-[0_0_40px_rgba(86,104,255,0.15)]'
+                : 'bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/40 dark:to-slate-900/40 border-slate-200/60 dark:border-slate-700/40 hover:border-[#5668FF]/50 hover:shadow-[0_0_40px_rgba(86,104,255,0.08)]'
             }`}
             onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
             onDragLeave={() => setIsDragging(false)}
             onDrop={handleDrop}
             onClick={() => document.getElementById('file-upload')?.click()}
           >
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-16 h-16 rounded-2xl bg-[#5668FF]/10 dark:bg-[#5668FF]/20 flex items-center justify-center group-hover/drop:scale-110 transition-transform duration-300">
+                <svg className="w-8 h-8 text-[#5668FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+              </div>
+              <div className="text-center">
+                <p className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-1">Drop your image here</p>
+                <p className="text-sm text-slate-400 dark:text-slate-500">or <span className="text-[#5668FF] font-medium hover:underline">browse files</span></p>
+              </div>
+            </div>
             <input
               id="file-upload"
               type="file"
@@ -158,9 +167,6 @@ export default function ImageResizer() {
               className="hidden"
               onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
             />
-            <p className="text-lg text-slate-500 dark:text-slate-400">
-              Drag and drop an image here, or click to browse
-            </p>
           </div>
         )}
 
@@ -173,7 +179,7 @@ export default function ImageResizer() {
               </div>
             </div>
 
-            <div className="text-left bg-white dark:bg-indigo-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl max-w-2xl mx-auto">
+            <div className="text-left bg-white/60 dark:bg-[#0a0f1c]/50 backdrop-blur-xl p-6 md:p-8 rounded-[1.5rem] border border-slate-100/80 dark:border-indigo-800/40 shadow-sm max-w-2xl mx-auto">
               <h2 className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4">Dimensions</h2>
               
               <div className="flex items-center gap-4 mb-8">
@@ -229,7 +235,7 @@ export default function ImageResizer() {
               <button
                 onClick={processImage}
                 disabled={isProcessing || !width || !height}
-                className="w-full bg-emerald-500 text-white py-5 rounded-2xl font-black hover:bg-emerald-600 transition-all shadow-lg text-xl disabled:opacity-50"
+                className="w-full py-4 md:py-5 rounded-2xl font-bold text-lg transition-all duration-300 bg-[#5668FF] hover:bg-[#4858E0] text-white shadow-[0_8px_30px_rgba(86,104,255,0.3)] hover:shadow-[0_12px_40px_rgba(86,104,255,0.4)] hover:translate-y-[-1px] active:translate-y-[1px] active:shadow-[0_4px_20px_rgba(86,104,255,0.3)] disabled:opacity-50 disabled:hover:translate-y-0"
               >
                 {isProcessing ? 'Processing...' : 'Resize'}
               </button>
@@ -244,7 +250,7 @@ export default function ImageResizer() {
               <img src={resultUrl} alt="Resized" className="max-h-64 rounded-xl shadow-lg" />
             </div>
             
-            <div className="text-left bg-white dark:bg-indigo-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl max-w-md mx-auto">
+            <div className="text-left bg-white/60 dark:bg-[#0a0f1c]/50 backdrop-blur-xl p-6 md:p-8 rounded-[1.5rem] border border-slate-100/80 dark:border-indigo-800/40 shadow-sm max-w-md mx-auto">
               <div className="space-y-4 mb-8 text-sm">
                 <div className="flex justify-between pb-4 border-b border-slate-100 dark:border-slate-700">
                   <span className="text-slate-500 dark:text-slate-400">Dimensions</span>
@@ -256,7 +262,7 @@ export default function ImageResizer() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500 dark:text-slate-400">New Size</span>
-                  <span className="font-bold text-emerald-500">{formatBytes(resultBlob.size)}</span>
+                  <span className="font-bold text-[#5668FF]">{formatBytes(resultBlob.size)}</span>
                 </div>
               </div>
 
@@ -273,7 +279,7 @@ export default function ImageResizer() {
                 <a
                   href={resultUrl}
                   download={`resized_${width}x${height}_${file!.name.replace(/\.[^/.]+$/, "")}.webp`}
-                  className="flex-1 bg-emerald-500 text-white py-4 rounded-2xl font-bold hover:bg-emerald-600 transition-colors text-center"
+                  className="flex-1 py-4 md:py-5 rounded-2xl font-bold text-lg transition-all duration-300 bg-[#5668FF] hover:bg-[#4858E0] text-white shadow-[0_8px_30px_rgba(86,104,255,0.3)] hover:shadow-[0_12px_40px_rgba(86,104,255,0.4)] hover:translate-y-[-1px] active:translate-y-[1px] active:shadow-[0_4px_20px_rgba(86,104,255,0.3)] text-center flex items-center justify-center"
                 >
                   Download
                 </a>

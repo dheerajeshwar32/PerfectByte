@@ -173,10 +173,13 @@ export default function Assistant() {
     : null;
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-100 via-slate-50 to-white dark:from-[#0a0f1c] dark:via-[#050810] dark:to-[#050810] flex flex-col items-center justify-center p-4 md:p-8 font-sans relative overflow-hidden transition-colors duration-300">
+    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-white dark:from-[#080B14] dark:via-[#0D1220] dark:to-[#050810] flex flex-col items-center justify-start pt-20 md:pt-24 relative overflow-x-hidden font-sans transition-colors duration-300">
       
       {/* Background Ambient Glows */}
-      <div className="absolute top-[20%] left-[-10%] w-[40%] h-[40%] rounded-full bg-purple-300/20 dark:bg-purple-900/10 blur-[120px] pointer-events-none"></div>
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-400/10 dark:bg-blue-900/20 blur-[120px]"></div>
+        <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-400/10 dark:bg-purple-900/20 blur-[120px]"></div>
+      </div>
 
       {/* Unmistakable Back Button */}
       <Navbar />
@@ -186,7 +189,7 @@ export default function Assistant() {
         onDrop={handleDrop}
         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
         onDragLeave={() => setIsDragging(false)}
-        className="w-full max-w-4xl h-[85vh] bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-indigo-800/80 rounded-[28px] shadow-[0_12px_40px_-18px_rgba(0,0,0,0.1)] dark:shadow-[0_12px_40px_-18px_rgba(0,0,0,0.6)] flex flex-col relative overflow-hidden"
+        className="bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-full flex flex-col relative overflow-hidden z-10 mt-4 mx-4 h-[80vh]"
       >
         {/* Full Screen Dropzone Overlay */}
         <AnimatePresence>
@@ -211,8 +214,8 @@ export default function Assistant() {
               <h1 className="text-base font-black text-indigo-900 dark:text-white tracking-tight leading-none mb-1.5">AI Command Center</h1>
               <div className="flex items-center gap-1.5">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#5668FF] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#5668FF]"></span>
                 </span>
                 <span className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest">Engine Live</span>
               </div>
@@ -229,7 +232,7 @@ export default function Assistant() {
             <div
               className={`px-5 py-2.5 transition-all duration-200 flex items-center gap-2 text-xs font-bold font-mono uppercase tracking-widest rounded-xl shadow-sm group-hover:scale-[1.02] active:scale-95 ${
                 files.length > 0
-                  ? 'bg-emerald-500 text-white shadow-emerald-500/25 border border-emerald-400'
+                  ? 'bg-[#5668FF] text-white shadow-[#5668FF]/25 border border-[#5668FF]'
                   : 'bg-indigo-900 dark:bg-white text-white dark:text-indigo-900 border border-indigo-800 dark:border-slate-200 hover:opacity-90'
               }`}
             >
@@ -297,18 +300,18 @@ export default function Assistant() {
                           <div className="h-2 rounded-full bg-slate-100 dark:bg-indigo-800 w-full" />
                         </div>
                         <div>
-                          <div className="flex justify-between text-[11px] tabular-nums text-emerald-500 mb-1.5 uppercase font-bold tracking-wider">
+                          <div className="flex justify-between text-[11px] tabular-nums text-[#5668FF] mb-1.5 uppercase font-bold tracking-wider">
                             <span>Target</span><span>{formatBytes(downloadUrl.compressedSize!)}</span>
                           </div>
                           <div className="h-2 rounded-full bg-slate-100 dark:bg-indigo-800 w-full overflow-hidden">
-                            <div className="h-full rounded-full bg-emerald-500" style={{ width: `${compressedBarPercent}%` }} />
+                            <div className="h-full rounded-full bg-[#5668FF]" style={{ width: `${compressedBarPercent}%` }} />
                           </div>
                         </div>
                       </div>
                     </div>
                   ) : (
                     <div className="mb-6 flex items-center gap-4 relative z-10">
-                      <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
+                      <div className="w-12 h-12 rounded-xl bg-[#5668FF]/10 text-[#5668FF] flex items-center justify-center shrink-0">
                         <CheckIcon className="w-6 h-6" />
                       </div>
                       <div className="min-w-0">

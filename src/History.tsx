@@ -35,10 +35,24 @@ export default function History() {
   const totalSaved = stats.totalOriginal - stats.totalCompressed;
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-slate-50 to-white dark:from-indigo-900 dark:via-[#0a0f1c] dark:to-[#050810] flex flex-col items-center py-12 px-4 font-sans relative overflow-hidden transition-colors duration-150">
+    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-white dark:from-[#080B14] dark:via-[#0D1220] dark:to-[#050810] flex flex-col items-center justify-start pt-20 md:pt-24 relative overflow-x-hidden font-sans transition-colors duration-300">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-400/10 dark:bg-blue-900/20 blur-[120px]"></div>
+        <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-400/10 dark:bg-purple-900/20 blur-[120px]"></div>
+      </div>
       <Navbar />
       
-      <div className="bg-white/60 dark:bg-indigo-900/50 backdrop-blur-xl p-8 md:p-12 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-white dark:border-indigo-800 max-w-5xl w-full text-center relative z-10 mt-12">
+      <div className="bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-full text-center relative z-10 mt-4 mx-4">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-indigo-900 to-slate-600 dark:from-white dark:to-slate-400 mb-8 md:mb-12 leading-tight px-4 pb-2">
+          Action / <br className="hidden sm:block" />
+          <span 
+            className="text-[#5668FF] drop-shadow-sm"
+            style={{ textShadow: '-2px 0px 0px rgba(0,255,255,0.3), 2px 0px 0px rgba(255,0,255,0.3)' }}
+          >
+            History
+          </span>
+        </h1>
+
         <h2 className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4">Total Space Saved</h2>
         
         <div className="mb-12">
@@ -59,42 +73,38 @@ export default function History() {
             <p>No compression history yet.</p>
           </div>
         ) : (
-          <div className="text-left bg-white dark:bg-indigo-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl overflow-hidden mb-8">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm text-left text-slate-600 dark:text-slate-400">
-                <thead className="text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
-                  <tr>
-                    <th scope="col" className="px-6 py-3">File Name</th>
-                    <th scope="col" className="px-6 py-3">Date</th>
-                    <th scope="col" className="px-6 py-3">Original Size</th>
-                    <th scope="col" className="px-6 py-3">Compressed Size</th>
-                    <th scope="col" className="px-6 py-3">Reduction</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {entries.map((entry, index) => {
-                    const reduction = entry.originalSize > 0 
-                      ? ((entry.originalSize - entry.compressedSize) / entry.originalSize * 100).toFixed(1)
-                      : 0;
-                    const date = new Date(entry.timestamp).toLocaleDateString(undefined, { 
-                      year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
-                    });
-                    
-                    return (
-                      <tr key={entry.id} className={`${index % 2 === 0 ? 'bg-white dark:bg-indigo-800' : 'bg-slate-50 dark:bg-indigo-900/50'} border-b dark:border-slate-700`}>
-                        <td className="px-6 py-4 font-medium text-indigo-900 dark:text-white truncate max-w-xs" title={entry.fileName}>
-                          {entry.fileName}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">{date}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">{formatBytes(entry.originalSize)}</td>
-                        <td className="px-6 py-4 font-bold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">{formatBytes(entry.compressedSize)}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">{reduction}%</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+          <div className="flex flex-col gap-4 mb-8 text-left">
+            {entries.map((entry) => {
+              const reduction = entry.originalSize > 0 
+                ? ((entry.originalSize - entry.compressedSize) / entry.originalSize * 100).toFixed(1)
+                : 0;
+              const date = new Date(entry.timestamp).toLocaleDateString(undefined, { 
+                year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+              });
+              
+              return (
+                <div key={entry.id} className="bg-white/60 dark:bg-[#0a0f1c]/50 backdrop-blur-sm p-4 rounded-xl border border-slate-100/80 dark:border-indigo-800/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="flex flex-col min-w-0">
+                    <span className="font-bold text-indigo-900 dark:text-white truncate" title={entry.fileName}>
+                      {entry.fileName}
+                    </span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400">
+                      {date}
+                    </span>
+                  </div>
+                  <div className="flex flex-row items-center gap-4 sm:gap-6 shrink-0">
+                    <div className="flex items-center gap-2 text-sm">
+                      <span className="text-slate-500">{formatBytes(entry.originalSize)}</span>
+                      <span className="text-slate-400">→</span>
+                      <span className="font-bold text-[#5668FF]">{formatBytes(entry.compressedSize)}</span>
+                    </div>
+                    <div className="bg-[#5668FF]/10 text-[#5668FF] rounded-full px-3 py-1 text-sm font-bold">
+                      -{reduction}%
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
 
@@ -104,7 +114,7 @@ export default function History() {
             className={`px-6 py-4 rounded-2xl transition-all text-sm font-bold shadow-lg ${
               confirmClear 
                 ? 'bg-red-500 hover:bg-red-600 text-white' 
-                : 'bg-slate-200 dark:bg-indigo-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'
+                : 'bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20'
             }`}
           >
             {confirmClear ? 'Are you sure?' : 'Clear History'}

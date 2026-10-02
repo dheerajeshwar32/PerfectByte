@@ -151,16 +151,25 @@ export default function FormatConverter() {
 
         {!file && (
           <div 
-            className={`border-2 border-dashed rounded-[2rem] p-12 transition-all duration-300 cursor-pointer shadow-inner backdrop-blur-sm mx-auto max-w-3xl ${
+            className={`relative w-full max-w-2xl mx-auto p-10 md:p-14 border-2 border-dashed rounded-[2rem] transition-all duration-500 cursor-pointer group/drop backdrop-blur-sm ${
               isDragging 
-                ? 'border-[#5668FF] bg-[#5668FF]/5 scale-[1.02] shadow-[0_0_30px_rgba(86,104,255,0.2)]' 
-                : 'border-slate-300/50 dark:border-slate-700/50 bg-white/40 dark:bg-indigo-800/40 hover:border-[#5668FF]/50 hover:bg-white/60 dark:hover:bg-indigo-800/60'
+                ? 'border-[#5668FF] bg-[#5668FF]/5 scale-[1.02] shadow-[0_0_40px_rgba(86,104,255,0.15)]' 
+                : 'bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/40 dark:to-slate-900/40 border-slate-200/60 dark:border-slate-700/40 hover:border-[#5668FF]/50 hover:shadow-[0_0_40px_rgba(86,104,255,0.08)]'
             }`}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             onClick={() => fileInputRef.current?.click()}
           >
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-16 h-16 rounded-2xl bg-[#5668FF]/10 dark:bg-[#5668FF]/20 flex items-center justify-center group-hover/drop:scale-110 transition-transform duration-300">
+                <svg className="w-8 h-8 text-[#5668FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+              </div>
+              <div className="text-center">
+                <p className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-1">Drop your image here</p>
+                <p className="text-sm text-slate-400 dark:text-slate-500">or <span className="text-[#5668FF] font-medium hover:underline">browse files</span></p>
+              </div>
+            </div>
             <input 
               type="file" 
               className="hidden" 
@@ -168,11 +177,6 @@ export default function FormatConverter() {
               onChange={handleFileChange} 
               accept="image/*"
             />
-            <div className="flex flex-col items-center justify-center">
-              <svg className="w-16 h-16 mb-4 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-              <p className="text-xl font-bold text-slate-700 dark:text-slate-300 mb-2">Drag and drop an image</p>
-              <p className="text-slate-500">or click to browse</p>
-            </div>
           </div>
         )}
 
@@ -180,7 +184,7 @@ export default function FormatConverter() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 text-left">
             {/* Left side: Uploaded file info & Result */}
             <div className="space-y-6">
-              <div className="text-left bg-white dark:bg-indigo-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl">
+              <div className="text-left bg-white/60 dark:bg-[#0a0f1c]/50 backdrop-blur-xl p-6 md:p-8 rounded-[1.5rem] border border-slate-100/80 dark:border-indigo-800/40 shadow-sm">
                 <h3 className="font-bold text-indigo-800 dark:text-white mb-4">Original Image</h3>
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-slate-500">File Name</span>
@@ -207,8 +211,8 @@ export default function FormatConverter() {
               </div>
 
               {result && (
-                <div className="text-left bg-white dark:bg-indigo-800 p-8 rounded-3xl border border-emerald-200 dark:border-emerald-800 shadow-xl relative overflow-hidden">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-emerald-500"></div>
+                <div className="text-left bg-white/60 dark:bg-[#0a0f1c]/50 backdrop-blur-xl p-6 md:p-8 rounded-[1.5rem] border border-[#5668FF]/30 dark:border-[#5668FF]/20 shadow-sm relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#5668FF] to-purple-500"></div>
                   <h3 className="font-bold text-indigo-800 dark:text-white mb-4">Conversion Result</h3>
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-slate-500">New Format</span>
@@ -216,13 +220,13 @@ export default function FormatConverter() {
                   </div>
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-slate-500">New Size</span>
-                    <span className="font-bold text-emerald-600 dark:text-emerald-400">{formatBytes(result.size)}</span>
+                    <span className="font-bold text-[#5668FF] dark:text-[#7888FF]">{formatBytes(result.size)}</span>
                   </div>
                   
                   {result.size < file.size && (
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-slate-500">Reduction</span>
-                      <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                      <span className="font-bold text-[#5668FF] dark:text-[#7888FF]">
                         {((file.size - result.size) / file.size * 100).toFixed(1)}%
                       </span>
                     </div>
@@ -230,7 +234,7 @@ export default function FormatConverter() {
 
                   <button 
                     onClick={downloadResult}
-                    className="mt-6 w-full bg-emerald-500 text-white py-4 rounded-2xl font-black hover:bg-emerald-600 transition-all shadow-lg text-lg flex items-center justify-center gap-2"
+                    className="mt-6 w-full py-4 md:py-5 rounded-2xl font-bold text-lg transition-all duration-300 bg-[#5668FF] hover:bg-[#4858E0] text-white shadow-[0_8px_30px_rgba(86,104,255,0.3)] hover:shadow-[0_12px_40px_rgba(86,104,255,0.4)] hover:translate-y-[-1px] active:translate-y-[1px] active:shadow-[0_4px_20px_rgba(86,104,255,0.3)] flex items-center justify-center gap-2"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                     Download {result.format}
@@ -240,7 +244,7 @@ export default function FormatConverter() {
             </div>
 
             {/* Right side: Conversion Settings */}
-            <div className="text-left bg-white dark:bg-indigo-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl h-fit">
+            <div className="text-left bg-white/60 dark:bg-[#0a0f1c]/50 backdrop-blur-xl p-6 md:p-8 rounded-[1.5rem] border border-slate-100/80 dark:border-indigo-800/40 shadow-sm h-fit">
               <h3 className="font-bold text-indigo-800 dark:text-white mb-6">Settings</h3>
               
               <div className="mb-8">
@@ -286,10 +290,10 @@ export default function FormatConverter() {
               <button 
                 onClick={handleConvert}
                 disabled={isConverting}
-                className={`w-full py-5 rounded-2xl font-black transition-all shadow-lg text-xl ${
+                className={`w-full py-4 md:py-5 rounded-2xl font-bold text-lg transition-all duration-300 ${
                   isConverting 
                     ? 'bg-slate-300 dark:bg-slate-700 text-slate-500 cursor-not-allowed' 
-                    : 'bg-indigo-900 dark:bg-white text-white dark:text-indigo-900 hover:scale-105'
+                    : 'bg-[#5668FF] hover:bg-[#4858E0] text-white shadow-[0_8px_30px_rgba(86,104,255,0.3)] hover:shadow-[0_12px_40px_rgba(86,104,255,0.4)] hover:translate-y-[-1px] active:translate-y-[1px] active:shadow-[0_4px_20px_rgba(86,104,255,0.3)]'
                 }`}
               >
                 {isConverting ? 'Converting...' : 'Convert Image'}
