@@ -19,7 +19,7 @@ export default function Logo() {
       </span>
       {/* Wordmark */}
       <span 
-        className="text-[14px] font-medium text-[#5668FF] tracking-[0.45em] uppercase mt-1"
+        className="hidden sm:block text-[14px] font-medium text-[#5668FF] tracking-[0.45em] uppercase mt-1"
         style={{ fontFamily: "'Montserrat', sans-serif" }}
       >
         PERFECTBYTE

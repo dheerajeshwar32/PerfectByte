@@ -189,7 +189,7 @@ export default function Home() {
               key={tool.id}
               animate={{ x: xOffset, scale, zIndex, opacity, filter: blur }}
               transition={{ type: "spring", stiffness: 260, damping: 25 }}
-              className="absolute w-[88%] sm:w-[90%] md:w-full max-w-[460px]"
+              className="absolute left-0 right-0 mx-auto w-[88%] sm:w-[90%] md:w-full max-w-[460px]"
             >
               <div 
                 onClick={() => {
