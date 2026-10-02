@@ -162,7 +162,7 @@ export default function TargetCompressor() {
       </div>
       <Navbar />
 
-      <div className="bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-full text-center relative z-10 mt-4 mx-4">
+      <div className="bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-[calc(100%-2rem)] mx-auto text-center relative z-10 mt-4">
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-indigo-900 to-slate-600 dark:from-white dark:to-slate-400 mb-8 md:mb-12 leading-tight px-4 pb-2">
           Target <br className="hidden sm:block" />
           <span 
@@ -201,7 +201,7 @@ export default function TargetCompressor() {
 
             <input
               type="range"
-              min="10" max="2000"
+              min="10" max="10240"
               value={targetKB}
               onChange={(e) => setTargetKB(Number(e.target.value))}
               className="w-full max-w-md h-2 mt-4 bg-slate-200 dark:bg-indigo-800 rounded-lg appearance-none cursor-pointer accent-blue-600 dark:accent-blue-500"
@@ -220,8 +220,8 @@ export default function TargetCompressor() {
                     : 'border-slate-200/60 dark:border-slate-700/40 hover:border-[#5668FF]/50 hover:shadow-[0_0_40px_rgba(86,104,255,0.08)]'
                 }`}
               >
-                <input type="file" accept=".pdf,.png,.jpg,.jpeg,.webp" onChange={handleFileUpload} disabled={isProcessing} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
-                <div className="flex flex-col items-center gap-4">
+                <input type="file" accept=".pdf,.png,.jpg,.jpeg,.webp" onChange={handleFileUpload} disabled={isProcessing} className="absolute inset-0 z-10 w-full h-full opacity-0 cursor-pointer" />
+                <div className="flex flex-col items-center gap-4 relative z-0">
                   <div className="w-16 h-16 rounded-2xl bg-[#5668FF]/10 dark:bg-[#5668FF]/20 flex items-center justify-center group-hover/drop:scale-110 transition-transform duration-300">
                     <svg className="w-8 h-8 text-[#5668FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                   </div>
@@ -272,7 +272,7 @@ export default function TargetCompressor() {
                 <svg className="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                 <div className="flex flex-col text-right">
                   <span className="text-slate-400 text-xs font-sans font-bold uppercase">Target</span>
-                  <span className="text-emerald-500 font-bold">{formatBytes(result.compressedSize)}</span>
+                  <span className="text-[#5668FF] font-bold">{formatBytes(result.compressedSize)}</span>
                 </div>
               </div>
               

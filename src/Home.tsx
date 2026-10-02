@@ -25,8 +25,8 @@ export default function Home() {
       title: 'Bulk Compression',
       desc: 'Process entire folders of images instantly. Reduce your storage footprint while maintaining crisp visual quality.',
       path: '/bulk-compress',
-      iconColor: 'text-emerald-600 dark:text-emerald-400',
-      glowColor: 'bg-emerald-500',
+      iconColor: 'text-teal-600 dark:text-teal-400',
+      glowColor: 'bg-teal-500',
       svg: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
     },
     {
@@ -67,8 +67,8 @@ export default function Home() {
     }
   ];
 
-  const handleNext = () => setActiveIndex((prev) => (prev + 1) % tools.length);
-  const handlePrev = () => setActiveIndex((prev) => (prev - 1 + tools.length) % tools.length);
+  const handleNext = useCallback(() => setActiveIndex((prev) => (prev + 1) % tools.length), [tools.length]);
+  const handlePrev = useCallback(() => setActiveIndex((prev) => (prev - 1 + tools.length) % tools.length), [tools.length]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -125,17 +125,23 @@ export default function Home() {
               )}
               {activeIndex === 3 && (
                 <>
+                  <svg className="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                  <span className="text-xs md:text-sm font-semibold text-slate-700 dark:text-slate-300">Track Your Savings</span>
+                </>
+              )}
+              {activeIndex === 4 && (
+                <>
                   <svg className="w-4 h-4 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                   <span className="text-xs md:text-sm font-semibold text-slate-700 dark:text-slate-300">Any Format, Anywhere</span>
                 </>
               )}
-              {activeIndex === 4 && (
+              {activeIndex === 5 && (
                 <>
                   <svg className="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
                   <span className="text-xs md:text-sm font-semibold text-slate-700 dark:text-slate-300">Pixel-Perfect Resizing</span>
                 </>
               )}
-              {activeIndex === 5 && (
+              {activeIndex === 6 && (
                 <>
                   <svg className="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                   <span className="text-xs md:text-sm font-semibold text-slate-700 dark:text-slate-300">Complete PDF Control</span>

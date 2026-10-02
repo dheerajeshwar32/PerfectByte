@@ -189,7 +189,7 @@ export default function Assistant() {
         onDrop={handleDrop}
         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
         onDragLeave={() => setIsDragging(false)}
-        className="bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-full flex flex-col relative overflow-hidden z-10 mt-4 mx-4 h-[80vh]"
+        className="bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-[calc(100%-2rem)] mx-auto flex flex-col relative overflow-hidden z-10 mt-4 h-[80vh]"
       >
         {/* Full Screen Dropzone Overlay */}
         <AnimatePresence>

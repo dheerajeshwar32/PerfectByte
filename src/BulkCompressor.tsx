@@ -96,7 +96,7 @@ export default function BulkCompressor() {
       </div>
       <Navbar />
 
-      <div className="bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-full text-center relative z-10 mt-4 mx-4">
+      <div className="bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-[calc(100%-2rem)] mx-auto text-center relative z-10 mt-4">
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-indigo-900 to-slate-600 dark:from-white dark:to-slate-400 mb-8 md:mb-12 leading-tight px-4 pb-2">
           Bulk <br className="hidden sm:block" />
           <span 
@@ -131,8 +131,8 @@ export default function BulkCompressor() {
                   : 'border-slate-200/60 dark:border-slate-700/40 hover:border-[#5668FF]/50 hover:shadow-[0_0_40px_rgba(86,104,255,0.08)]'
               }`}
             >
-              <input type="file" multiple accept="image/jpeg, image/png, image/webp" onChange={handleFileChange} disabled={isProcessing} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
-              <div className="flex flex-col items-center gap-4">
+              <input type="file" multiple accept="image/jpeg, image/png, image/webp" onChange={handleFileChange} disabled={isProcessing} className="absolute inset-0 z-10 w-full h-full opacity-0 cursor-pointer" />
+              <div className="flex flex-col items-center gap-4 relative z-0">
                 <div className="w-16 h-16 rounded-2xl bg-[#5668FF]/10 dark:bg-[#5668FF]/20 flex items-center justify-center group-hover/drop:scale-110 transition-transform duration-300">
                   <svg className="w-8 h-8 text-[#5668FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                 </div>
@@ -158,11 +158,11 @@ export default function BulkCompressor() {
             <div className="w-full bg-slate-100 dark:bg-indigo-800 rounded-2xl p-6 shadow-sm">
               <div className="flex justify-between items-center text-sm font-bold text-slate-500 dark:text-slate-400 mb-3">
                 <span>Processing file {progress.current} of {progress.total}</span>
-                <span className="text-emerald-500">{Math.round((progress.current / progress.total) * 100)}%</span>
+                <span className="text-[#5668FF]">{Math.round((progress.current / progress.total) * 100)}%</span>
               </div>
               <div className="w-full bg-slate-200 dark:bg-slate-700 h-3 rounded-full overflow-hidden">
                 <div 
-                  className="bg-emerald-500 h-full transition-all duration-300 rounded-full"
+                  className="bg-[#5668FF] h-full transition-all duration-300 rounded-full"
                   style={{ width: `${(progress.current / progress.total) * 100}%` }}
                 />
               </div>
@@ -176,7 +176,7 @@ export default function BulkCompressor() {
             <div className="flex justify-between items-center mb-8 border-b border-slate-100 dark:border-slate-700 pb-6">
               <div>
                 <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Current Batch Saved</h3>
-                <span className="text-3xl font-black font-mono text-emerald-500">{formatBytes(totalReduction)}</span>
+                <span className="text-3xl font-black font-mono text-[#5668FF]">{formatBytes(totalReduction)}</span>
               </div>
               <button onClick={handleDownloadAll} className="px-6 py-4 rounded-2xl font-bold transition-all duration-300 bg-[#5668FF] hover:bg-[#4858E0] text-white shadow-[0_8px_30px_rgba(86,104,255,0.3)] hover:shadow-[0_12px_40px_rgba(86,104,255,0.4)] hover:translate-y-[-1px] active:translate-y-[1px] active:shadow-[0_4px_20px_rgba(86,104,255,0.3)] disabled:opacity-50 disabled:hover:translate-y-0 text-sm">
                 Download ZIP ({compressedFiles.length})
@@ -196,7 +196,7 @@ export default function BulkCompressor() {
                     <span className="text-xs font-bold text-indigo-800 dark:text-slate-200 truncate mb-2">{file.name}</span>
                     <div className="flex items-center justify-between font-mono text-[10px] uppercase">
                       <span className="text-slate-400 line-through">{formatBytes(file.originalSize)}</span>
-                      <span className="text-emerald-500 font-bold">{formatBytes(file.compressedSize)}</span>
+                      <span className="text-[#5668FF] font-bold">{formatBytes(file.compressedSize)}</span>
                     </div>
                   </div>
                 </div>

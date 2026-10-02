@@ -121,7 +121,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const data = await geminiResponse.json();
     
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const parts = data?.candidates?.[0]?.content?.parts ?? [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const functionCallPart = parts.find((part: any) => part.functionCall);
