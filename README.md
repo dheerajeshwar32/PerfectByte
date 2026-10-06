@@ -1,56 +1,100 @@
-# PerfectByte 
+<div align="center">
 
-**Zero-Server Edge Compute File Compression & AI Assistant**
+# 📦 PerfectByte
+### Local-First File Compression & AI Assistant
 
-[![Deploy Status](https://img.shields.io/badge/Deployed-Vercel-black?logo=vercel)](#) 
-[![React](https://img.shields.io/badge/React-18.0-blue?logo=react)](#) 
-[![WebAssembly](https://img.shields.io/badge/WebAssembly-Enabled-654FF0?logo=webassembly)](#)
-[![Gemini](https://img.shields.io/badge/Gemini_AI-Integrated-8E75B2?logo=google)](#)
+<a href="https://perfectbyte.vercel.app">
+  <img src="https://img.shields.io/badge/Live_Demo-3B82F6?style=for-the-badge&logo=vercel" alt="Live Demo" />
+</a>
+<a href="https://github.com/dheerajeshwar32/PerfectByte">
+  <img src="https://img.shields.io/badge/Repository-0F172A?style=for-the-badge&logo=github" alt="Repository" />
+</a>
 
-PerfectByte is a privacy-first, client-side web application engineered to perform aggressive file compression and manipulation entirely within the browser. By leveraging WebAssembly (WASM) and a zero-server architecture, PerfectByte ensures user data never leaves the device, providing a highly secure, offline-capable alternative to traditional cloud-based utility tools.
+PerfectByte is a privacy-first, client-side web application engineered to perform aggressive file compression and manipulation entirely within the browser. By leveraging **Web Workers** and a **zero-server architecture**, PerfectByte ensures user data never leaves the device.
 
-## 🏗️ System Architecture & Engineering
+</div>
 
-This project was built to explore the boundaries of edge computing and client-side processing, specifically avoiding traditional backend API bottlenecks.
+---
 
-*   **Zero-Server Topology:** Eliminates backend storage and processing completely. All file I/O, rasterization, and compression algorithms execute locally on the client's CPU.
-*   **WebAssembly (WASM) Integration:** Bypasses JavaScript's single-threaded limitations and performance bottlenecks by utilizing low-level memory management for intensive PDF manipulation and image compression.
-*   **Context-Aware AI Routing:** Integrates the Gemini API to parse natural language commands (e.g., "compress this PDF to 100KB") and dynamically translate them into executable, client-side function calls.
+## ⚡ Live Demo
+![PerfectByte Demo](public/demo.gif)
+*(Replace `public/demo.gif` with a screen recording of the app in action!)*
+
+## 🧠 System Architecture
+
+PerfectByte avoids traditional backend API bottlenecks. All file I/O, rasterization, and compression algorithms execute locally on the client's CPU.
+
+```mermaid
+graph TD
+    User[User] -->|Uploads Folder/Files| UI(React UI)
+    UI -->|Offloads Task| WorkerPool[Web Worker Pool]
+    
+    subgraph Client-Side Edge Compute
+        WorkerPool -->|Spawns| Worker1[Worker Thread 1]
+        WorkerPool -->|Spawns| Worker2[Worker Thread 2]
+        Worker1 --> WASM1(WASM Compression Module)
+        Worker2 --> WASM2(WASM Compression Module)
+    end
+    
+    WASM1 -->|Yields| File1[Compressed File]
+    WASM2 -->|Yields| File2[Compressed File]
+    File1 --> UI
+    File2 --> UI
+    UI -->|Downloads ZIP| User
+
+    UI -.->|Natural Language Prompt| Gemini(Gemini API)
+    Gemini -.->|Parsed Commands| UI
+```
 
 ## ✨ Core Capabilities
 
 *   **Target-Byte Compression Engine:** A precision algorithm allowing users to shrink images or PDFs to an exact maximum byte size via custom UI target sliders, specifically engineered for strict government or academic portal upload limits.
-*   **High-Volume Bulk Processing:** Capable of instantly batch-processing entire directories of images, optimizing storage footprints while utilizing custom algorithms to maintain visual fidelity.
+*   **High-Volume Bulk Processing:** Capable of instantly batch-processing entire directories of images without blocking the main UI thread, optimizing storage footprints while maintaining visual fidelity.
 *   **Intelligent File Assistant:** An AI-driven command interface powered by Gemini, allowing users to manipulate files, strip blank pages, and compress assets using natural language.
-*   **Responsive Glassmorphic UI:** A highly polished, custom-built interface featuring fluid spring animations (Framer Motion), interactive carousels, and dynamic light/dark mode chromatic aberration branding.
+*   **Responsive Glassmorphic UI:** A highly polished, custom-built interface featuring fluid spring animations (Framer Motion).
 
-## 🛠️ Technical Stack
+## 🛠️ Tech Stack
 
-| Category | Technology | Purpose |
-| :--- | :--- | :--- |
-| **Frontend Core** | React.js, TypeScript, Vite | Component architecture and blazing-fast local development environment. |
-| **Styling & UI** | Tailwind CSS, Framer Motion | Utility-first styling and physics-based spring animations for a native-app feel. |
-| **Processing Engine** | WebAssembly (WASM), Canvas API | Client-side execution of heavy file compression and PDF rasterization algorithms. |
-| **Intelligence** | Gemini API | Natural language processing for the AI File Assistant. |
-| **Infrastructure** | Vercel | Edge-network hosting and continuous deployment pipeline. |
+*   **Frontend Core:** React.js, TypeScript, Vite
+*   **Styling & UI:** Tailwind CSS, Framer Motion
+*   **Processing Engine:** Web Workers, WebAssembly (WASM), Canvas API
+*   **Intelligence:** Gemini API
+*   **Infrastructure:** Vercel
 
-## 🚀 Local Development
+---
+
+## 🚀 Local Setup Instructions
 
 To run PerfectByte locally and explore the edge-compute architecture:
 
+### Prerequisites
+*   Node.js (v18 or higher)
+*   Google Gemini API Key (via Google AI Studio)
+
+### 1. Clone the repository
 ```bash
-# 1. Clone the repository
-git clone [https://github.com/dheerajeshwar32/PerfectByte.git](https://github.com/dheerajeshwar32/PerfectByte.git)
-
-# 2. Navigate to the project directory
+git clone https://github.com/dheerajeshwar32/PerfectByte.git
 cd PerfectByte
+```
 
-# 3. Install dependencies
+### 2. Install dependencies
+```bash
 npm install
+```
 
-# 4. Configure environment variables
-# Create a .env file and add your Gemini API Key
+### 3. Environment Variables
+Create a `.env` file and add your Gemini API Key:
+```env
 VITE_GEMINI_API_KEY=your_api_key_here
+```
 
-# 5. Start the Vite development server
+### 4. Start the Development Server
+```bash
 npm run dev
+```
+The application will launch and be accessible at `http://localhost:5173`.
+
+---
+<div align="center">
+<i>Engineered by Nagula Dheeraj Eshwar Prudhvi</i>
+</div>
