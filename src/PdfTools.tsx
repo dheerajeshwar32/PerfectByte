@@ -227,6 +227,7 @@ export default function PdfTools() {
                       accept=".pdf"
                       multiple
                       onChange={handleMergeFiles}
+                      aria-label="Upload PDF files to merge"
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                     />
                   </div>
@@ -243,9 +244,9 @@ export default function PdfTools() {
                             <span className="ml-2 text-xs text-slate-400">{formatBytes(file.size)}</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <button onClick={() => moveMergeFile(idx, 'up')} disabled={idx === 0} className="p-1 text-slate-400 hover:text-slate-700 disabled:opacity-30">↑</button>
-                            <button onClick={() => moveMergeFile(idx, 'down')} disabled={idx === mergeFiles.length - 1} className="p-1 text-slate-400 hover:text-slate-700 disabled:opacity-30">↓</button>
-                            <button onClick={() => removeMergeFile(idx)} className="p-1 text-red-400 hover:text-red-600 ml-2">×</button>
+                            <button onClick={() => moveMergeFile(idx, 'up')} disabled={idx === 0} aria-label={`Move ${file.name} up`} className="p-1 text-slate-400 hover:text-slate-700 disabled:opacity-30">↑</button>
+                            <button onClick={() => moveMergeFile(idx, 'down')} disabled={idx === mergeFiles.length - 1} aria-label={`Move ${file.name} down`} className="p-1 text-slate-400 hover:text-slate-700 disabled:opacity-30">↓</button>
+                            <button onClick={() => removeMergeFile(idx)} aria-label={`Remove ${file.name}`} className="p-1 text-red-400 hover:text-red-600 ml-2">×</button>
                           </div>
                         </div>
                       ))}
@@ -308,6 +309,7 @@ export default function PdfTools() {
                       type="file"
                       accept=".pdf"
                       onChange={handleSplitFile}
+                      aria-label="Upload PDF file to split"
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                     />
                   </div>
@@ -326,6 +328,7 @@ export default function PdfTools() {
                       value={pageRange}
                       onChange={(e) => setPageRange(e.target.value)}
                       placeholder="e.g. 1-3, 5, 7-10"
+                      aria-label="Pages to extract (comma-separated or ranges)"
                       className="w-full bg-slate-50 dark:bg-indigo-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-indigo-800 dark:text-white"
                     />
                     <p className="mt-2 text-xs text-slate-400">Comma-separated page numbers or ranges.</p>

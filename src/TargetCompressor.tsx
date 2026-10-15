@@ -50,6 +50,7 @@ function BeforeAfterSlider({ originalUrl, compressedUrl }: { originalUrl: string
         max={100}
         value={position}
         onChange={(e) => setPosition(Number(e.target.value))}
+        aria-label="Before and after comparison slider"
         className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize"
       />
       <span className="absolute top-3 left-3 bg-indigo-900/70 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-lg pointer-events-none font-medium">Original</span>
@@ -162,7 +163,7 @@ export default function TargetCompressor() {
       </div>
       <Navbar />
 
-      <div className="bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-[calc(100%-2rem)] mx-auto text-center relative z-10 mt-4">
+      <main className="bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-[calc(100%-2rem)] mx-auto text-center relative z-10 mt-4">
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-indigo-900 to-slate-600 dark:from-white dark:to-slate-400 mb-8 md:mb-12 leading-tight px-4 pb-2">
           Target <br className="hidden sm:block" />
           <span 
@@ -181,6 +182,7 @@ export default function TargetCompressor() {
                 type="number"
                 value={targetKB}
                 onChange={(e) => setTargetKB(Number(e.target.value))}
+                aria-label="Target file size in kilobytes"
                 className="text-6xl md:text-8xl font-black font-mono tabular-nums text-center bg-transparent outline-none text-indigo-900 dark:text-white w-full max-w-[350px]"
                 min="1"
               />
@@ -204,6 +206,7 @@ export default function TargetCompressor() {
               min="10" max="10240"
               value={targetKB}
               onChange={(e) => setTargetKB(Number(e.target.value))}
+              aria-label="Target file size slider in kilobytes"
               className="w-full max-w-md h-2 mt-4 bg-slate-200 dark:bg-indigo-800 rounded-lg appearance-none cursor-pointer accent-blue-600 dark:accent-blue-500"
             />
           </div>
@@ -220,7 +223,7 @@ export default function TargetCompressor() {
                     : 'border-slate-200/60 dark:border-slate-700/40 hover:border-[#5668FF]/50 hover:shadow-[0_0_40px_rgba(86,104,255,0.08)]'
                 }`}
               >
-                <input type="file" accept=".pdf,.png,.jpg,.jpeg,.webp" onChange={handleFileUpload} disabled={isProcessing} className="absolute inset-0 z-10 w-full h-full opacity-0 cursor-pointer" />
+                <input type="file" accept=".pdf,.png,.jpg,.jpeg,.webp" onChange={handleFileUpload} disabled={isProcessing} aria-label="Upload file to compress" className="absolute inset-0 z-10 w-full h-full opacity-0 cursor-pointer" />
                 <div className="flex flex-col items-center gap-4 relative z-0">
                   <div className="w-16 h-16 rounded-2xl bg-[#5668FF]/10 dark:bg-[#5668FF]/20 flex items-center justify-center group-hover/drop:scale-110 transition-transform duration-300">
                     <svg className="w-8 h-8 text-[#5668FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
@@ -244,7 +247,7 @@ export default function TargetCompressor() {
             <div className="space-y-6 text-left bg-white dark:bg-indigo-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl">
               <div className="flex justify-between items-center pb-6 border-b border-slate-100 dark:border-slate-700">
                 <div>
-                  <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">Reduction</h3>
+                <h2 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">Reduction</h2>
                   <span 
                     className="text-5xl md:text-6xl font-black font-mono text-[#5668FF] dark:text-[#7888FF]"
                     style={{ textShadow: '-3px 0px 0px rgba(0,255,255,0.6), 3px 0px 0px rgba(255,0,255,0.6)' }}
@@ -282,7 +285,7 @@ export default function TargetCompressor() {
             </div>
           )}
         </div>
-      </div>
+      </main>
     </div>
   );
 }

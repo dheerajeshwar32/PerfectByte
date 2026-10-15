@@ -82,16 +82,16 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-white dark:from-[#080B14] dark:via-[#0D1220] dark:to-[#050810] flex flex-col items-center justify-start pt-20 md:pt-24 relative overflow-x-hidden font-sans transition-colors duration-300">
       
-      <div className="absolute top-0 left-0 w-full p-5 md:px-12 flex justify-between items-center z-50">
+      <nav className="absolute top-0 left-0 w-full p-5 md:px-12 flex justify-between items-center z-50">
         <Logo />
-      </div>
+      </nav>
 
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-400/10 dark:bg-blue-900/20 blur-[120px]"></div>
         <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-400/10 dark:bg-purple-900/20 blur-[120px]"></div>
       </div>
 
-      <div className="max-w-4xl mx-auto text-center relative z-10 flex flex-col items-center mb-8 md:mb-16">
+      <main className="max-w-4xl mx-auto text-center relative z-10 flex flex-col items-center mb-8 md:mb-16">
         
         <div className="h-10 flex items-center justify-center mb-4 md:mb-6">
           <AnimatePresence mode="wait">
@@ -125,17 +125,23 @@ export default function Home() {
               )}
               {activeIndex === 3 && (
                 <>
+                  <svg className="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                  <span className="text-xs md:text-sm font-semibold text-slate-700 dark:text-slate-300">Track Your Savings</span>
+                </>
+              )}
+              {activeIndex === 4 && (
+                <>
                   <svg className="w-4 h-4 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                   <span className="text-xs md:text-sm font-semibold text-slate-700 dark:text-slate-300">Any Format, Anywhere</span>
                 </>
               )}
-              {activeIndex === 4 && (
+              {activeIndex === 5 && (
                 <>
                   <svg className="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
                   <span className="text-xs md:text-sm font-semibold text-slate-700 dark:text-slate-300">Pixel-Perfect Resizing</span>
                 </>
               )}
-              {activeIndex === 5 && (
+              {activeIndex === 6 && (
                 <>
                   <svg className="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                   <span className="text-xs md:text-sm font-semibold text-slate-700 dark:text-slate-300">Complete PDF Control</span>
@@ -154,7 +160,7 @@ export default function Home() {
             Zero compromises.
           </span>
         </h1>
-      </div>
+      </main>
 
       <div className="relative w-full max-w-7xl h-[360px] md:h-[420px] mx-auto flex items-center justify-center z-20">
         {tools.map((tool, index) => {
@@ -183,7 +189,7 @@ export default function Home() {
               key={tool.id}
               animate={{ x: xOffset, scale, zIndex, opacity, filter: blur }}
               transition={{ type: "spring", stiffness: 260, damping: 25 }}
-              className="absolute left-0 right-0 mx-auto w-[88%] sm:w-[90%] md:w-full max-w-[460px]"
+              className="absolute w-[88%] sm:w-[90%] md:w-full max-w-[460px]"
             >
               <div 
                 onClick={() => {
@@ -200,9 +206,9 @@ export default function Home() {
                     </svg>
                   </div>
                   
-                  <h3 className="text-2xl md:text-3xl font-semibold tracking-tight text-indigo-900 dark:text-white mb-2 md:mb-4">
+                  <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-indigo-900 dark:text-white mb-2 md:mb-4">
                     {tool.title}
-                  </h3>
+                  </h2>
                   
                   <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base font-light leading-relaxed line-clamp-3 md:line-clamp-none">
                     {tool.desc}
@@ -210,11 +216,12 @@ export default function Home() {
                 </div>
 
                 {isActive && (
-                  <motion.div 
+                  <motion.button 
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="relative z-10 w-full flex items-center justify-between mt-auto pt-4 md:pt-6 border-t border-slate-200/60 dark:border-slate-700/60 group/btn cursor-pointer"
+                    className="relative z-10 w-full flex items-center justify-between mt-auto pt-4 md:pt-6 border-t border-slate-200/60 dark:border-slate-700/60 group/btn cursor-pointer bg-transparent"
+                    aria-label={`Open ${tool.title}`}
                     onClick={(e) => {
                       e.stopPropagation();
                       navigate(tool.path);
@@ -226,7 +233,7 @@ export default function Home() {
                     <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-indigo-900 dark:bg-white flex items-center justify-center text-white dark:text-indigo-900 transition-transform duration-300 group-hover/btn:translate-x-1">
                       <svg className="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </div>
-                  </motion.div>
+                  </motion.button>
                 )}
               </div>
             </motion.div>
@@ -237,12 +244,14 @@ export default function Home() {
       <div className="flex gap-4 md:gap-6 mt-8 md:mt-12 z-30 mb-12">
         <button 
           onClick={handlePrev}
+          aria-label="Previous tool"
           className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white dark:bg-indigo-800 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-indigo-900 dark:hover:text-white hover:scale-110 transition-all active:scale-95"
         >
           <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
         </button>
         <button 
           onClick={handleNext}
+          aria-label="Next tool"
           className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white dark:bg-indigo-800 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-indigo-900 dark:hover:text-white hover:scale-110 transition-all active:scale-95"
         >
           <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>

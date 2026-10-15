@@ -185,7 +185,7 @@ export default function Assistant() {
       <Navbar />
 
       {/* Main Terminal Window */}
-      <div
+      <main
         onDrop={handleDrop}
         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
         onDragLeave={() => setIsDragging(false)}
@@ -342,6 +342,7 @@ export default function Assistant() {
             <input
               type="text" value={input} onChange={(e) => setInput(e.target.value)} disabled={isBusy}
               placeholder='ENTER COMMAND (e.g. "compress to 100KB")'
+              aria-label="Assistant command input"
               className="flex-1 bg-transparent px-3 py-4 outline-none text-[14px] font-mono font-medium text-indigo-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 disabled:opacity-50"
             />
             <div className="pr-1">
@@ -355,7 +356,7 @@ export default function Assistant() {
             </div>
           </div>
         </form>
-      </div>
+      </main>
     </div>
   );
 }

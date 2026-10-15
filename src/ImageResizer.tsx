@@ -165,6 +165,7 @@ export default function ImageResizer() {
               type="file"
               accept="image/*"
               className="hidden"
+              aria-label="Upload image to resize"
               onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
             />
           </div>
@@ -184,11 +185,13 @@ export default function ImageResizer() {
               
               <div className="flex items-center gap-4 mb-8">
                 <div className="flex-1">
-                  <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">Width (px)</label>
+                  <label htmlFor="resize-width" className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">Width (px)</label>
                   <input
+                    id="resize-width"
                     type="number"
                     value={width}
                     onChange={(e) => handleWidthChange(e.target.value)}
+                    aria-label="Width in pixels"
                     className="w-full bg-slate-50 dark:bg-indigo-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-indigo-800 dark:text-white"
                   />
                 </div>
@@ -197,6 +200,7 @@ export default function ImageResizer() {
                   onClick={() => setLockRatio(!lockRatio)}
                   className={`mt-6 p-3 rounded-full transition-colors ${lockRatio ? 'bg-[#5668FF] text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-400'}`}
                   title={lockRatio ? 'Unlock aspect ratio' : 'Lock aspect ratio'}
+                  aria-label={lockRatio ? 'Unlock aspect ratio' : 'Lock aspect ratio'}
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     {lockRatio ? (
@@ -208,11 +212,13 @@ export default function ImageResizer() {
                 </button>
 
                 <div className="flex-1">
-                  <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">Height (px)</label>
+                  <label htmlFor="resize-height" className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">Height (px)</label>
                   <input
+                    id="resize-height"
                     type="number"
                     value={height}
                     onChange={(e) => handleHeightChange(e.target.value)}
+                    aria-label="Height in pixels"
                     className="w-full bg-slate-50 dark:bg-indigo-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-indigo-800 dark:text-white"
                   />
                 </div>

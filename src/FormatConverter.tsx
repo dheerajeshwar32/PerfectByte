@@ -137,7 +137,7 @@ export default function FormatConverter() {
         <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-400/10 dark:bg-purple-900/20 blur-[120px]"></div>
       </div>
 
-      <div className="bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-[calc(100%-2rem)] mx-auto text-center relative z-10 mt-4">
+      <main className="bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-[calc(100%-2rem)] mx-auto text-center relative z-10 mt-4">
         
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-indigo-900 to-slate-600 dark:from-white dark:to-slate-400 mb-8 md:mb-12 leading-tight px-4 pb-2">
           Format <br className="hidden sm:block" />
@@ -176,6 +176,7 @@ export default function FormatConverter() {
               ref={fileInputRef} 
               onChange={handleFileChange} 
               accept="image/*"
+              aria-label="Upload image to convert"
             />
           </div>
         )}
@@ -185,7 +186,7 @@ export default function FormatConverter() {
             {/* Left side: Uploaded file info & Result */}
             <div className="space-y-6">
               <div className="text-left bg-white/60 dark:bg-[#0a0f1c]/50 backdrop-blur-xl p-6 md:p-8 rounded-[1.5rem] border border-slate-100/80 dark:border-indigo-800/40 shadow-sm">
-                <h3 className="font-bold text-indigo-800 dark:text-white mb-4">Original Image</h3>
+                <h2 className="font-bold text-indigo-800 dark:text-white mb-4">Original Image</h2>
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-slate-500">File Name</span>
                   <span className="font-medium text-indigo-800 dark:text-slate-200 truncate max-w-[200px]" title={file.name}>{file.name}</span>
@@ -213,7 +214,7 @@ export default function FormatConverter() {
               {result && (
                 <div className="text-left bg-white/60 dark:bg-[#0a0f1c]/50 backdrop-blur-xl p-6 md:p-8 rounded-[1.5rem] border border-[#5668FF]/30 dark:border-[#5668FF]/20 shadow-sm relative overflow-hidden">
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#5668FF] to-purple-500"></div>
-                  <h3 className="font-bold text-indigo-800 dark:text-white mb-4">Conversion Result</h3>
+                  <h2 className="font-bold text-indigo-800 dark:text-white mb-4">Conversion Result</h2>
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-slate-500">New Format</span>
                     <span className="font-medium text-indigo-800 dark:text-slate-200">{result.format}</span>
@@ -245,7 +246,7 @@ export default function FormatConverter() {
 
             {/* Right side: Conversion Settings */}
             <div className="text-left bg-white/60 dark:bg-[#0a0f1c]/50 backdrop-blur-xl p-6 md:p-8 rounded-[1.5rem] border border-slate-100/80 dark:border-indigo-800/40 shadow-sm h-fit">
-              <h3 className="font-bold text-indigo-800 dark:text-white mb-6">Settings</h3>
+              <h2 className="font-bold text-indigo-800 dark:text-white mb-6">Settings</h2>
               
               <div className="mb-8">
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Target Format</label>
@@ -278,6 +279,7 @@ export default function FormatConverter() {
                     max="100" 
                     value={quality}
                     onChange={(e) => setQuality(parseInt(e.target.value))}
+                    aria-label="Compression quality percentage"
                     className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[#5668FF]"
                   />
                   <div className="flex justify-between text-xs text-slate-500 mt-2">
@@ -301,7 +303,7 @@ export default function FormatConverter() {
             </div>
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 }

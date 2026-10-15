@@ -46,9 +46,9 @@ export default function Footer() {
               >
                 <div className="overflow-hidden">
                   <div className="bg-white/[0.04] backdrop-blur-sm rounded-2xl p-5 border border-white/[0.06]">
-                    <h4 className="text-base font-semibold text-white/90 mb-1">
+                    <h3 className="text-base font-semibold text-white/90 mb-1">
                       Nagula Dheeraj Eshwar Prudhvi
-                    </h4>
+                    </h3>
                     <p className="text-sm text-slate-400/80 mb-3">
                       B.Tech Computer Science & Engineering (Core) '28
                       <br />
@@ -64,9 +64,9 @@ export default function Footer() {
 
             {/* Column 2: Connect */}
             <div className="md:col-span-2 md:col-start-8 flex flex-col">
-              <h4 className="text-[11px] font-semibold text-white/40 mb-6 uppercase tracking-[0.2em]">
+              <h2 className="text-[11px] font-semibold text-white/70 mb-6 uppercase tracking-[0.2em]">
                 Connect
-              </h4>
+              </h2>
               <ul className="flex flex-col gap-3.5">
                 <li>
                   <a
@@ -116,9 +116,9 @@ export default function Footer() {
 
             {/* Column 3: Feedback */}
             <div className="md:col-span-3 md:col-start-10 flex flex-col">
-              <h4 className="text-[11px] font-semibold text-white/40 mb-6 uppercase tracking-[0.2em]">
+              <h2 className="text-[11px] font-semibold text-white/70 mb-6 uppercase tracking-[0.2em]">
                 Feedback
-              </h4>
+              </h2>
               <p className="text-sm text-slate-500 font-light leading-relaxed mb-5">
                 Encountered a bug or have a feature request? Let me know via GitHub Issues.
               </p>
@@ -152,7 +152,7 @@ export default function Footer() {
               </span>
               PerfectByte © {new Date().getFullYear()}
             </div>
-            <div className="text-[11px] text-slate-600 font-medium tracking-wider uppercase">
+            <div className="text-[11px] text-slate-400 font-medium tracking-wider uppercase">
               Architected for local-first privacy.
             </div>
           </div>
