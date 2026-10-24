@@ -147,6 +147,24 @@ export default function BulkCompressor() {
           )}
 
           {files.length > 0 && compressedFiles.length === 0 && !isProcessing && (
+            <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto p-3 rounded-2xl bg-slate-50 dark:bg-indigo-900/40 border border-slate-200/60 dark:border-indigo-800/60 text-left">
+              {files.map((file, idx) => (
+                <div key={idx} className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white dark:bg-indigo-950 border border-slate-200 dark:border-slate-700 text-xs font-mono">
+                  <span className="truncate max-w-[150px]">{file.name}</span>
+                  <span className="text-slate-400">({formatBytes(file.size)})</span>
+                  <button
+                    type="button"
+                    onClick={() => setFiles(prev => prev.filter((_, i) => i !== idx))}
+                    className="text-slate-400 hover:text-red-500 font-bold ml-1"
+                    aria-label={`Remove ${file.name}`}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+          {files.length > 0 && compressedFiles.length === 0 && !isProcessing && (
             <button
               onClick={handleCompress} disabled={isProcessing}
               className="w-full py-4 md:py-5 rounded-2xl font-bold text-lg transition-all duration-300 bg-[#5668FF] hover:bg-[#4858E0] text-white shadow-[0_8px_30px_rgba(86,104,255,0.3)] hover:shadow-[0_12px_40px_rgba(86,104,255,0.4)] hover:translate-y-[-1px] active:translate-y-[1px] active:shadow-[0_4px_20px_rgba(86,104,255,0.3)] disabled:opacity-50 disabled:hover:translate-y-0"
@@ -188,6 +206,17 @@ export default function BulkCompressor() {
               {compressedFiles.map((file, i) => (
                 <div key={i} className="bg-slate-50 dark:bg-indigo-900 p-3 rounded-2xl border border-slate-200 dark:border-indigo-800 flex flex-col group relative">
                   <div className="relative aspect-square w-full rounded-xl overflow-hidden mb-3 bg-checkerboard">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        URL.revokeObjectURL(file.url);
+                        setCompressedFiles(prev => prev.filter((_, idx) => idx !== i));
+                      }}
+                      aria-label={`Remove ${file.name} from batch`}
+                      className="absolute top-2 right-2 z-20 w-6 h-6 rounded-full bg-slate-900/80 hover:bg-red-500 text-white flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-md"
+                    >
+                      ✕
+                    </button>
                     <img src={file.url} alt={file.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                     <a href={file.url} download={file.name} className="absolute inset-0 bg-indigo-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
                       <span className="bg-white text-indigo-900 text-xs font-bold px-4 py-2 rounded-lg">Download</span>

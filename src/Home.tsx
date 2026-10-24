@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, type DragEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Logo from './Logo';
@@ -9,6 +9,7 @@ export default function Home() {
   useDocumentTitle('Home');
   const [activeIndex, setActiveIndex] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
   const navigate = useNavigate();
 
   const tools = [
@@ -81,8 +82,44 @@ export default function Home() {
   }, [handleNext, handlePrev]);
 
   return (
-    <div className="min-h-dvh bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-white dark:from-[#080B14] dark:via-[#0D1220] dark:to-[#050810] flex flex-col items-center justify-start pt-20 md:pt-24 relative overflow-x-hidden font-sans transition-colors duration-300">
+    <div
+      onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+      onDragLeave={() => setIsDragging(false)}
+      onDrop={(e: DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        setIsDragging(false);
+        const dropped = e.dataTransfer.files;
+        if (!dropped || dropped.length === 0) return;
+        if (dropped.length === 1) {
+          navigate('/target-size');
+        } else {
+          navigate('/bulk-compress');
+        }
+      }}
+      className="min-h-dvh bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-white dark:from-[#080B14] dark:via-[#0D1220] dark:to-[#050810] flex flex-col items-center justify-start pt-20 md:pt-24 relative overflow-x-hidden font-sans transition-colors duration-300"
+    >
       
+      <AnimatePresence>
+        {isDragging && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 backdrop-blur-md bg-indigo-950/70 border-4 border-dashed border-[#5668FF] flex flex-col items-center justify-center gap-4 text-center p-6"
+          >
+            <div className="w-20 h-20 rounded-3xl bg-[#5668FF]/20 text-[#5668FF] flex items-center justify-center animate-bounce shadow-2xl">
+              <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+            </div>
+            <p className="text-3xl font-black text-white tracking-tight">Drop Files to Launch Tool</p>
+            <p className="text-sm font-mono text-slate-300">
+              1 file launches <span className="text-[#7888FF] font-bold">Target Compressor</span> · Multiple files launch <span className="text-teal-400 font-bold">Bulk Processor</span>
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <nav className="absolute top-0 left-0 w-full p-5 md:px-12 flex justify-between items-center z-50">
         <Logo />
       </nav>

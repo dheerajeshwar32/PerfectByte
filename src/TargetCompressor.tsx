@@ -32,9 +32,27 @@ const PRESETS = [
 
 function BeforeAfterSlider({ originalUrl, compressedUrl }: { originalUrl: string; compressedUrl: string }) {
   const [position, setPosition] = useState(50);
+  const [showLoupe, setShowLoupe] = useState(false);
+  const [loupePos, setLoupePos] = useState({ x: 50, y: 50 });
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!showLoupe || !containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
+    const y = Math.max(0, Math.min(rect.height, e.clientY - rect.top));
+    setLoupePos({
+      x: (x / rect.width) * 100,
+      y: (y / rect.height) * 100,
+    });
+  };
 
   return (
-    <div className="relative w-full aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200/60 dark:border-slate-700 shadow-sm bg-checkerboard select-none">
+    <div
+      ref={containerRef}
+      onMouseMove={handleMouseMove}
+      className="relative w-full aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200/60 dark:border-slate-700 shadow-sm bg-checkerboard select-none"
+    >
       <img src={compressedUrl} alt="Compressed output" draggable={false} className="absolute inset-0 w-full h-full object-contain" />
       <div className="absolute inset-0 overflow-hidden" style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}>
         <img src={originalUrl} alt="Original input" draggable={false} className="absolute inset-0 w-full h-full object-contain" />
@@ -58,6 +76,42 @@ function BeforeAfterSlider({ originalUrl, compressedUrl }: { originalUrl: string
         aria-label="Before and after comparison slider"
         className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize"
       />
+
+      {showLoupe && (
+        <div
+          className="absolute w-28 h-28 rounded-full border-2 border-white shadow-2xl pointer-events-none overflow-hidden -translate-x-1/2 -translate-y-1/2 z-30 ring-2 ring-[#5668FF]"
+          style={{
+            left: `${loupePos.x}%`,
+            top: `${loupePos.y}%`,
+          }}
+        >
+          <img
+            src={loupePos.x > position ? compressedUrl : originalUrl}
+            alt="Magnified loupe inspection"
+            className="absolute max-w-none"
+            style={{
+              width: '250%',
+              height: '250%',
+              left: `${-loupePos.x * 2.5 + 50}%`,
+              top: `${-loupePos.y * 2.5 + 50}%`,
+            }}
+          />
+        </div>
+      )}
+
+      <button
+        type="button"
+        onClick={() => setShowLoupe(!showLoupe)}
+        aria-label="Toggle Magnifier Loupe"
+        className={`absolute bottom-3 left-3 z-30 px-2.5 py-1 rounded-lg text-xs font-bold font-mono transition-colors ${
+          showLoupe
+            ? 'bg-[#5668FF] text-white shadow-md'
+            : 'bg-black/60 text-white/80 hover:bg-black/80'
+        }`}
+      >
+        🔍 2.5x Loupe
+      </button>
+
       <span className="absolute top-3 left-3 bg-indigo-900/70 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-lg pointer-events-none font-medium">Original</span>
       <span className="absolute top-3 right-3 bg-indigo-900/70 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-lg pointer-events-none font-medium">Compressed</span>
     </div>
