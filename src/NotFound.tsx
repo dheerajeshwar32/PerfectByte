@@ -15,7 +15,7 @@ export default function NotFound() {
       <Navbar />
 
       <main className="flex-1 flex flex-col items-center justify-center bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-16 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-2xl w-[calc(100%-2rem)] mx-auto text-center relative z-10 mt-8 mb-16">
-        <span 
+        <span
           className="text-8xl md:text-9xl font-black font-mono text-[#5668FF] leading-none mb-4"
           style={{ textShadow: '-3px 0px 0px rgba(0,255,255,0.6), 3px 0px 0px rgba(255,0,255,0.6)' }}
         >
@@ -40,3 +40,4 @@ export default function NotFound() {
     </div>
   );
 }
+

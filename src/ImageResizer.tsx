@@ -98,10 +98,10 @@ export default function ImageResizer() {
       canvas.height = height;
       const ctx = canvas.getContext('2d');
       if (!ctx) throw new Error('Could not get canvas context');
-      
+
       ctx.drawImage(bitmap, 0, 0, width, height);
       bitmap.close();
-      
+
       canvas.toBlob(
         (blob) => {
           canvas.width = 0;
@@ -132,10 +132,10 @@ export default function ImageResizer() {
       </div>
 
       <main className="flex-1 bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-[calc(100%-2rem)] mx-auto text-center relative z-10 mt-4 pb-20">
-        
+
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-indigo-900 to-slate-600 dark:from-white dark:to-slate-400 mb-8 md:mb-12 leading-tight px-4 pb-2">
           Image <br className="hidden sm:block" />
-          <span 
+          <span
             className="text-[#5668FF] drop-shadow-sm"
             style={{ textShadow: '-2px 0px 0px rgba(0,255,255,0.3), 2px 0px 0px rgba(255,0,255,0.3)' }}
           >
@@ -186,7 +186,7 @@ export default function ImageResizer() {
 
             <div className="text-left bg-white/60 dark:bg-[#0a0f1c]/50 backdrop-blur-xl p-6 md:p-8 rounded-[1.5rem] border border-slate-100/80 dark:border-indigo-800/40 shadow-sm max-w-2xl mx-auto">
               <h2 className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4">Dimensions</h2>
-              
+
               <div className="flex items-center gap-4 mb-8">
                 <div className="flex-1">
                   <label htmlFor="resize-width" className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">Width (px)</label>
@@ -199,7 +199,7 @@ export default function ImageResizer() {
                     className="w-full bg-slate-50 dark:bg-indigo-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-indigo-800 dark:text-white"
                   />
                 </div>
-                
+
                 <button
                   onClick={() => setLockRatio(!lockRatio)}
                   className={`mt-6 p-3 rounded-full transition-colors ${lockRatio ? 'bg-[#5668FF] text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-400'}`}
@@ -259,7 +259,7 @@ export default function ImageResizer() {
             <div className="relative inline-block mx-auto p-2 rounded-2xl bg-checkerboard border border-slate-200/50 dark:border-slate-700/50">
               <img src={resultUrl} alt="Resized" className="max-h-64 rounded-xl shadow-lg" />
             </div>
-            
+
             <div className="text-left bg-white/60 dark:bg-[#0a0f1c]/50 backdrop-blur-xl p-6 md:p-8 rounded-[1.5rem] border border-slate-100/80 dark:border-indigo-800/40 shadow-sm max-w-md mx-auto">
               <div className="space-y-4 mb-8 text-sm">
                 <div className="flex justify-between pb-4 border-b border-slate-100 dark:border-slate-700">

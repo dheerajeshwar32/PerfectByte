@@ -98,7 +98,7 @@ export default function Home() {
       }}
       className="min-h-dvh bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-white dark:from-[#080B14] dark:via-[#0D1220] dark:to-[#050810] flex flex-col items-center justify-start pt-20 md:pt-24 relative overflow-x-hidden font-sans transition-colors duration-300"
     >
-      
+
       <AnimatePresence>
         {isDragging && (
           <motion.div
@@ -130,7 +130,7 @@ export default function Home() {
       </div>
 
       <main className="max-w-4xl mx-auto text-center relative z-10 flex flex-col items-center mb-8 md:mb-16">
-        
+
         <div className="h-10 flex items-center justify-center mb-4 md:mb-6">
           <AnimatePresence mode="wait">
             <motion.div
@@ -191,7 +191,7 @@ export default function Home() {
 
         <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-indigo-900 to-slate-600 dark:from-white dark:to-slate-400 mb-2 md:mb-4 leading-tight transition-colors px-4 pb-2">
           Flawless files. <br className="hidden sm:block" />
-          <span 
+          <span
             className="text-[#5668FF] drop-shadow-sm"
             style={{ textShadow: '-2px 0px 0px rgba(0,255,255,0.8), 2px 0px 0px rgba(255,0,255,0.8)' }}
           >
@@ -240,7 +240,7 @@ export default function Home() {
               transition={{ type: "spring", stiffness: 260, damping: 25 }}
               className="absolute w-[88%] sm:w-[90%] md:w-full max-w-[460px]"
             >
-              <div 
+              <div
                 onClick={() => {
                   if (!isActive) setActiveIndex(index);
                 }}
@@ -254,18 +254,18 @@ export default function Home() {
                       {tool.svg}
                     </svg>
                   </div>
-                  
+
                   <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-indigo-900 dark:text-white mb-2 md:mb-4">
                     {tool.title}
                   </h2>
-                  
+
                   <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base font-light leading-relaxed line-clamp-3 md:line-clamp-none">
                     {tool.desc}
                   </p>
                 </div>
 
                 {isActive && (
-                  <motion.button 
+                  <motion.button
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
@@ -291,7 +291,7 @@ export default function Home() {
       </div>
 
       <div className="flex items-center gap-4 md:gap-6 mt-8 md:mt-12 z-30 mb-12">
-        <button 
+        <button
           onClick={handlePrev}
           aria-label="Previous tool"
           className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white dark:bg-indigo-800 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-indigo-900 dark:hover:text-white hover:scale-110 transition-all active:scale-95"
@@ -317,7 +317,7 @@ export default function Home() {
         </div>
 
 
-        <button 
+        <button
           onClick={handleNext}
           aria-label="Next tool"
           className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white dark:bg-indigo-800 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-indigo-900 dark:hover:text-white hover:scale-110 transition-all active:scale-95"

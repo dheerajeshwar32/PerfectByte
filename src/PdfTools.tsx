@@ -8,7 +8,7 @@ import { PDFDocument } from 'pdf-lib';
 
 export default function PdfTools() {
   useDocumentTitle('PDF Tools');
-  
+
   const [activeTab, setActiveTab] = useState<'merge' | 'split'>('merge');
 
   // Merge State
@@ -68,7 +68,7 @@ export default function PdfTools() {
         const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
         copiedPages.forEach(page => mergedPdf.addPage(page));
       }
-      
+
       const pdfBytes = await mergedPdf.save();
       const blob = new Blob([pdfBytes as BlobPart], { type: 'application/pdf' });
       setMergedSize(blob.size);
@@ -92,7 +92,7 @@ export default function PdfTools() {
       }
       setSplitFile(file);
       setSplitPdfUrl('');
-      
+
       try {
         const arrayBuffer = await file.arrayBuffer();
         const pdfDoc = await PDFDocument.load(arrayBuffer);
@@ -108,7 +108,7 @@ export default function PdfTools() {
   const parsePageRange = (rangeStr: string, maxPages: number): number[] => {
     const pages = new Set<number>();
     const parts = rangeStr.split(',').map(s => s.trim()).filter(Boolean);
-    
+
     for (const part of parts) {
       if (part.includes('-')) {
         const [start, end] = part.split('-').map(s => parseInt(s, 10));
@@ -126,14 +126,14 @@ export default function PdfTools() {
         pages.add(page - 1);
       }
     }
-    
+
     return Array.from(pages).sort((a, b) => a - b);
   };
 
   const splitPdf = async () => {
     if (!splitFile || !pageRange) return;
     setIsSplitting(true);
-    
+
     try {
       const indicesToCopy = parsePageRange(pageRange, splitTotalPages);
       if (indicesToCopy.length === 0) {
@@ -143,13 +143,13 @@ export default function PdfTools() {
       const arrayBuffer = await splitFile.arrayBuffer();
       const originalPdf = await PDFDocument.load(arrayBuffer);
       const newPdf = await PDFDocument.create();
-      
+
       const copiedPages = await newPdf.copyPages(originalPdf, indicesToCopy);
       copiedPages.forEach(page => newPdf.addPage(page));
-      
+
       const pdfBytes = await newPdf.save();
       const blob = new Blob([pdfBytes as BlobPart], { type: 'application/pdf' });
-      
+
       setSplitSize(blob.size);
       setSplitFinalPages(indicesToCopy.length);
       setSplitPdfUrl(URL.createObjectURL(blob));
@@ -171,10 +171,10 @@ export default function PdfTools() {
       </div>
 
       <main className="flex-1 bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-[calc(100%-2rem)] mx-auto text-center relative z-10 mt-4 pb-20">
-        
+
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-indigo-900 to-slate-600 dark:from-white dark:to-slate-400 mb-8 md:mb-12 leading-tight px-4 pb-2">
           PDF <br className="hidden sm:block" />
-          <span 
+          <span
             className="text-[#5668FF] drop-shadow-sm"
             style={{ textShadow: '-2px 0px 0px rgba(0,255,255,0.3), 2px 0px 0px rgba(255,0,255,0.3)' }}
           >
@@ -187,7 +187,7 @@ export default function PdfTools() {
             <button
               onClick={() => setActiveTab('merge')}
               className={`px-8 py-3 rounded-full font-bold text-sm transition-all duration-300 ${
-                activeTab === 'merge' 
+                activeTab === 'merge'
                   ? 'bg-[#5668FF] text-white shadow-lg'
                   : 'bg-white/60 dark:bg-[#0a0f1c]/50 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
               }`}

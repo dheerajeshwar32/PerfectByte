@@ -8,13 +8,13 @@ export default function Footer() {
     <footer className="w-full mt-auto z-40 relative">
       {/* Gradient fade from page → footer */}
       <div className="h-32 md:h-40 bg-gradient-to-b from-transparent via-[#131835]/60 to-[#0c1029]"></div>
-      
+
       {/* Main footer body */}
       <div className="bg-[#0c1029] relative overflow-hidden">
         {/* Subtle ambient glow */}
         <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-[#5668FF]/5 blur-[120px] pointer-events-none"></div>
         <div className="absolute bottom-0 right-1/4 w-64 h-64 rounded-full bg-purple-500/5 blur-[100px] pointer-events-none"></div>
-        
+
 
 
 
@@ -123,7 +123,7 @@ export default function Footer() {
               <p className="text-sm text-slate-500 font-light leading-relaxed mb-5">
                 Encountered a bug or have a feature request? Let me know via GitHub Issues.
               </p>
-              
+
               <a
                 href="https://github.com/dheerajeshwar32/PerfectByte/issues"
                 target="_blank"

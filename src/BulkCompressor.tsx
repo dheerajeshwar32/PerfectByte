@@ -17,7 +17,7 @@ interface CompressedFile {
 
 export default function BulkCompressor() {
   useDocumentTitle('Bulk Compressor');
-  
+
   const [files, setFiles] = useState<File[]>([]);
   const [compressedFiles, setCompressedFiles] = useState<CompressedFile[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -61,7 +61,7 @@ export default function BulkCompressor() {
 
       setCompressedFiles(results);
       setStats(getHistoryStats());
-      
+
       if (results.length === 0) toast.error("Failed to compress images.");
       else toast.success(`Successfully compressed ${results.length} images!`);
     } catch {
@@ -100,18 +100,18 @@ export default function BulkCompressor() {
       <main className="flex-1 bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-[calc(100%-2rem)] mx-auto text-center relative z-10 mt-4 pb-20">
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-indigo-900 to-slate-600 dark:from-white dark:to-slate-400 mb-8 md:mb-12 leading-tight px-4 pb-2">
           Bulk <br className="hidden sm:block" />
-          <span 
+          <span
             className="text-[#5668FF] drop-shadow-sm"
             style={{ textShadow: '-2px 0px 0px rgba(0,255,255,0.3), 2px 0px 0px rgba(255,0,255,0.3)' }}
           >
             Compress
           </span>
         </h1>
-        
+
         {/* Phase 3: The Hero Stats */}
         <div className="flex flex-col items-center justify-center py-8 mb-8 border-b border-slate-200 dark:border-indigo-800">
           <span className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4">Total Space Saved</span>
-          <div 
+          <div
             className="text-6xl md:text-8xl font-black font-mono tabular-nums text-[#5668FF] dark:text-[#7888FF]"
             style={{ textShadow: '-3px 0px 0px rgba(0,255,255,0.6), 3px 0px 0px rgba(255,0,255,0.6)' }}
           >
@@ -127,8 +127,8 @@ export default function BulkCompressor() {
             <div
               onDrop={handleDrop} onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }} onDragLeave={() => setIsDragging(false)}
               className={`relative w-full max-w-2xl mx-auto p-10 md:p-14 border-2 border-dashed rounded-[2rem] transition-all duration-500 cursor-pointer group/drop bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/40 dark:to-slate-900/40 backdrop-blur-sm ${
-                isDragging 
-                  ? 'border-[#5668FF] bg-[#5668FF]/5 dark:bg-[#5668FF]/10 scale-[1.02] shadow-[0_0_40px_rgba(86,104,255,0.15)]' 
+                isDragging
+                  ? 'border-[#5668FF] bg-[#5668FF]/5 dark:bg-[#5668FF]/10 scale-[1.02] shadow-[0_0_40px_rgba(86,104,255,0.15)]'
                   : 'border-slate-200/60 dark:border-slate-700/40 hover:border-[#5668FF]/50 hover:shadow-[0_0_40px_rgba(86,104,255,0.08)]'
               }`}
             >
@@ -180,7 +180,7 @@ export default function BulkCompressor() {
                 <span className="text-[#5668FF]">{Math.round((progress.current / progress.total) * 100)}%</span>
               </div>
               <div className="w-full bg-slate-200 dark:bg-slate-700 h-3 rounded-full overflow-hidden">
-                <div 
+                <div
                   className="bg-[#5668FF] h-full transition-all duration-300 rounded-full"
                   style={{ width: `${(progress.current / progress.total) * 100}%` }}
                 />
@@ -201,7 +201,7 @@ export default function BulkCompressor() {
                 Download ZIP ({compressedFiles.length})
               </button>
             </div>
-            
+
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {compressedFiles.map((file, i) => (
                 <div key={i} className="bg-slate-50 dark:bg-indigo-900 p-3 rounded-2xl border border-slate-200 dark:border-indigo-800 flex flex-col group relative">

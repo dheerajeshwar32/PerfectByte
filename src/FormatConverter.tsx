@@ -17,10 +17,10 @@ export default function FormatConverter() {
   const [file, setFile] = useState<File | null>(null);
   const [meta, setMeta] = useState<ImageMeta | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  
+
   const [targetFormat, setTargetFormat] = useState<Format>('webp');
   const [quality, setQuality] = useState(75);
-  
+
   const [isConverting, setIsConverting] = useState(false);
   const [result, setResult] = useState<{ url: string; size: number; format: string } | null>(null);
 
@@ -50,7 +50,7 @@ export default function FormatConverter() {
   const handleDrop = useCallback(async (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
-    
+
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       const droppedFile = e.dataTransfer.files[0];
       if (droppedFile.type.startsWith('image/')) {
@@ -70,15 +70,15 @@ export default function FormatConverter() {
 
   const handleConvert = async () => {
     if (!file) return;
-    
+
     setIsConverting(true);
     setResult(null);
-    
+
     try {
       const imageData = await getImageData(file);
       let buffer: ArrayBuffer;
       const mimeType = `image/${targetFormat}`;
-      
+
       if (targetFormat === 'webp') {
         buffer = await encodeWebp(imageData, { quality });
       } else if (targetFormat === 'jpeg') {
@@ -98,15 +98,15 @@ export default function FormatConverter() {
 
       const blob = new Blob([buffer], { type: mimeType });
       const url = URL.createObjectURL(blob);
-      
+
       setResult({
         url,
         size: blob.size,
         format: targetFormat.toUpperCase()
       });
-      
+
       toast.success('Conversion complete!');
-      
+
     } catch (err: unknown) {
       console.error(err);
       toast.error((err as Error).message || 'Failed to convert image.');
@@ -132,17 +132,17 @@ export default function FormatConverter() {
   return (
     <div className="min-h-dvh bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-white dark:from-[#080B14] dark:via-[#0D1220] dark:to-[#050810] flex flex-col items-center justify-start pt-20 md:pt-24 relative overflow-x-hidden font-sans transition-colors duration-300">
       <Navbar />
-      
+
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-400/10 dark:bg-blue-900/20 blur-[120px]"></div>
         <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-400/10 dark:bg-purple-900/20 blur-[120px]"></div>
       </div>
 
       <main className="flex-1 bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-[calc(100%-2rem)] mx-auto text-center relative z-10 mt-4 pb-20">
-        
+
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-indigo-900 to-slate-600 dark:from-white dark:to-slate-400 mb-8 md:mb-12 leading-tight px-4 pb-2">
           Format <br className="hidden sm:block" />
-          <span 
+          <span
             className="text-[#5668FF] drop-shadow-sm"
             style={{ textShadow: '-2px 0px 0px rgba(0,255,255,0.3), 2px 0px 0px rgba(255,0,255,0.3)' }}
           >
@@ -151,10 +151,10 @@ export default function FormatConverter() {
         </h1>
 
         {!file && (
-          <div 
+          <div
             className={`relative w-full max-w-2xl mx-auto p-10 md:p-14 border-2 border-dashed rounded-[2rem] transition-all duration-500 cursor-pointer group/drop backdrop-blur-sm ${
-              isDragging 
-                ? 'border-[#5668FF] bg-[#5668FF]/5 scale-[1.02] shadow-[0_0_40px_rgba(86,104,255,0.15)]' 
+              isDragging
+                ? 'border-[#5668FF] bg-[#5668FF]/5 scale-[1.02] shadow-[0_0_40px_rgba(86,104,255,0.15)]'
                 : 'bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/40 dark:to-slate-900/40 border-slate-200/60 dark:border-slate-700/40 hover:border-[#5668FF]/50 hover:shadow-[0_0_40px_rgba(86,104,255,0.08)]'
             }`}
             onDragOver={handleDragOver}
@@ -171,11 +171,11 @@ export default function FormatConverter() {
                 <p className="text-sm text-slate-400 dark:text-slate-500">or <span className="text-[#5668FF] font-medium hover:underline">browse files</span></p>
               </div>
             </div>
-            <input 
-              type="file" 
-              className="hidden" 
-              ref={fileInputRef} 
-              onChange={handleFileChange} 
+            <input
+              type="file"
+              className="hidden"
+              ref={fileInputRef}
+              onChange={handleFileChange}
               accept="image/*"
               aria-label="Upload image to convert"
             />
@@ -203,8 +203,8 @@ export default function FormatConverter() {
                 <div className="mt-4 text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 p-3 rounded-lg">
                   Note: Metadata is stripped automatically during conversion.
                 </div>
-                
-                <button 
+
+                <button
                   onClick={() => { setFile(null); setResult(null); }}
                   className="mt-6 text-sm text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 underline"
                 >
@@ -224,7 +224,7 @@ export default function FormatConverter() {
                     <span className="text-slate-500">New Size</span>
                     <span className="font-bold text-[#5668FF] dark:text-[#7888FF]">{formatBytes(result.size)}</span>
                   </div>
-                  
+
                   {result.size < file.size && (
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-slate-500">Reduction</span>
@@ -234,7 +234,7 @@ export default function FormatConverter() {
                     </div>
                   )}
 
-                  <button 
+                  <button
                     onClick={downloadResult}
                     className="mt-6 w-full py-4 md:py-5 rounded-2xl font-bold text-lg transition-all duration-300 bg-[#5668FF] hover:bg-[#4858E0] text-white shadow-[0_8px_30px_rgba(86,104,255,0.3)] hover:shadow-[0_12px_40px_rgba(86,104,255,0.4)] hover:translate-y-[-1px] active:translate-y-[1px] active:shadow-[0_4px_20px_rgba(86,104,255,0.3)] flex items-center justify-center gap-2"
                   >
@@ -248,7 +248,7 @@ export default function FormatConverter() {
             {/* Right side: Conversion Settings */}
             <div className="text-left bg-white/60 dark:bg-[#0a0f1c]/50 backdrop-blur-xl p-6 md:p-8 rounded-[1.5rem] border border-slate-100/80 dark:border-indigo-800/40 shadow-sm h-fit">
               <h2 className="font-bold text-indigo-800 dark:text-white mb-6">Settings</h2>
-              
+
               <div className="mb-8">
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Target Format</label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
@@ -257,8 +257,8 @@ export default function FormatConverter() {
                       key={fmt}
                       onClick={() => setTargetFormat(fmt)}
                       className={`py-3 px-4 rounded-xl font-bold text-sm transition-all ${
-                        targetFormat === fmt 
-                          ? 'bg-[#5668FF] text-white shadow-md' 
+                        targetFormat === fmt
+                          ? 'bg-[#5668FF] text-white shadow-md'
                           : 'bg-slate-100 dark:bg-slate-700/50 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
                       }`}
                     >
@@ -274,10 +274,10 @@ export default function FormatConverter() {
                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Quality</label>
                     <span className="font-mono text-sm font-bold text-[#5668FF] dark:text-[#7888FF]">{quality}%</span>
                   </div>
-                  <input 
-                    type="range" 
-                    min="1" 
-                    max="100" 
+                  <input
+                    type="range"
+                    min="1"
+                    max="100"
                     value={quality}
                     onChange={(e) => setQuality(parseInt(e.target.value))}
                     aria-label="Compression quality percentage"
@@ -290,12 +290,12 @@ export default function FormatConverter() {
                 </div>
               )}
 
-              <button 
+              <button
                 onClick={handleConvert}
                 disabled={isConverting}
                 className={`w-full py-4 md:py-5 rounded-2xl font-bold text-lg transition-all duration-300 ${
-                  isConverting 
-                    ? 'bg-slate-300 dark:bg-slate-700 text-slate-500 cursor-not-allowed' 
+                  isConverting
+                    ? 'bg-slate-300 dark:bg-slate-700 text-slate-500 cursor-not-allowed'
                     : 'bg-[#5668FF] hover:bg-[#4858E0] text-white shadow-[0_8px_30px_rgba(86,104,255,0.3)] hover:shadow-[0_12px_40px_rgba(86,104,255,0.4)] hover:translate-y-[-1px] active:translate-y-[1px] active:shadow-[0_4px_20px_rgba(86,104,255,0.3)]'
                 }`}
               >

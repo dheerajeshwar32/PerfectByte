@@ -42,11 +42,11 @@ export default function History() {
         <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-400/10 dark:bg-purple-900/20 blur-[120px]"></div>
       </div>
       <Navbar />
-      
+
       <main className="flex-1 bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-[calc(100%-2rem)] mx-auto text-center relative z-10 mt-4 pb-20">
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-indigo-900 to-slate-600 dark:from-white dark:to-slate-400 mb-8 md:mb-12 leading-tight px-4 pb-2">
           Action / <br className="hidden sm:block" />
-          <span 
+          <span
             className="text-[#5668FF] drop-shadow-sm"
             style={{ textShadow: '-2px 0px 0px rgba(0,255,255,0.3), 2px 0px 0px rgba(255,0,255,0.3)' }}
           >
@@ -55,9 +55,9 @@ export default function History() {
         </h1>
 
         <h2 className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4">Total Space Saved</h2>
-        
+
         <div className="mb-12">
-          <div 
+          <div
             className="text-6xl md:text-8xl font-black font-mono tabular-nums text-[#5668FF] dark:text-[#7888FF] mb-4"
             style={{ textShadow: '-3px 0px 0px rgba(0,255,255,0.6), 3px 0px 0px rgba(255,0,255,0.6)' }}
           >
@@ -76,13 +76,13 @@ export default function History() {
         ) : (
           <div className="flex flex-col gap-4 mb-8 text-left">
             {entries.map((entry) => {
-              const reduction = entry.originalSize > 0 
+              const reduction = entry.originalSize > 0
                 ? ((entry.originalSize - entry.compressedSize) / entry.originalSize * 100).toFixed(1)
                 : 0;
-              const date = new Date(entry.timestamp).toLocaleDateString(undefined, { 
+              const date = new Date(entry.timestamp).toLocaleDateString(undefined, {
                 year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
               });
-              
+
               return (
                 <div key={entry.id} className="bg-white/60 dark:bg-[#0a0f1c]/50 backdrop-blur-sm p-4 rounded-xl border border-slate-100/80 dark:border-indigo-800/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="flex flex-col min-w-0">
@@ -110,11 +110,11 @@ export default function History() {
         )}
 
         {entries.length > 0 && (
-          <button 
+          <button
             onClick={handleClear}
             className={`px-6 py-4 rounded-2xl transition-all text-sm font-bold shadow-lg ${
-              confirmClear 
-                ? 'bg-red-500 hover:bg-red-600 text-white' 
+              confirmClear
+                ? 'bg-red-500 hover:bg-red-600 text-white'
                 : 'bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20'
             }`}
           >
