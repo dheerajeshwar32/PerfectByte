@@ -40,6 +40,7 @@ export async function getImageData(file: File): Promise<ImageData> {
   if (!ctx) throw new Error('Canvas context failed');
   ctx.drawImage(bitmap, 0, 0);
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  canvas.width = 0; canvas.height = 0;
   bitmap.close();
   return imageData;
 }

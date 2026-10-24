@@ -6,13 +6,14 @@ async function getImageData(file: File): Promise<ImageData> {
   const canvas = document.createElement('canvas');
   canvas.width = bitmap.width;
   canvas.height = bitmap.height;
-  
+
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('Canvas context failed');
-  
+
   ctx.drawImage(bitmap, 0, 0);
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  
+
+  canvas.width = 0; canvas.height = 0;
   bitmap.close();
   return imageData;
 }
@@ -22,7 +23,7 @@ export async function compressToWebp(file: File) {
   const imageData = await getImageData(file);
   // Encode to WebP (defaults to ~75 quality, excellent for bulk size reduction)
   const compressedBuffer = await encodeWebp(imageData);
-  
+
   return new Blob([compressedBuffer], { type: 'image/webp' });
 }
 
@@ -35,13 +36,13 @@ export async function compressToTarget(imageData: ImageData, targetBytes: number
   }
 
   let minQ = 0;
-  let maxQ = 89; 
+  let maxQ = 89;
   let bestBuffer: ArrayBuffer | null = null;
   let bestSizeDiff = Infinity;
 
   // 2. Binary search for optimal quality
   for (let i = 0; i < 8; i++) {
-    if (minQ > maxQ) break; 
+    if (minQ > maxQ) break;
 
     const midQ = Math.floor((minQ + maxQ) / 2);
     const buffer = await encodeWebp(imageData, { quality: midQ });
@@ -54,10 +55,10 @@ export async function compressToTarget(imageData: ImageData, targetBytes: number
         bestSizeDiff = diff;
         bestBuffer = buffer;
       }
-      minQ = midQ + 1; 
+      minQ = midQ + 1;
     } else {
       // Over target: lower the quality
-      maxQ = midQ - 1; 
+      maxQ = midQ - 1;
     }
   }
 

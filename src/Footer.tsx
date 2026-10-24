@@ -14,9 +14,9 @@ export default function Footer() {
         <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-[#5668FF]/5 blur-[120px] pointer-events-none"></div>
         <div className="absolute bottom-0 right-1/4 w-64 h-64 rounded-full bg-purple-500/5 blur-[100px] pointer-events-none"></div>
         
-        <style>
-          {`@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600&display=swap');`}
-        </style>
+
+
+
 
         <div className="max-w-7xl mx-auto px-8 md:px-12 py-16 md:py-20 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8">

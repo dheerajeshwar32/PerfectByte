@@ -203,7 +203,7 @@ export default function BulkCompressor() {
               ))}
             </div>
 
-            <button onClick={() => { setCompressedFiles([]); setFiles([]); }} className="w-full mt-8 py-3 text-sm font-bold text-slate-400 hover:text-slate-700 transition-colors">
+            <button onClick={() => { compressedFiles.forEach(f => URL.revokeObjectURL(f.url)); setCompressedFiles([]); setFiles([]); }} className="w-full mt-8 py-3 text-sm font-bold text-slate-400 hover:text-slate-700 transition-colors">
               Clear Batch & Compress More
             </button>
           </div>
