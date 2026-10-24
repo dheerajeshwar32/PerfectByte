@@ -140,9 +140,12 @@ export default function Assistant() {
       } else if (data.type === 'function_call' && data.name === 'bulk_compress') {
         const results = await runBulkCompress();
         setMessages((prev) => [...prev, { role: 'assistant', text: `Batch execution complete. Processed ${results.length} assets.` }]);
-        results.forEach((r) => {
-          const link = document.createElement('a'); link.href = r.url; link.download = r.name; document.body.appendChild(link); link.click(); document.body.removeChild(link);
-        });
+
+          // Display download package rather than auto-downloading
+          if (results.length > 0) {
+            setDownloadUrl({ url: results[0].url, name: results[0].name });
+          }
+
       } else if (data.type === 'function_call' && data.name === 'remove_blank_pages') {
         const file = files[0];
         const result = await removeBlankPages(file);
@@ -173,7 +176,7 @@ export default function Assistant() {
     : null;
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-white dark:from-[#080B14] dark:via-[#0D1220] dark:to-[#050810] flex flex-col items-center justify-start pt-20 md:pt-24 relative overflow-x-hidden font-sans transition-colors duration-300">
+    <div className="min-h-dvh bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-white dark:from-[#080B14] dark:via-[#0D1220] dark:to-[#050810] flex flex-col items-center justify-start pt-20 md:pt-24 relative overflow-x-hidden font-sans transition-colors duration-300">
       
       {/* Background Ambient Glows */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
@@ -355,6 +358,7 @@ export default function Assistant() {
               </button>
             </div>
           </div>
+          <p className="text-[11px] text-center text-slate-400 mt-2 font-mono">🔒 Files never leave your device. Prompt &amp; metadata (name, size) sent to Gemini.</p>
         </form>
       </main>
     </div>

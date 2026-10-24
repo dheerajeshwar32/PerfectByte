@@ -12,6 +12,8 @@ const History = lazy(() => import('./History'));
 const FormatConverter = lazy(() => import('./FormatConverter'));
 const ImageResizer = lazy(() => import('./ImageResizer'));
 const PdfTools = lazy(() => import('./PdfTools'));
+const Privacy = lazy(() => import('./Privacy'));
+const NotFound = lazy(() => import('./NotFound'));
 
 function LoadingSpinner() {
   return (
@@ -42,6 +44,8 @@ function AnimatedRoutes() {
             <Route path="/convert" element={<FormatConverter />} />
             <Route path="/resize" element={<ImageResizer />} />
             <Route path="/pdf-tools" element={<PdfTools />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
       </motion.div>

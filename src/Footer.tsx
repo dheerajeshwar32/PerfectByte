@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Footer() {
   const [showAbout, setShowAbout] = useState(false);
@@ -153,7 +154,7 @@ export default function Footer() {
               PerfectByte © {new Date().getFullYear()}
             </div>
             <div className="text-[11px] text-slate-400 font-medium tracking-wider uppercase">
-              Architected for local-first privacy.
+              <Link to="/privacy" className="hover:text-[#7888FF] transition-colors">Architected for local-first privacy · Privacy Policy</Link>
             </div>
           </div>
         </div>
