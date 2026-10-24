@@ -8,6 +8,7 @@ import { useDocumentTitle } from './useDocumentTitle';
 export default function Home() {
   useDocumentTitle('Home');
   const [activeIndex, setActiveIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
   const navigate = useNavigate();
 
   const tools = [
@@ -162,7 +163,18 @@ export default function Home() {
         </h1>
       </main>
 
-      <div className="relative w-full max-w-7xl h-[360px] md:h-[420px] mx-auto flex items-center justify-center z-20">
+      <div
+        onTouchStart={(e) => setTouchStart(e.targetTouches[0].clientX)}
+        onTouchEnd={(e) => {
+          if (touchStart === null) return;
+          const touchEnd = e.changedTouches[0].clientX;
+          if (touchStart - touchEnd > 50) handleNext();
+          if (touchStart - touchEnd < -50) handlePrev();
+          setTouchStart(null);
+        }}
+        style={{ touchAction: 'pan-y' }}
+        className="relative w-full max-w-7xl h-[360px] md:h-[420px] mx-auto flex items-center justify-center z-20 touch-pan-y"
+      >
         {tools.map((tool, index) => {
           const isActive = index === activeIndex;
           const isLeft = index === (activeIndex - 1 + tools.length) % tools.length;
@@ -241,7 +253,7 @@ export default function Home() {
         })}
       </div>
 
-      <div className="flex gap-4 md:gap-6 mt-8 md:mt-12 z-30 mb-12">
+      <div className="flex items-center gap-4 md:gap-6 mt-8 md:mt-12 z-30 mb-12">
         <button 
           onClick={handlePrev}
           aria-label="Previous tool"
@@ -249,6 +261,25 @@ export default function Home() {
         >
           <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
         </button>
+
+        <div className="flex items-center gap-2" role="tablist" aria-label="Tool selection">
+          {tools.map((tool, idx) => (
+            <button
+              key={tool.id}
+              onClick={() => setActiveIndex(idx)}
+              aria-label={`Jump to ${tool.title}`}
+              aria-selected={idx === activeIndex}
+              role="tab"
+              className={`h-2.5 rounded-full transition-all duration-300 ${
+                idx === activeIndex
+                  ? 'w-8 bg-[#5668FF] shadow-[0_0_12px_rgba(86,104,255,0.4)]'
+                  : 'w-2.5 bg-slate-300/80 dark:bg-slate-700/80 hover:bg-slate-400 dark:hover:bg-slate-600'
+              }`}
+            />
+          ))}
+        </div>
+
+
         <button 
           onClick={handleNext}
           aria-label="Next tool"
@@ -256,6 +287,7 @@ export default function Home() {
         >
           <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
         </button>
+
       </div>
 
       <div className="flex-grow"></div>

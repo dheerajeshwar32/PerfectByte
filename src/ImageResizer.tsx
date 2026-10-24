@@ -177,7 +177,7 @@ export default function ImageResizer() {
 
         {file && !resultBlob && (
           <div className="space-y-8">
-            <div className="relative inline-block mx-auto">
+            <div className="relative inline-block mx-auto p-2 rounded-2xl bg-checkerboard border border-slate-200/50 dark:border-slate-700/50">
               <img src={previewUrl} alt="Preview" className="max-h-64 rounded-xl shadow-lg" />
               <div className="absolute bottom-4 right-4 bg-indigo-900/80 text-white px-3 py-1 rounded-lg text-sm font-medium backdrop-blur-md">
                 {originalWidth} × {originalHeight}
@@ -256,7 +256,7 @@ export default function ImageResizer() {
         {resultBlob && (
           <div className="space-y-8 animate-in fade-in zoom-in duration-300">
             <h2 className="text-2xl font-bold text-indigo-800 dark:text-white">Done!</h2>
-            <div className="relative inline-block mx-auto">
+            <div className="relative inline-block mx-auto p-2 rounded-2xl bg-checkerboard border border-slate-200/50 dark:border-slate-700/50">
               <img src={resultUrl} alt="Resized" className="max-h-64 rounded-xl shadow-lg" />
             </div>
             

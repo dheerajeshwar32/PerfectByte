@@ -17,7 +17,15 @@ interface DownloadInfo {
   name: string;
   originalSize?: number;
   compressedSize?: number;
+  targetKB?: number;
 }
+
+const EXAMPLE_CHIPS = [
+  { label: '🎯 Compress to 100KB', prompt: 'compress to 100KB' },
+  { label: '🏛️ Govt Portal (50KB)', prompt: 'compress for government portal under 50KB' },
+  { label: '📑 Remove Blank Pages', prompt: 'remove blank pages from this PDF' },
+  { label: '⚡ Bulk Optimize', prompt: 'bulk compress these files' },
+];
 
 // --- Icons -----------------------------------------------------------
 const SparkIcon = ({ className = '' }: { className?: string }) => (
@@ -58,55 +66,66 @@ export default function Assistant() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'assistant',
-      text: 'SYSTEM ONLINE. Mount a file in the bay, then issue a command (e.g., "compress to 150KB" or "remove blank pages").',
+      text: 'SYSTEM ONLINE. Mount a file in the bay or type your goal below (e.g., "compress to 100KB" or "remove blank pages").',
     },
   ]);
   const [input, setInput] = useState('');
   const [isBusy, setIsBusy] = useState(false);
   const [downloadUrl, setDownloadUrl] = useState<DownloadInfo | null>(null);
+  const [queuedIntent, setQueuedIntent] = useState<string | null>(null);
+  const [lastTargetKB, setLastTargetKB] = useState<number | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, downloadUrl, isBusy]);
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) setFiles(Array.from(e.target.files));
-  };
+  const runCompressToTarget = async (targetKB: number, targetFiles = files) => {
+    const file = targetFiles[0];
+    if (!file) throw new Error('No file mounted');
 
-  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-    if (e.dataTransfer.files) setFiles(Array.from(e.dataTransfer.files));
-  };
-
-  const runCompressToTarget = async (targetKB: number) => {
-    const file = files[0];
-    if (file.type === 'application/pdf') {
-      const pdfData = await compressPDF(file, targetKB * 1024);
+    if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+      const pdfData = await compressPDF(file, 0.5);
       const blob = pdfData instanceof Blob ? pdfData : new Blob([pdfData as BlobPart], { type: 'application/pdf' });
       addHistoryEntry({ fileName: file.name, originalSize: file.size, compressedSize: blob.size });
-      return { url: URL.createObjectURL(blob), name: file.name.replace(/\.[^/.]+$/, '') + '_compressed.pdf', original: file.size, compressed: blob.size };
+      return {
+        url: URL.createObjectURL(blob),
+        name: file.name.replace(/\.[^/.]+$/, '') + '_compressed.pdf',
+        original: file.size,
+        compressed: blob.size,
+        targetKB,
+      };
     }
 
     const bitmap = await createImageBitmap(file);
     const canvas = document.createElement('canvas');
-    canvas.width = bitmap.width; canvas.height = bitmap.height;
+    canvas.width = bitmap.width;
+    canvas.height = bitmap.height;
     const ctx = canvas.getContext('2d');
     if (!ctx) throw new Error('Canvas context failed');
     ctx.drawImage(bitmap, 0, 0);
     bitmap.close();
 
-    const buffer = await compressToTarget(ctx.getImageData(0, 0, canvas.width, canvas.height), targetKB * 1024);
+    const buffer = await compressToTarget(ctx.getImageData(0, 0, canvas.width, canvas.height), targetKB * 1000);
+    canvas.width = 0;
+    canvas.height = 0;
+
     const blob = new Blob([buffer], { type: 'image/webp' });
     addHistoryEntry({ fileName: file.name, originalSize: file.size, compressedSize: blob.size });
-    return { url: URL.createObjectURL(blob), name: file.name.replace(/\.[^/.]+$/, '') + '.webp', original: file.size, compressed: blob.size };
+    return {
+      url: URL.createObjectURL(blob),
+      name: file.name.replace(/\.[^/.]+$/, '') + '.webp',
+      original: file.size,
+      compressed: blob.size,
+      targetKB,
+    };
   };
 
-  const runBulkCompress = async () => {
+  const runBulkCompress = async (targetFiles = files) => {
     const results = [];
-    for (const file of files) {
+    for (const file of targetFiles) {
       const blob = await compressToWebp(file);
       addHistoryEntry({ fileName: file.name, originalSize: file.size, compressedSize: blob.size });
       results.push({ url: URL.createObjectURL(blob), name: file.name.replace(/\.[^/.]+$/, '') + '.webp' });
@@ -114,49 +133,70 @@ export default function Assistant() {
     return results;
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!input.trim() || isBusy) return;
+  const executeCommand = async (commandText: string, activeFiles = files) => {
+    if (!commandText.trim() || isBusy) return;
 
-    const userMessage = input.trim();
-    setMessages((prev) => [...prev, { role: 'user', text: userMessage }]);
-    setInput(''); setIsBusy(true); setDownloadUrl(null);
+    setMessages((prev) => [...prev, { role: 'user', text: commandText }]);
+    setInput('');
+    setIsBusy(true);
+    setDownloadUrl(null);
+
+    // If no file mounted, queue intent and trigger file picker
+    if (activeFiles.length === 0) {
+      setQueuedIntent(commandText);
+      setIsBusy(false);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          text: `Command queued: "${commandText}". Opening file picker... select your document or image to proceed.`,
+        },
+      ]);
+      fileInputRef.current?.click();
+      return;
+    }
 
     try {
       const response = await fetch('/api/assistant', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMessage, fileCount: files.length }),
+        body: JSON.stringify({ message: commandText, fileCount: activeFiles.length }),
       });
       const data = await response.json();
 
-      if (data.type === 'function_call' && files.length === 0) {
-        setMessages((prev) => [...prev, { role: 'assistant', text: "Error: No payload detected. Please mount a file first." }]);
-      } else if (data.type === 'function_call' && (data.name === 'compress_to_target' || data.name === 'compress_pdf_to_target')) {
+      if (data.type === 'function_call' && (data.name === 'compress_to_target' || data.name === 'compress_pdf_to_target')) {
         const targetKB = Number(data.args?.targetKB) || 200;
-        const result = await runCompressToTarget(targetKB);
-        setDownloadUrl({ url: result.url, name: result.name, originalSize: result.original, compressedSize: result.compressed });
-        setMessages((prev) => [...prev, { role: 'assistant', text: 'Operation successful. Output package generated.' }]);
+        setLastTargetKB(targetKB);
+        const result = await runCompressToTarget(targetKB, activeFiles);
+        setDownloadUrl({
+          url: result.url,
+          name: result.name,
+          originalSize: result.original,
+          compressedSize: result.compressed,
+          targetKB,
+        });
+        setMessages((prev) => [...prev, { role: 'assistant', text: `Operation successful. Output package generated for target ${targetKB} KB.` }]);
       } else if (data.type === 'function_call' && data.name === 'bulk_compress') {
-        const results = await runBulkCompress();
+        const results = await runBulkCompress(activeFiles);
         setMessages((prev) => [...prev, { role: 'assistant', text: `Batch execution complete. Processed ${results.length} assets.` }]);
-
-          // Display download package rather than auto-downloading
-          if (results.length > 0) {
-            setDownloadUrl({ url: results[0].url, name: results[0].name });
-          }
-
+        if (results.length > 0) {
+          setDownloadUrl({ url: results[0].url, name: results[0].name });
+        }
       } else if (data.type === 'function_call' && data.name === 'remove_blank_pages') {
-        const file = files[0];
+        const file = activeFiles[0];
         const result = await removeBlankPages(file);
         const blob = new Blob([result.bytes as BlobPart], { type: 'application/pdf' });
         setDownloadUrl({ url: URL.createObjectURL(blob), name: file.name.replace(/\.pdf$/i, '') + '_cleaned.pdf' });
-        setMessages((prev) => [...prev, {
-          role: 'assistant',
-          text: result.removedPages.length > 0
-            ? `Purged ${result.removedPages.length} empty pages. Optimized document ready.`
-            : `Verified ${result.totalPages} pages. No empty frames detected.`,
-        }]);
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: 'assistant',
+            text:
+              result.removedPages.length > 0
+                ? `Purged ${result.removedPages.length} empty pages. Optimized document ready.`
+                : `Verified ${result.totalPages} pages. No empty frames detected.`,
+          },
+        ]);
       } else {
         setMessages((prev) => [...prev, { role: 'assistant', text: data.text ?? "Command not recognized." }]);
       }
@@ -167,12 +207,65 @@ export default function Assistant() {
     }
   };
 
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const selected = Array.from(e.target.files);
+      setFiles(selected);
+      if (queuedIntent) {
+        const intent = queuedIntent;
+        setQueuedIntent(null);
+        executeCommand(intent, selected);
+      }
+    }
+  };
+
+  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const dropped = Array.from(e.dataTransfer.files);
+      setFiles(dropped);
+      if (queuedIntent) {
+        const intent = queuedIntent;
+        setQueuedIntent(null);
+        executeCommand(intent, dropped);
+      }
+    }
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    executeCommand(input);
+  };
+
+  const handleNudgeTarget = async (newTargetKB: number) => {
+    if (files.length === 0 || isBusy) return;
+    setLastTargetKB(newTargetKB);
+    setIsBusy(true);
+    setMessages((prev) => [...prev, { role: 'user', text: `Adjust target to ${newTargetKB} KB` }]);
+    try {
+      const result = await runCompressToTarget(newTargetKB);
+      setDownloadUrl({
+        url: result.url,
+        name: result.name,
+        originalSize: result.original,
+        compressedSize: result.compressed,
+        targetKB: newTargetKB,
+      });
+      setMessages((prev) => [...prev, { role: 'assistant', text: `Adjusted target to ${newTargetKB} KB.` }]);
+    } catch {
+      setMessages((prev) => [...prev, { role: 'assistant', text: 'Adjustment failed. Please retry.' }]);
+    } finally {
+      setIsBusy(false);
+    }
+  };
+
   const hasSizes = downloadUrl?.originalSize != null && downloadUrl?.compressedSize != null;
   const reductionPercent = hasSizes
-    ? Math.round(((downloadUrl!.originalSize! - downloadUrl!.compressedSize!) / downloadUrl!.originalSize!) * 100)
+    ? Math.max(0, Math.round(((downloadUrl!.originalSize! - downloadUrl!.compressedSize!) / downloadUrl!.originalSize!) * 100))
     : null;
   const compressedBarPercent = hasSizes
-    ? Math.max(4, Math.round((downloadUrl!.compressedSize! / downloadUrl!.originalSize!) * 100))
+    ? Math.max(4, Math.min(100, Math.round((downloadUrl!.compressedSize! / downloadUrl!.originalSize!) * 100)))
     : null;
 
   return (
@@ -184,7 +277,6 @@ export default function Assistant() {
         <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-400/10 dark:bg-purple-900/20 blur-[120px]"></div>
       </div>
 
-      {/* Unmistakable Back Button */}
       <Navbar />
 
       {/* Main Terminal Window */}
@@ -192,7 +284,7 @@ export default function Assistant() {
         onDrop={handleDrop}
         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
         onDragLeave={() => setIsDragging(false)}
-        className="bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-[calc(100%-2rem)] mx-auto flex flex-col relative overflow-hidden z-10 mt-4 h-[80vh]"
+        className="bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-[calc(100%-2rem)] mx-auto flex flex-col relative overflow-hidden z-10 mt-4 h-[82vh]"
       >
         {/* Full Screen Dropzone Overlay */}
         <AnimatePresence>
@@ -225,22 +317,40 @@ export default function Assistant() {
             </div>
           </div>
 
-          {/* Claude's High-Visibility Mount Button (Tailwind Styled) */}
-          <div className="relative overflow-hidden rounded-xl group cursor-pointer">
-            <input
-              type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.webp" onChange={handleFileChange}
-              aria-label="Mount files"
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-            />
-            <div
-              className={`px-5 py-2.5 transition-all duration-200 flex items-center gap-2 text-xs font-bold font-mono uppercase tracking-widest rounded-xl shadow-sm group-hover:scale-[1.02] active:scale-95 ${
-                files.length > 0
-                  ? 'bg-[#5668FF] text-white shadow-[#5668FF]/25 border border-[#5668FF]'
-                  : 'bg-indigo-900 dark:bg-white text-white dark:text-indigo-900 border border-indigo-800 dark:border-slate-200 hover:opacity-90'
-              }`}
-            >
-              {files.length > 0 ? <CheckIcon className="w-4 h-4" /> : <UploadIcon className="w-4 h-4" />}
-              {files.length > 0 ? `${files.length} MOUNTED` : 'MOUNT FILES'}
+          {/* Context Pill & High-Visibility Mount Button */}
+          <div className="flex items-center gap-3">
+            {files.length > 0 && (
+              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-xs font-mono text-purple-700 dark:text-purple-300">
+                <span className="truncate max-w-[140px]">{files[0].name}</span>
+                <span className="text-slate-400">({formatBytes(files[0].size)})</span>
+                <button
+                  type="button"
+                  onClick={() => { setFiles([]); setDownloadUrl(null); }}
+                  className="hover:text-red-500 font-bold ml-1"
+                  aria-label="Unmount file"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
+
+            <div className="relative overflow-hidden rounded-xl group cursor-pointer">
+              <input
+                ref={fileInputRef}
+                type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.webp" onChange={handleFileChange}
+                aria-label="Mount files"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+              />
+              <div
+                className={`px-4 sm:px-5 py-2.5 transition-all duration-200 flex items-center gap-2 text-xs font-bold font-mono uppercase tracking-widest rounded-xl shadow-sm group-hover:scale-[1.02] active:scale-95 ${
+                  files.length > 0
+                    ? 'bg-[#5668FF] text-white shadow-[#5668FF]/25 border border-[#5668FF]'
+                    : 'bg-indigo-900 dark:bg-white text-white dark:text-indigo-900 border border-indigo-800 dark:border-slate-200 hover:opacity-90'
+                }`}
+              >
+                {files.length > 0 ? <CheckIcon className="w-4 h-4" /> : <UploadIcon className="w-4 h-4" />}
+                {files.length > 0 ? `${files.length} MOUNTED` : 'MOUNT FILES'}
+              </div>
             </div>
           </div>
         </header>
@@ -278,14 +388,14 @@ export default function Assistant() {
               </motion.div>
             )}
 
-            {/* Premium Download Panel */}
+            {/* Premium Download Panel with ± Size Stepper */}
             {downloadUrl && (
               <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="ml-12 mt-2">
                 <div className="w-full max-w-sm rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0f172a] p-6 shadow-xl relative overflow-hidden group">
                   <div className="absolute -top-10 -right-10 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl group-hover:bg-purple-500/20 transition-colors"></div>
 
                   {hasSizes ? (
-                    <div className="mb-6 relative z-10">
+                    <div className="mb-4 relative z-10">
                       <div className="flex items-end justify-between mb-4">
                         <span className="text-[10px] font-bold font-mono uppercase tracking-widest text-slate-400">Reduction</span>
                         <span 
@@ -304,13 +414,37 @@ export default function Assistant() {
                         </div>
                         <div>
                           <div className="flex justify-between text-[11px] tabular-nums text-[#5668FF] mb-1.5 uppercase font-bold tracking-wider">
-                            <span>Target</span><span>{formatBytes(downloadUrl.compressedSize!)}</span>
+                            <span>Achieved</span><span>{formatBytes(downloadUrl.compressedSize!)}</span>
                           </div>
                           <div className="h-2 rounded-full bg-slate-100 dark:bg-indigo-800 w-full overflow-hidden">
                             <div className="h-full rounded-full bg-[#5668FF]" style={{ width: `${compressedBarPercent}%` }} />
                           </div>
                         </div>
                       </div>
+
+                      {/* Size Stepper */}
+                      {lastTargetKB !== null && (
+                        <div className="flex items-center justify-between gap-2 mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs font-mono">
+                          <span className="text-slate-400">Nudge Target:</span>
+                          <div className="flex items-center gap-1.5">
+                            <button
+                              onClick={() => handleNudgeTarget(Math.max(10, lastTargetKB - 25))}
+                              disabled={isBusy}
+                              className="px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-purple-100 dark:hover:bg-purple-900/40 text-slate-600 dark:text-slate-300 font-bold"
+                            >
+                              -25K
+                            </button>
+                            <span className="font-bold text-[#5668FF] px-1">{lastTargetKB}KB</span>
+                            <button
+                              onClick={() => handleNudgeTarget(lastTargetKB + 25)}
+                              disabled={isBusy}
+                              className="px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-purple-100 dark:hover:bg-purple-900/40 text-slate-600 dark:text-slate-300 font-bold"
+                            >
+                              +25K
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <div className="mb-6 flex items-center gap-4 relative z-10">
@@ -336,6 +470,21 @@ export default function Assistant() {
             )}
           </AnimatePresence>
           <div ref={messagesEndRef} />
+        </div>
+
+        {/* Clickable Example Prompt Chips */}
+        <div className="px-5 py-2 flex flex-wrap items-center gap-2 border-t border-slate-100 dark:border-indigo-800/40 bg-slate-50/30 dark:bg-[#050810]/30">
+          <span className="text-[11px] font-mono text-slate-400">Examples:</span>
+          {EXAMPLE_CHIPS.map((chip) => (
+            <button
+              key={chip.label}
+              onClick={() => executeCommand(chip.prompt)}
+              disabled={isBusy}
+              className="text-xs font-medium px-2.5 py-1 rounded-lg bg-white/70 dark:bg-indigo-950/50 border border-slate-200/60 dark:border-indigo-800/60 text-slate-600 dark:text-slate-300 hover:text-[#5668FF] dark:hover:text-[#7888FF] hover:border-[#5668FF]/40 transition-colors"
+            >
+              {chip.label}
+            </button>
+          ))}
         </div>
 
         {/* Input Bar */}

@@ -34,3 +34,13 @@
 .dark * {
   scrollbar-color: #334155 transparent;
 }
+
+/* Transparent PNG/WebP Image Checkerboard Preview Backdrop */
+.bg-checkerboard {
+  background-image: conic-gradient(#e2e8f0 90deg, #f8fafc 90deg 180deg, #e2e8f0 180deg 270deg, #f8fafc 270deg);
+  background-size: 16px 16px;
+}
+.dark .bg-checkerboard {
+  background-image: conic-gradient(#1e293b 90deg, #0f172a 90deg 180deg, #1e293b 180deg 270deg, #0f172a 270deg);
+  background-size: 16px 16px;
+}

@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type DragEvent } from 'react';
+import { useState, useEffect, useRef, type ChangeEvent, type DragEvent } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { compressImageToTarget } from './compressionService';
@@ -34,7 +34,7 @@ function BeforeAfterSlider({ originalUrl, compressedUrl }: { originalUrl: string
   const [position, setPosition] = useState(50);
 
   return (
-    <div className="relative w-full aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200/60 dark:border-slate-700 shadow-sm bg-slate-50 dark:bg-indigo-900 select-none">
+    <div className="relative w-full aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200/60 dark:border-slate-700 shadow-sm bg-checkerboard select-none">
       <img src={compressedUrl} alt="Compressed output" draggable={false} className="absolute inset-0 w-full h-full object-contain" />
       <div className="absolute inset-0 overflow-hidden" style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}>
         <img src={originalUrl} alt="Original input" draggable={false} className="absolute inset-0 w-full h-full object-contain" />
@@ -72,6 +72,7 @@ export default function TargetCompressor() {
   const [isDragging, setIsDragging] = useState(false);
   const [result, setResult] = useState<CompressionResult | null>(null);
   const [progressMsg, setProgressMsg] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const processFile = async (file: File) => {
     if (result) {
@@ -199,6 +200,25 @@ export default function TargetCompressor() {
     }
   };
 
+  useEffect(() => {
+    const handlePaste = (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].kind === 'file') {
+          const file = items[i].getAsFile();
+          if (file) {
+            processFile(file);
+            toast.success(`Pasted file: ${file.name}`);
+            break;
+          }
+        }
+      }
+    };
+    window.addEventListener('paste', handlePaste);
+    return () => window.removeEventListener('paste', handlePaste);
+  });
+
   const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) processFile(file);
@@ -238,6 +258,7 @@ export default function TargetCompressor() {
                 type="number"
                 value={targetKB}
                 onChange={(e) => setTargetKB(Math.max(1, Number(e.target.value)))}
+                onKeyDown={(e) => { if (e.key === 'Enter') fileInputRef.current?.click(); }}
                 aria-label="Target file size in kilobytes"
                 className="text-6xl md:text-8xl font-black font-mono tabular-nums text-center bg-transparent outline-none text-indigo-900 dark:text-white w-full max-w-[350px]"
                 min="1"
@@ -292,6 +313,7 @@ export default function TargetCompressor() {
                   onChange={handleFileUpload}
                   disabled={isProcessing}
                   aria-label="Upload file to compress"
+                  ref={fileInputRef}
                   className="absolute inset-0 z-10 w-full h-full opacity-0 cursor-pointer"
                 />
                 <div className="flex flex-col items-center gap-4 relative z-0">
@@ -395,6 +417,32 @@ export default function TargetCompressor() {
                 <span className="font-semibold text-slate-600 dark:text-slate-300">
                   {(targetKB * 1000).toLocaleString()} bytes ({(targetKB * 1000 / 1024).toFixed(1)} KiB)
                 </span>
+              </div>
+
+              {/* Byte Meter */}
+              <div className="space-y-1.5 pt-2 border-t border-slate-100 dark:border-slate-700">
+                <div className="flex justify-between items-center text-xs font-mono">
+                  <span className="text-slate-400">Quota Used (Byte Meter):</span>
+                  <span className={`font-bold ${result.compressedSize <= result.targetBytes ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-500'}`}>
+                    {Math.round((result.compressedSize / result.targetBytes) * 100)}% ({result.compressedSize.toLocaleString()} / {result.targetBytes.toLocaleString()} bytes)
+                  </span>
+                </div>
+                <div className="w-full h-2 rounded-full bg-slate-100 dark:bg-indigo-900 overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all duration-500 ${
+                      result.compressedSize <= result.targetBytes * 0.99
+                        ? 'bg-emerald-500'
+                        : result.compressedSize <= result.targetBytes
+                        ? 'bg-[#5668FF]'
+                        : 'bg-amber-500'
+                    }`}
+                    style={{ width: `${Math.min(100, Math.round((result.compressedSize / result.targetBytes) * 100))}%` }}
+                  />
+                </div>
+              </div>
+
+              <div className="text-[11px] text-center text-slate-400 font-mono pt-1">
+                ✓ EXIF &amp; location metadata stripped for maximum privacy
               </div>
               
               <button

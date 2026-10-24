@@ -1,7 +1,7 @@
 import { useEffect, useState, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Link } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
 import { Toaster } from 'sonner';
 import Home from './Home';
 
@@ -75,7 +75,8 @@ export default function App() {
   }, [isDark]);
 
   return (
-    <Router>
+    <MotionConfig reducedMotion="user">
+      <Router>
       <Toaster position="bottom-right" theme={isDark ? 'dark' : 'light'} richColors />
       <AnimatedRoutes />
       <Analytics />
@@ -103,5 +104,6 @@ export default function App() {
         </button>
       </div>
     </Router>
+  </MotionConfig>
   );
 }
