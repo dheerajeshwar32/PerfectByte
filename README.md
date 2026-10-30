@@ -1,13 +1,15 @@
-# PerfectByte
+# PerfectByte ⚡
+> **Zero-Server Edge Compute File Optimization, Conversion & AI Command Suite**
 
-> **Zero-Server Edge Compute File Optimization, Conversion & AI Command Suite**  
-> 🔗 Live Application: [https://perfectbyte.vercel.app](https://perfectbyte.vercel.app)
+[![Live Production Demo](https://img.shields.io/badge/Live%20Demo-Vercel-black.svg?style=for-the-badge&logo=vercel)](https://perfectbyte.vercel.app)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-181717.svg?style=for-the-badge&logo=github)](https://github.com/dheerajeshwar32/PerfectByte)
 
-![Deployment](https://img.shields.io/badge/Deployment-Vercel-black?logo=vercel)
-![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript)
-![WASM](https://img.shields.io/badge/WebAssembly-jsquash-654FF0?logo=webassembly)
-![PWA](https://img.shields.io/badge/PWA-Offline%20Ready-5A0FC8?logo=pwa)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)]()
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript)]()
+[![WASM](https://img.shields.io/badge/WebAssembly-jsquash-654FF0?logo=webassembly)]()
+[![PWA](https://img.shields.io/badge/PWA-Offline%20Ready-5A0FC8?logo=pwa)]()
+
+> 🌐 **Live Application**: [https://perfectbyte.vercel.app](https://perfectbyte.vercel.app)
 
 ---
 
