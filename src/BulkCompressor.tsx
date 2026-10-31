@@ -1,11 +1,11 @@
 import { useState, type ChangeEvent, type DragEvent } from 'react';
-import Navbar from './Navbar';
-import Footer from './Footer';
+import ToolShell from './ToolShell';
 import { compressToWebp } from './compressionService';
 import { addHistoryEntry, getHistoryStats } from './historyService';
 import { toast } from 'sonner';
 import { useDocumentTitle } from './useDocumentTitle';
 import { formatBytes } from './utils';
+import { haptic } from './usePWA';
 import JSZip from 'jszip';
 
 interface CompressedFile {
@@ -47,7 +47,7 @@ export default function BulkCompressor() {
         try {
           const blob = await compressToWebp(file);
           results.push({
-            name: file.name.replace(/\.[^/.]+$/, "") + ".webp",
+            name: file.name.replace(/\.[^/.]+$/, '') + '.webp',
             url: URL.createObjectURL(blob),
             originalSize: file.size,
             compressedSize: blob.size,
@@ -61,11 +61,12 @@ export default function BulkCompressor() {
 
       setCompressedFiles(results);
       setStats(getHistoryStats());
+      haptic([12, 40, 20]);
 
-      if (results.length === 0) toast.error("Failed to compress images.");
+      if (results.length === 0) toast.error('Failed to compress images.');
       else toast.success(`Successfully compressed ${results.length} images!`);
     } catch {
-      toast.error("A critical error occurred during compression.");
+      toast.error('A critical error occurred during compression.');
     } finally {
       setIsProcessing(false);
     }
@@ -85,161 +86,251 @@ export default function BulkCompressor() {
     link.download = 'perfectbyte-batch.zip';
     link.click();
     URL.revokeObjectURL(url);
+    haptic(10);
   };
 
   const totalReduction = compressedFiles.reduce((acc, curr) => acc + (curr.originalSize - curr.compressedSize), 0);
+  const totalOriginal = compressedFiles.reduce((acc, curr) => acc + curr.originalSize, 0);
 
-  return (
-    <div className="min-h-dvh bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-white dark:from-[#080B14] dark:via-[#0D1220] dark:to-[#050810] flex flex-col items-center justify-start pt-20 md:pt-24 relative overflow-x-hidden font-sans transition-colors duration-300">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-400/10 dark:bg-blue-900/20 blur-[120px]"></div>
-        <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-400/10 dark:bg-purple-900/20 blur-[120px]"></div>
-      </div>
-      <Navbar />
-
-      <main className="flex-1 bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-[calc(100%-2rem)] mx-auto text-center relative z-10 mt-4 pb-20">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-indigo-900 to-slate-600 dark:from-white dark:to-slate-400 mb-8 md:mb-12 leading-tight px-4 pb-2">
-          Bulk <br className="hidden sm:block" />
-          <span
-            className="text-[#5668FF] drop-shadow-sm"
-            style={{ textShadow: '-2px 0px 0px rgba(0,255,255,0.3), 2px 0px 0px rgba(255,0,255,0.3)' }}
-          >
-            Compress
-          </span>
-        </h1>
-
-        {/* Phase 3: The Hero Stats */}
-        <div className="flex flex-col items-center justify-center py-8 mb-8 border-b border-slate-200 dark:border-indigo-800">
-          <span className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4">Total Space Saved</span>
+  // ─── Canvas Content (70% Left / Mobile Top) ───
+  const canvasContent = (
+    <div className="flex flex-col items-center justify-center w-full gap-4">
+      {compressedFiles.length === 0 ? (
+        <div className="w-full space-y-4 max-w-xl">
           <div
-            className="text-6xl md:text-8xl font-black font-mono tabular-nums text-[#5668FF] dark:text-[#7888FF]"
-            style={{ textShadow: '-3px 0px 0px rgba(0,255,255,0.6), 3px 0px 0px rgba(255,0,255,0.6)' }}
+            onDrop={handleDrop}
+            onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+            onDragLeave={() => setIsDragging(false)}
+            className={`relative w-full p-10 md:p-14 border-2 border-dashed rounded-3xl transition-all duration-300 cursor-pointer group/drop pb-panel ${
+              isDragging
+                ? 'border-[#5668FF] bg-[#5668FF]/5 dark:bg-[#5668FF]/10 scale-[1.01]'
+                : 'border-zinc-300 dark:border-zinc-700/60 hover:border-[#5668FF]/60'
+            }`}
+            style={{ boxShadow: 'inset 0 1px 0 0 var(--pb-specular)' }}
           >
-            {stats.count > 0 ? formatBytes(stats.totalOriginal - stats.totalCompressed) : '0 MB'}
-          </div>
-          <p className="text-sm font-medium text-slate-400 dark:text-slate-500 mt-4 uppercase tracking-widest">
-            Across {stats.count} lifetime file{stats.count !== 1 ? 's' : ''}
-          </p>
-        </div>
-
-        <div className="max-w-2xl mx-auto space-y-6 mb-12">
-          {compressedFiles.length === 0 && (
-            <div
-              onDrop={handleDrop} onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }} onDragLeave={() => setIsDragging(false)}
-              className={`relative w-full max-w-2xl mx-auto p-10 md:p-14 border-2 border-dashed rounded-[2rem] transition-all duration-500 cursor-pointer group/drop bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/40 dark:to-slate-900/40 backdrop-blur-sm ${
-                isDragging
-                  ? 'border-[#5668FF] bg-[#5668FF]/5 dark:bg-[#5668FF]/10 scale-[1.02] shadow-[0_0_40px_rgba(86,104,255,0.15)]'
-                  : 'border-slate-200/60 dark:border-slate-700/40 hover:border-[#5668FF]/50 hover:shadow-[0_0_40px_rgba(86,104,255,0.08)]'
-              }`}
-            >
-              <input type="file" multiple accept="image/jpeg, image/png, image/webp" onChange={handleFileChange} disabled={isProcessing} aria-label="Upload images for bulk compression" className="absolute inset-0 z-10 w-full h-full opacity-0 cursor-pointer" />
-              <div className="flex flex-col items-center gap-4 relative z-0">
-                <div className="w-16 h-16 rounded-2xl bg-[#5668FF]/10 dark:bg-[#5668FF]/20 flex items-center justify-center group-hover/drop:scale-110 transition-transform duration-300">
-                  <svg className="w-8 h-8 text-[#5668FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                </div>
-                <div className="text-center">
-                  <p className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-1">{isProcessing ? 'Processing...' : 'Click to select folders or images'}</p>
-                  <p className="text-sm text-slate-400 dark:text-slate-500">or <span className="text-[#5668FF] font-medium hover:underline">browse files</span></p>
-                  {files.length > 0 && <span className="mt-4 inline-block bg-indigo-900 text-white font-mono text-xs px-4 py-2 rounded-lg">{files.length} selected</span>}
-                </div>
+            <input
+              type="file"
+              multiple
+              accept="image/jpeg, image/png, image/webp"
+              onChange={handleFileChange}
+              disabled={isProcessing}
+              aria-label="Upload multiple images for batch compression"
+              className="absolute inset-0 z-10 w-full h-full opacity-0 cursor-pointer"
+            />
+            <div className="flex flex-col items-center gap-4 relative z-0 text-center">
+              <div className="w-14 h-14 rounded-2xl pb-control flex items-center justify-center group-hover/drop:scale-110 transition-transform">
+                <svg className="w-7 h-7 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
               </div>
-            </div>
-          )}
-
-          {files.length > 0 && compressedFiles.length === 0 && !isProcessing && (
-            <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto p-3 rounded-2xl bg-slate-50 dark:bg-indigo-900/40 border border-slate-200/60 dark:border-indigo-800/60 text-left">
-              {files.map((file, idx) => (
-                <div key={idx} className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white dark:bg-indigo-950 border border-slate-200 dark:border-slate-700 text-xs font-mono">
-                  <span className="truncate max-w-[150px]">{file.name}</span>
-                  <span className="text-slate-400">({formatBytes(file.size)})</span>
-                  <button
-                    type="button"
-                    onClick={() => setFiles(prev => prev.filter((_, i) => i !== idx))}
-                    className="text-slate-400 hover:text-red-500 font-bold ml-1"
-                    aria-label={`Remove ${file.name}`}
-                  >
-                    ✕
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-          {files.length > 0 && compressedFiles.length === 0 && !isProcessing && (
-            <button
-              onClick={handleCompress} disabled={isProcessing}
-              className="w-full py-4 md:py-5 rounded-2xl font-bold text-lg transition-all duration-300 bg-[#5668FF] hover:bg-[#4858E0] text-white shadow-[0_8px_30px_rgba(86,104,255,0.3)] hover:shadow-[0_12px_40px_rgba(86,104,255,0.4)] hover:translate-y-[-1px] active:translate-y-[1px] active:shadow-[0_4px_20px_rgba(86,104,255,0.3)] disabled:opacity-50 disabled:hover:translate-y-0"
-            >
-              EXECUTE BATCH ({files.length})
-            </button>
-          )}
-
-          {isProcessing && progress.total > 0 && (
-            <div className="w-full bg-slate-100 dark:bg-indigo-800 rounded-2xl p-6 shadow-sm">
-              <div className="flex justify-between items-center text-sm font-bold text-slate-500 dark:text-slate-400 mb-3">
-                <span>Processing file {progress.current} of {progress.total}</span>
-                <span className="text-[#5668FF]">{Math.round((progress.current / progress.total) * 100)}%</span>
-              </div>
-              <div className="w-full bg-slate-200 dark:bg-slate-700 h-3 rounded-full overflow-hidden">
-                <div
-                  className="bg-[#5668FF] h-full transition-all duration-300 rounded-full"
-                  style={{ width: `${(progress.current / progress.total) * 100}%` }}
-                />
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Phase 3: The Results Grid */}
-        {compressedFiles.length > 0 && (
-          <div className="text-left bg-white dark:bg-indigo-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl">
-            <div className="flex justify-between items-center mb-8 border-b border-slate-100 dark:border-slate-700 pb-6">
               <div>
-                <h2 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Current Batch Saved</h2>
-                <span className="text-3xl font-black font-mono text-[#5668FF]">{formatBytes(totalReduction)}</span>
+                <p className="text-base font-bold text-zinc-800 dark:text-zinc-100 mb-1">
+                  {isProcessing ? 'Processing files...' : 'Select or drop multiple files / folders'}
+                </p>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                  JPEG, PNG, WebP · Processed in parallel Web Workers
+                </p>
               </div>
-              <button onClick={handleDownloadAll} className="px-6 py-4 rounded-2xl font-bold transition-all duration-300 bg-[#5668FF] hover:bg-[#4858E0] text-white shadow-[0_8px_30px_rgba(86,104,255,0.3)] hover:shadow-[0_12px_40px_rgba(86,104,255,0.4)] hover:translate-y-[-1px] active:translate-y-[1px] active:shadow-[0_4px_20px_rgba(86,104,255,0.3)] disabled:opacity-50 disabled:hover:translate-y-0 text-sm">
-                Download ZIP ({compressedFiles.length})
-              </button>
             </div>
+          </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {compressedFiles.map((file, i) => (
-                <div key={i} className="bg-slate-50 dark:bg-indigo-900 p-3 rounded-2xl border border-slate-200 dark:border-indigo-800 flex flex-col group relative">
-                  <div className="relative aspect-square w-full rounded-xl overflow-hidden mb-3 bg-checkerboard">
+          {/* Staged files chips */}
+          {files.length > 0 && (
+            <div className="pb-panel p-3.5 rounded-2xl space-y-2">
+              <div className="flex items-center justify-between text-xs font-mono text-zinc-500">
+                <span>STAGED FILES ({files.length})</span>
+                <span>{formatBytes(files.reduce((a, b) => a + b.size, 0))}</span>
+              </div>
+              <div className="flex flex-wrap gap-1.5 max-h-40 overflow-y-auto">
+                {files.map((file, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg pb-control text-xs font-mono"
+                  >
+                    <span className="truncate max-w-[130px] text-zinc-700 dark:text-zinc-300">{file.name}</span>
+                    <span className="text-zinc-400 text-[10px]">({formatBytes(file.size)})</span>
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        URL.revokeObjectURL(file.url);
-                        setCompressedFiles(prev => prev.filter((_, idx) => idx !== i));
-                      }}
-                      aria-label={`Remove ${file.name} from batch`}
-                      className="absolute top-2 right-2 z-20 w-6 h-6 rounded-full bg-slate-900/80 hover:bg-red-500 text-white flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-md"
+                      type="button"
+                      onClick={() => setFiles(prev => prev.filter((_, i) => i !== idx))}
+                      className="text-zinc-400 hover:text-red-500 ml-1 font-bold"
+                      aria-label={`Remove ${file.name}`}
                     >
                       ✕
                     </button>
-                    <img src={file.url} alt={file.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                    <a href={file.url} download={file.name} className="absolute inset-0 bg-indigo-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
-                      <span className="bg-white text-indigo-900 text-xs font-bold px-4 py-2 rounded-lg">Download</span>
-                    </a>
                   </div>
-                  <div className="flex flex-col px-1">
-                    <span className="text-xs font-bold text-indigo-800 dark:text-slate-200 truncate mb-2">{file.name}</span>
-                    <div className="flex items-center justify-between font-mono text-[10px] uppercase">
-                      <span className="text-slate-400 line-through">{formatBytes(file.originalSize)}</span>
-                      <span className="text-[#5668FF] font-bold">{formatBytes(file.compressedSize)}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
+          )}
+        </div>
+      ) : (
+        /* Results Grid */
+        <div className="w-full space-y-3">
+          <div className="flex items-center justify-between pb-2 border-b border-[var(--pb-border)]">
+            <span className="text-xs font-mono font-bold text-zinc-500 uppercase">
+              Optimized Output ({compressedFiles.length} files)
+            </span>
+            <span className="text-xs font-mono text-emerald-500 font-bold">
+              Saved {formatBytes(totalReduction)}
+            </span>
+          </div>
 
-            <button onClick={() => { compressedFiles.forEach(f => URL.revokeObjectURL(f.url)); setCompressedFiles([]); setFiles([]); }} className="w-full mt-8 py-3 text-sm font-bold text-slate-400 hover:text-slate-700 transition-colors">
-              Clear Batch & Compress More
-            </button>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-[56dvh] overflow-y-auto p-1">
+            {compressedFiles.map((file, i) => (
+              <div
+                key={i}
+                className="pb-panel rounded-xl p-2.5 flex flex-col group relative border border-[var(--pb-border)]"
+              >
+                <div className="relative aspect-square w-full rounded-lg overflow-hidden mb-2 bg-checkerboard">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      URL.revokeObjectURL(file.url);
+                      setCompressedFiles(prev => prev.filter((_, idx) => idx !== i));
+                    }}
+                    aria-label={`Remove ${file.name} from batch`}
+                    className="absolute top-1.5 right-1.5 z-20 w-6 h-6 rounded-full bg-zinc-900/80 hover:bg-red-500 text-white flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    ✕
+                  </button>
+                  <img src={file.url} alt={file.name} className="absolute inset-0 w-full h-full object-cover" />
+                  <a
+                    href={file.url}
+                    download={file.name}
+                    className="absolute inset-0 bg-[#09090B]/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+                  >
+                    <span className="px-2.5 py-1 rounded bg-[#5668FF] text-white text-[11px] font-mono font-bold">
+                      Download
+                    </span>
+                  </a>
+                </div>
+                <span className="text-[11px] font-bold text-zinc-800 dark:text-zinc-200 truncate">{file.name}</span>
+                <div className="flex items-center justify-between text-[10px] font-mono mt-1">
+                  <span className="text-zinc-400 line-through">{formatBytes(file.originalSize)}</span>
+                  <span className="text-[#5668FF] font-bold">{formatBytes(file.compressedSize)}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  // ─── Inspector Content (360px Fixed Desktop / Mobile Sheet) ───
+  const inspectorContent = (
+    <div className="space-y-4">
+      {/* Batch Stats Panel */}
+      <div className="pb-panel p-4 rounded-2xl space-y-3">
+        <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+          BATCH TELEMETRY
+        </span>
+
+        {compressedFiles.length > 0 ? (
+          <div className="space-y-2">
+            <div>
+              <span className="text-[10px] font-mono text-zinc-400 block">TOTAL SAVINGS</span>
+              <span className="text-4xl font-black font-mono tabular-nums text-emerald-500">
+                {formatBytes(totalReduction)}
+              </span>
+            </div>
+            <div className="text-xs font-mono text-zinc-400">
+              Reduced from {formatBytes(totalOriginal)} by{' '}
+              {totalOriginal > 0 ? ((totalReduction / totalOriginal) * 100).toFixed(0) : 0}%
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            <div>
+              <span className="text-[10px] font-mono text-zinc-400 block">LIFETIME STORAGE SAVED</span>
+              <span className="text-3xl font-black font-mono tabular-nums text-zinc-900 dark:text-white">
+                {stats.count > 0 ? formatBytes(stats.totalOriginal - stats.totalCompressed) : '0 MB'}
+              </span>
+            </div>
+            <div className="text-xs font-mono text-zinc-500">
+              Across {stats.count.toLocaleString()} lifetime files processed
+            </div>
           </div>
         )}
-      </main>
-      <Footer />
+
+        {isProcessing && (
+          <div className="space-y-1.5 pt-2 border-t border-[var(--pb-border)]">
+            <div className="flex justify-between text-xs font-mono">
+              <span className="text-zinc-400">Processing file {progress.current} of {progress.total}</span>
+              <span className="text-[#5668FF] font-bold">
+                {Math.round((progress.current / Math.max(1, progress.total)) * 100)}%
+              </span>
+            </div>
+            <div className="w-full h-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-[#5668FF] transition-all duration-200"
+                style={{ width: `${(progress.current / Math.max(1, progress.total)) * 100}%` }}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Primary Actions */}
+      <div className="space-y-2">
+        {compressedFiles.length > 0 ? (
+          <>
+            <button
+              onClick={handleDownloadAll}
+              className="w-full py-3.5 rounded-xl font-bold text-sm transition-all bg-[#5668FF] hover:bg-[#4858E0] text-white shadow-[0_4px_20px_rgba(86,104,255,0.4)] active:scale-[0.98] flex items-center justify-center gap-2"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              <span>Download ZIP Archive ({compressedFiles.length})</span>
+            </button>
+
+            <button
+              onClick={() => {
+                compressedFiles.forEach(f => URL.revokeObjectURL(f.url));
+                setCompressedFiles([]);
+                setFiles([]);
+              }}
+              className="w-full py-2.5 text-xs font-mono text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors rounded-xl pb-control text-center"
+            >
+              ← Clear Batch &amp; Add More
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={handleCompress}
+            disabled={files.length === 0 || isProcessing}
+            className="w-full py-3.5 rounded-xl font-bold text-sm transition-all bg-[#5668FF] hover:bg-[#4858E0] text-white shadow-[0_4px_20px_rgba(86,104,255,0.4)] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            {isProcessing ? 'Processing Batch...' : `EXECUTE BATCH (${files.length})`}
+          </button>
+        )}
+      </div>
+
+      <div className="pb-panel p-3.5 rounded-xl space-y-1.5 text-xs font-mono text-zinc-500">
+        <div className="flex items-center justify-between">
+          <span>Engine</span>
+          <span className="text-zinc-700 dark:text-zinc-300">WebAssembly SIMD</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span>Max Workers</span>
+          <span className="text-zinc-700 dark:text-zinc-300">4 Parallel</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span>Target Codec</span>
+          <span className="text-zinc-700 dark:text-zinc-300">Google WebP</span>
+        </div>
+      </div>
     </div>
+  );
+
+  return (
+    <ToolShell
+      title="Bulk Compression"
+      accentColor="bg-teal-500"
+      badgeText="4x PARALLEL WORKERS"
+      canvas={canvasContent}
+      inspector={inspectorContent}
+    />
   );
 }

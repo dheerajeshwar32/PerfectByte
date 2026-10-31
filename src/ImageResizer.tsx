@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import Navbar from './Navbar';
-import Footer from './Footer';
+import ToolShell from './ToolShell';
 import { useDocumentTitle } from './useDocumentTitle';
 import { formatBytes } from './utils';
 import { toast } from 'sonner';
+import { haptic } from './usePWA';
 
 type Preset = { label: string; width: number; height: number };
 
@@ -13,9 +13,8 @@ const PRESETS: Preset[] = [
   { label: 'Instagram Story', width: 1080, height: 1920 },
   { label: 'Twitter/X Header', width: 1500, height: 500 },
   { label: 'LinkedIn Banner', width: 1584, height: 396 },
-  { label: 'YouTube Thumbnail', width: 1280, height: 720 },
-  { label: 'Facebook Cover', width: 820, height: 312 },
-  { label: 'HD 1080p', width: 1920, height: 1080 },
+  { label: 'YouTube 720p', width: 1280, height: 720 },
+  { label: 'Full HD 1080p', width: 1920, height: 1080 },
   { label: '4K UHD', width: 3840, height: 2160 },
 ];
 
@@ -85,6 +84,7 @@ export default function ImageResizer() {
     setWidth(preset.width);
     setHeight(preset.height);
     if (lockRatio) setLockRatio(false);
+    haptic(10);
   };
 
   const processImage = async () => {
@@ -99,206 +99,192 @@ export default function ImageResizer() {
       const ctx = canvas.getContext('2d');
       if (!ctx) throw new Error('Could not get canvas context');
 
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
       ctx.drawImage(bitmap, 0, 0, width, height);
-      bitmap.close();
 
       canvas.toBlob(
         (blob) => {
+          if (!blob) throw new Error('Blob creation failed');
+          setResultBlob(blob);
+          setResultUrl(URL.createObjectURL(blob));
+          haptic([12, 40, 20]);
+          toast.success('Image resized successfully!');
           canvas.width = 0;
           canvas.height = 0;
-          if (blob) {
-            setResultBlob(blob);
-            setResultUrl(URL.createObjectURL(blob));
-            toast.success('Image resized successfully!');
-          }
           setIsProcessing(false);
         },
-        'image/webp',
+        file.type,
         0.92
       );
     } catch (err) {
       console.error(err);
-      toast.error('Failed to resize image');
+      toast.error('Error resizing image');
       setIsProcessing(false);
     }
   };
 
-  return (
-    <div className="min-h-dvh bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-white dark:from-[#080B14] dark:via-[#0D1220] dark:to-[#050810] flex flex-col items-center justify-start pt-20 md:pt-24 relative overflow-x-hidden font-sans transition-colors duration-300">
-      <Navbar />
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-400/10 dark:bg-blue-900/20 blur-[120px]"></div>
-        <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-400/10 dark:bg-purple-900/20 blur-[120px]"></div>
-      </div>
-
-      <main className="flex-1 bg-white/50 dark:bg-[#0a0f1c]/70 backdrop-blur-3xl p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] border border-white/80 dark:border-indigo-800/60 max-w-5xl w-[calc(100%-2rem)] mx-auto text-center relative z-10 mt-4 pb-20">
-
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-indigo-900 to-slate-600 dark:from-white dark:to-slate-400 mb-8 md:mb-12 leading-tight px-4 pb-2">
-          Image <br className="hidden sm:block" />
-          <span
-            className="text-[#5668FF] drop-shadow-sm"
-            style={{ textShadow: '-2px 0px 0px rgba(0,255,255,0.3), 2px 0px 0px rgba(255,0,255,0.3)' }}
-          >
-            Resizer
-          </span>
-        </h1>
-
-        {!file && (
-          <div
-            className={`relative w-full max-w-2xl mx-auto p-10 md:p-14 border-2 border-dashed rounded-[2rem] transition-all duration-500 cursor-pointer group/drop backdrop-blur-sm ${
-              isDragging
-                ? 'border-[#5668FF] bg-[#5668FF]/5 scale-[1.02] shadow-[0_0_40px_rgba(86,104,255,0.15)]'
-                : 'bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-800/40 dark:to-slate-900/40 border-slate-200/60 dark:border-slate-700/40 hover:border-[#5668FF]/50 hover:shadow-[0_0_40px_rgba(86,104,255,0.08)]'
-            }`}
-            onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-            onDragLeave={() => setIsDragging(false)}
-            onDrop={handleDrop}
-            onClick={() => document.getElementById('file-upload')?.click()}
-          >
-            <div className="flex flex-col items-center gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-[#5668FF]/10 dark:bg-[#5668FF]/20 flex items-center justify-center group-hover/drop:scale-110 transition-transform duration-300">
-                <svg className="w-8 h-8 text-[#5668FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-              </div>
-              <div className="text-center">
-                <p className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-1">Drop your image here</p>
-                <p className="text-sm text-slate-400 dark:text-slate-500">or <span className="text-[#5668FF] font-medium hover:underline">browse files</span></p>
-              </div>
+  // ─── Canvas Content ───
+  const canvasContent = (
+    <div className="flex flex-col items-center justify-center w-full gap-4 max-w-xl mx-auto">
+      {!file ? (
+        <div
+          onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+          onDragLeave={() => setIsDragging(false)}
+          onDrop={handleDrop}
+          className={`relative w-full p-10 md:p-14 border-2 border-dashed rounded-3xl cursor-pointer group/drop pb-panel text-center ${
+            isDragging
+              ? 'border-[#5668FF] bg-[#5668FF]/5 scale-[1.01]'
+              : 'border-zinc-300 dark:border-zinc-700/60 hover:border-[#5668FF]/60'
+          }`}
+          style={{ boxShadow: 'inset 0 1px 0 0 var(--pb-specular)' }}
+        >
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
+            aria-label="Upload image to resize"
+            className="absolute inset-0 z-10 w-full h-full opacity-0 cursor-pointer"
+          />
+          <div className="flex flex-col items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl pb-control flex items-center justify-center text-rose-500">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+              </svg>
             </div>
+            <p className="text-base font-bold text-zinc-800 dark:text-zinc-100">Drop an image to resize</p>
+            <p className="text-xs text-zinc-500">Exact pixel dimensions or aspect scaling</p>
+          </div>
+        </div>
+      ) : (
+        <div className="w-full space-y-3">
+          <div className="relative w-full aspect-[4/3] max-h-[46dvh] rounded-2xl overflow-hidden pb-panel bg-checkerboard flex items-center justify-center border border-[var(--pb-border)]">
+            <img
+              src={resultUrl || previewUrl}
+              alt="Preview"
+              className="max-w-full max-h-full object-contain"
+            />
+            <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/60 backdrop-blur text-white font-mono text-[10px]">
+              {resultUrl ? 'RESIZED OUTPUT' : 'ORIGINAL'}
+            </div>
+            <div className="absolute bottom-3 left-3 px-2.5 py-1 rounded-md bg-black/60 backdrop-blur text-white font-mono text-[10px]">
+              {resultUrl ? `${width} × ${height} px` : `${originalWidth} × ${originalHeight} px`}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  // ─── Inspector Content ───
+  const inspectorContent = (
+    <div className="space-y-4">
+      {/* Dimension Inputs */}
+      <div className="pb-panel p-4 rounded-2xl space-y-3">
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+            TARGET DIMENSIONS
+          </span>
+          <button
+            type="button"
+            onClick={() => setLockRatio(!lockRatio)}
+            className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
+              lockRatio ? 'bg-[#5668FF]/20 text-[#5668FF]' : 'text-zinc-400'
+            }`}
+          >
+            {lockRatio ? '🔒 Locked 1:1' : '🔓 Unlocked'}
+          </button>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2">
+          <div>
+            <label className="text-[10px] font-mono text-zinc-500 block mb-1">WIDTH (PX)</label>
             <input
-              id="file-upload"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              aria-label="Upload image to resize"
-              onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
+              type="number"
+              value={width}
+              onChange={(e) => handleWidthChange(e.target.value)}
+              placeholder="Width"
+              className="w-full pb-control rounded-xl px-3 py-2 text-sm font-mono text-zinc-900 dark:text-white outline-none border border-[var(--pb-border)]"
             />
           </div>
-        )}
-
-        {file && !resultBlob && (
-          <div className="space-y-8">
-            <div className="relative inline-block mx-auto p-2 rounded-2xl bg-checkerboard border border-slate-200/50 dark:border-slate-700/50">
-              <img src={previewUrl} alt="Preview" className="max-h-64 rounded-xl shadow-lg" />
-              <div className="absolute bottom-4 right-4 bg-indigo-900/80 text-white px-3 py-1 rounded-lg text-sm font-medium backdrop-blur-md">
-                {originalWidth} × {originalHeight}
-              </div>
-            </div>
-
-            <div className="text-left bg-white/60 dark:bg-[#0a0f1c]/50 backdrop-blur-xl p-6 md:p-8 rounded-[1.5rem] border border-slate-100/80 dark:border-indigo-800/40 shadow-sm max-w-2xl mx-auto">
-              <h2 className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4">Dimensions</h2>
-
-              <div className="flex items-center gap-4 mb-8">
-                <div className="flex-1">
-                  <label htmlFor="resize-width" className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">Width (px)</label>
-                  <input
-                    id="resize-width"
-                    type="number"
-                    value={width}
-                    onChange={(e) => handleWidthChange(e.target.value)}
-                    aria-label="Width in pixels"
-                    className="w-full bg-slate-50 dark:bg-indigo-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-indigo-800 dark:text-white"
-                  />
-                </div>
-
-                <button
-                  onClick={() => setLockRatio(!lockRatio)}
-                  className={`mt-6 p-3 rounded-full transition-colors ${lockRatio ? 'bg-[#5668FF] text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-400'}`}
-                  title={lockRatio ? 'Unlock aspect ratio' : 'Lock aspect ratio'}
-                  aria-label={lockRatio ? 'Unlock aspect ratio' : 'Lock aspect ratio'}
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    {lockRatio ? (
-                      <><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></>
-                    ) : (
-                      <><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></>
-                    )}
-                  </svg>
-                </button>
-
-                <div className="flex-1">
-                  <label htmlFor="resize-height" className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">Height (px)</label>
-                  <input
-                    id="resize-height"
-                    type="number"
-                    value={height}
-                    onChange={(e) => handleHeightChange(e.target.value)}
-                    aria-label="Height in pixels"
-                    className="w-full bg-slate-50 dark:bg-indigo-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-indigo-800 dark:text-white"
-                  />
-                </div>
-              </div>
-
-              <h2 className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4">Presets</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
-                {PRESETS.map((preset) => (
-                  <button
-                    key={preset.label}
-                    onClick={() => handlePresetClick(preset)}
-                    className="bg-slate-50 dark:bg-indigo-900/50 hover:bg-slate-100 dark:hover:bg-indigo-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 py-2 px-3 rounded-xl text-xs font-medium text-left transition-colors"
-                  >
-                    <div className="font-bold">{preset.label}</div>
-                    <div className="text-slate-400">{preset.width} × {preset.height}</div>
-                  </button>
-                ))}
-              </div>
-
-              <button
-                onClick={processImage}
-                disabled={isProcessing || !width || !height}
-                className="w-full py-4 md:py-5 rounded-2xl font-bold text-lg transition-all duration-300 bg-[#5668FF] hover:bg-[#4858E0] text-white shadow-[0_8px_30px_rgba(86,104,255,0.3)] hover:shadow-[0_12px_40px_rgba(86,104,255,0.4)] hover:translate-y-[-1px] active:translate-y-[1px] active:shadow-[0_4px_20px_rgba(86,104,255,0.3)] disabled:opacity-50 disabled:hover:translate-y-0"
-              >
-                {isProcessing ? 'Processing...' : 'Resize'}
-              </button>
-            </div>
+          <div>
+            <label className="text-[10px] font-mono text-zinc-500 block mb-1">HEIGHT (PX)</label>
+            <input
+              type="number"
+              value={height}
+              onChange={(e) => handleHeightChange(e.target.value)}
+              placeholder="Height"
+              className="w-full pb-control rounded-xl px-3 py-2 text-sm font-mono text-zinc-900 dark:text-white outline-none border border-[var(--pb-border)]"
+            />
           </div>
+        </div>
+      </div>
+
+      {/* Presets */}
+      <div className="pb-panel p-4 rounded-2xl space-y-2">
+        <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 block">
+          STANDARD PRESETS
+        </span>
+        <div className="grid grid-cols-2 gap-1.5 max-h-36 overflow-y-auto">
+          {PRESETS.map((p) => (
+            <button
+              key={p.label}
+              type="button"
+              onClick={() => handlePresetClick(p)}
+              className="px-2 py-1.5 text-[10px] font-mono pb-control text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 rounded-lg text-left truncate"
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="space-y-2">
+        {resultUrl ? (
+          <>
+            <a
+              href={resultUrl}
+              download={file ? `resized_${file.name}` : 'resized_image.png'}
+              className="w-full py-3.5 rounded-xl font-bold text-sm transition-all bg-[#5668FF] hover:bg-[#4858E0] text-white shadow-[0_4px_20px_rgba(86,104,255,0.4)] text-center block"
+            >
+              Download Resized Image
+            </a>
+            <button
+              type="button"
+              onClick={() => { setFile(null); setResultUrl(''); setResultBlob(null); }}
+              className="w-full py-2.5 text-xs font-mono text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors rounded-xl pb-control text-center"
+            >
+              ← Resize Another Image
+            </button>
+          </>
+        ) : (
+          <button
+            type="button"
+            onClick={processImage}
+            disabled={!file || !width || !height || isProcessing}
+            className="w-full py-3.5 rounded-xl font-bold text-sm transition-all bg-[#5668FF] hover:bg-[#4858E0] text-white shadow-[0_4px_20px_rgba(86,104,255,0.4)] disabled:opacity-40"
+          >
+            {isProcessing ? 'Resizing Image...' : 'Resize & Render'}
+          </button>
         )}
+      </div>
 
-        {resultBlob && (
-          <div className="space-y-8 animate-in fade-in zoom-in duration-300">
-            <h2 className="text-2xl font-bold text-indigo-800 dark:text-white">Done!</h2>
-            <div className="relative inline-block mx-auto p-2 rounded-2xl bg-checkerboard border border-slate-200/50 dark:border-slate-700/50">
-              <img src={resultUrl} alt="Resized" className="max-h-64 rounded-xl shadow-lg" />
-            </div>
-
-            <div className="text-left bg-white/60 dark:bg-[#0a0f1c]/50 backdrop-blur-xl p-6 md:p-8 rounded-[1.5rem] border border-slate-100/80 dark:border-indigo-800/40 shadow-sm max-w-md mx-auto">
-              <div className="space-y-4 mb-8 text-sm">
-                <div className="flex justify-between pb-4 border-b border-slate-100 dark:border-slate-700">
-                  <span className="text-slate-500 dark:text-slate-400">Dimensions</span>
-                  <span className="font-bold text-indigo-800 dark:text-white">{originalWidth}×{originalHeight} → {width}×{height}</span>
-                </div>
-                <div className="flex justify-between pb-4 border-b border-slate-100 dark:border-slate-700">
-                  <span className="text-slate-500 dark:text-slate-400">Original Size</span>
-                  <span className="font-bold text-indigo-800 dark:text-white">{formatBytes(file!.size)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500 dark:text-slate-400">New Size</span>
-                  <span className="font-bold text-[#5668FF]">{formatBytes(resultBlob.size)}</span>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <button
-                  onClick={() => {
-                    setFile(null);
-                    setResultBlob(null);
-                  }}
-                  className="flex-1 bg-slate-100 dark:bg-slate-700 text-indigo-800 dark:text-white py-4 rounded-2xl font-bold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
-                >
-                  Start Over
-                </button>
-                <a
-                  href={resultUrl}
-                  download={`resized_${width}x${height}_${file!.name.replace(/\.[^/.]+$/, "")}.webp`}
-                  className="flex-1 py-4 md:py-5 rounded-2xl font-bold text-lg transition-all duration-300 bg-[#5668FF] hover:bg-[#4858E0] text-white shadow-[0_8px_30px_rgba(86,104,255,0.3)] hover:shadow-[0_12px_40px_rgba(86,104,255,0.4)] hover:translate-y-[-1px] active:translate-y-[1px] active:shadow-[0_4px_20px_rgba(86,104,255,0.3)] text-center flex items-center justify-center"
-                >
-                  Download
-                </a>
-              </div>
-            </div>
-          </div>
-        )}
-      </main>
-      <Footer />
+      {resultBlob && (
+        <div className="text-center text-[11px] font-mono text-zinc-400">
+          Result size: {formatBytes(resultBlob.size)}
+        </div>
+      )}
     </div>
+  );
+
+  return (
+    <ToolShell
+      title="Image Resizer"
+      accentColor="bg-rose-500"
+      badgeText="LANCZOS-3 INTERPOLATION"
+      canvas={canvasContent}
+      inspector={inspectorContent}
+    />
   );
 }

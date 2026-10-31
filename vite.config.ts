@@ -12,10 +12,11 @@ export default defineConfig({
         name: 'PerfectByte | Zero Compromise Compression',
         short_name: 'PerfectByte',
         description: 'Zero-Server Edge Compute File Compression & AI Assistant',
-        theme_color: '#0f172a',
-        background_color: '#ffffff',
+        theme_color: '#09090B',
+        background_color: '#09090B',
         display: 'standalone',
         orientation: 'portrait',
+        start_url: '/target-size',
         icons: [
           {
             src: 'pwa-192x192.png',
@@ -28,7 +29,20 @@ export default defineConfig({
             type: 'image/png',
             purpose: 'any maskable'
           }
-        ]
+        ],
+        share_target: {
+          action: '/target-size',
+          method: 'POST',
+          enctype: 'multipart/form-data',
+          params: {
+            files: [
+              {
+                name: 'file',
+                accept: ['image/*', 'application/pdf']
+              }
+            ]
+          }
+        }
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,wasm,mjs}'],
