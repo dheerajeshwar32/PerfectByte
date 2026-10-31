@@ -27,21 +27,21 @@
   }
 
   .dark {
-    /* Dark Mode Surfaces — 3-tier zinc/obsidian elevation scale */
-    --pb-canvas: #09090B;
-    --pb-surface: #111114;
-    --pb-control: #18181C;
-    --pb-control-hover: #222228;
+    /* Dark Mode Surfaces — Aesthetic Deep Cosmic Obsidian Midnight (Never Stark Black) */
+    --pb-canvas: #0B0E1B;
+    --pb-surface: #12182B;
+    --pb-control: #192038;
+    --pb-control-hover: #222B4A;
 
-    /* Dark Specular Border: 1px subtle hairline + inset 0 1px top specular highlight */
-    --pb-border: rgba(255, 255, 255, 0.07);
-    --pb-specular: rgba(255, 255, 255, 0.14);
+    /* Dark Specular Border with Subtle Indigo Luminance */
+    --pb-border: rgba(99, 102, 241, 0.16);
+    --pb-specular: rgba(129, 140, 248, 0.22);
 
     /* Dark Dot-Matrix */
-    --pb-dot: rgba(255, 255, 255, 0.08);
+    --pb-dot: rgba(99, 102, 241, 0.12);
 
     /* Theme color for meta tag sync */
-    --pb-theme-color: #09090B;
+    --pb-theme-color: #0B0E1B;
   }
 }
 

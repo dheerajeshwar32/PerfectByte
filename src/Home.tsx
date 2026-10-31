@@ -155,14 +155,14 @@ export default function Home() {
           navigate('/bulk-compress');
         }
       }}
-      className="min-h-dvh flex flex-col items-center justify-start pt-20 md:pt-24 relative overflow-x-hidden font-sans transition-colors duration-200"
+      className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-white dark:from-[#0B0E1B] dark:via-[#0F1426] dark:to-[#0B0E1B] flex flex-col items-center justify-start pt-20 md:pt-24 relative overflow-x-hidden font-sans transition-colors duration-300 pb-20"
     >
-      {/* ─── Background Ambient Glows (Apple Frosted Aesthetic) ─── */}
+      {/* ─── Background Ambient Glows (Luminous Frosted Aesthetic) ─── */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-10%] left-[20%] w-[45%] h-[45%] rounded-full bg-blue-400/15 dark:bg-blue-600/10 blur-[130px]"></div>
-        <div className="absolute top-[20%] right-[15%] w-[40%] h-[40%] rounded-full bg-teal-300/15 dark:bg-teal-600/10 blur-[120px]"></div>
-        <div className="absolute bottom-[-10%] left-[30%] w-[40%] h-[40%] rounded-full bg-indigo-400/15 dark:bg-indigo-600/10 blur-[140px]"></div>
-        <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-400/10 dark:bg-purple-900/20 blur-[120px]"></div>
+        <div className="absolute top-[-10%] left-[20%] w-[45%] h-[45%] rounded-full bg-blue-400/20 dark:bg-blue-600/15 blur-[130px]"></div>
+        <div className="absolute top-[20%] right-[15%] w-[40%] h-[40%] rounded-full bg-teal-300/20 dark:bg-teal-500/15 blur-[120px]"></div>
+        <div className="absolute bottom-[-10%] left-[30%] w-[40%] h-[40%] rounded-full bg-indigo-400/20 dark:bg-indigo-600/15 blur-[140px]"></div>
+        <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-400/15 dark:bg-purple-600/15 blur-[120px]"></div>
       </div>
 
       {/* ─── Drag Overlay ─── */}
@@ -172,7 +172,7 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 backdrop-blur-md bg-[#09090B]/80 border-2 border-dashed border-[#5668FF] flex flex-col items-center justify-center gap-4 text-center p-6"
+            className="fixed inset-0 z-50 backdrop-blur-md bg-[#0B0E1B]/80 border-2 border-dashed border-[#5668FF] flex flex-col items-center justify-center gap-4 text-center p-6"
           >
             <div className="w-16 h-16 rounded-2xl bg-[#5668FF]/20 text-[#5668FF] flex items-center justify-center animate-bounce">
               <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -192,17 +192,17 @@ export default function Home() {
         <Logo />
       </nav>
 
-      {/* ─── Hero Heading ─── */}
+      {/* ─── Hero Heading (Exact Original with Chromatic 3D Cyan/Magenta Shadow) ─── */}
       <main className="max-w-4xl mx-auto text-center relative z-10 flex flex-col items-center mb-8 md:mb-14 px-4">
         <div className="h-10 flex items-center justify-center mb-4 md:mb-6">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeIndex}
-              initial={{ opacity: 0, y: 8, filter: 'blur(4px)' }}
+              initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              exit={{ opacity: 0, y: -8, filter: 'blur(4px)' }}
+              exit={{ opacity: 0, y: -10, filter: 'blur(4px)' }}
               transition={{ duration: 0.25 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-1.5 rounded-full bg-white/70 dark:bg-zinc-900/70 backdrop-blur-xl border border-slate-200/60 dark:border-zinc-700/60 shadow-sm cursor-default"
+              className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-1.5 rounded-full bg-white/70 dark:bg-white/10 backdrop-blur-xl border border-slate-200/60 dark:border-white/10 shadow-sm cursor-default"
             >
               {tools[activeIndex]?.badge && (
                 <>
@@ -214,9 +214,12 @@ export default function Home() {
           </AnimatePresence>
         </div>
 
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
+        <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-indigo-900 to-slate-600 dark:from-white dark:to-slate-300 mb-2 md:mb-4 leading-tight transition-colors px-4 pb-2">
           Flawless files. <br className="hidden sm:block" />
-          <span className="text-[#5668FF]">
+          <span
+            className="text-[#5668FF] drop-shadow-sm inline-block"
+            style={{ textShadow: '-2px 0px 0px rgba(0,255,255,0.8), 2px 0px 0px rgba(255,0,255,0.8)' }}
+          >
             Zero compromises.
           </span>
         </h1>
@@ -270,16 +273,16 @@ export default function Home() {
                 onClick={() => {
                   if (!isActive) setActiveIndex(index);
                 }}
-                className={`relative overflow-hidden bg-white/70 dark:bg-[#111118]/80 backdrop-blur-3xl p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border ${
+                className={`relative overflow-hidden bg-white/70 dark:bg-[#12182B]/80 backdrop-blur-3xl p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border ${
                   isActive
-                    ? 'border-white/80 dark:border-white/10 shadow-[0_30px_60px_-15px_rgba(86,104,255,0.12)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] ring-1 ring-[#5668FF]/20 cursor-default'
+                    ? 'border-white/80 dark:border-indigo-400/30 shadow-[0_30px_60px_-15px_rgba(86,104,255,0.15)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.6)] ring-1 ring-[#5668FF]/20 cursor-default'
                     : 'border-white/40 dark:border-white/5 cursor-pointer shadow-none'
                 } flex flex-col items-start text-left transition-all duration-500 h-[360px] md:h-[420px] group`}
               >
                 {/* Soft ambient corner glow */}
                 <div
                   className={`absolute -top-24 -right-24 w-64 h-64 rounded-full blur-[80px] pointer-events-none transition-opacity duration-700 ${
-                    isActive ? 'opacity-35 dark:opacity-25' : 'opacity-0'
+                    isActive ? 'opacity-35 dark:opacity-30' : 'opacity-0'
                   } ${tool.glowColor}`}
                 />
 
@@ -315,7 +318,7 @@ export default function Home() {
                       navigate(tool.path);
                     }}
                   >
-                    <span className="text-[10px] md:text-[11px] font-bold text-slate-700 dark:text-slate-200 uppercase tracking-[0.2em]">
+                    <span className="text-[10px] md:text-[11px] font-bold text-slate-800 dark:text-slate-200 uppercase tracking-[0.2em]">
                       Initialize Tool
                     </span>
                     <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-slate-900 dark:bg-white flex items-center justify-center text-white dark:text-slate-900 transition-transform duration-300 group-hover/btn:translate-x-1">
@@ -336,7 +339,7 @@ export default function Home() {
         <button
           onClick={handlePrev}
           aria-label="Previous tool"
-          className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 shadow-sm flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:scale-105 transition-all active:scale-95 cursor-pointer"
+          className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white dark:bg-[#12182B] border border-slate-200 dark:border-white/10 shadow-sm flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:scale-105 transition-all active:scale-95 cursor-pointer"
         >
           <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
@@ -354,7 +357,7 @@ export default function Home() {
               className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
                 idx === activeIndex
                   ? 'w-8 bg-[#5668FF] shadow-[0_0_12px_rgba(86,104,255,0.4)]'
-                  : 'w-2.5 bg-slate-300/80 dark:bg-zinc-700/80 hover:bg-slate-400 dark:hover:bg-zinc-600'
+                  : 'w-2.5 bg-slate-300/80 dark:bg-slate-700/80 hover:bg-slate-400 dark:hover:bg-slate-600'
               }`}
             />
           ))}
@@ -363,7 +366,7 @@ export default function Home() {
         <button
           onClick={handleNext}
           aria-label="Next tool"
-          className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 shadow-sm flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:scale-105 transition-all active:scale-95 cursor-pointer"
+          className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white dark:bg-[#12182B] border border-slate-200 dark:border-white/10 shadow-sm flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:scale-105 transition-all active:scale-95 cursor-pointer"
         >
           <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>

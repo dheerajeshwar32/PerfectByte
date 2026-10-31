@@ -77,9 +77,9 @@ export function syncThemeColor(isDark: boolean): void {
     genericMeta.name = 'theme-color';
     document.head.appendChild(genericMeta);
   }
-  genericMeta.content = isDark ? '#09090B' : '#FAFAFA';
+  genericMeta.content = isDark ? '#0B0E1B' : '#FAFAFA';
   
   // Update the media-specific ones too
   if (lightMeta) (lightMeta as HTMLMetaElement).content = '#FAFAFA';
-  if (darkMeta) (darkMeta as HTMLMetaElement).content = '#09090B';
+  if (darkMeta) (darkMeta as HTMLMetaElement).content = '#0B0E1B';
 }
