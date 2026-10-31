@@ -157,12 +157,12 @@ export default function Home() {
       }}
       className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-50 via-slate-100 to-white dark:from-[#0B0E1B] dark:via-[#0F1426] dark:to-[#0B0E1B] flex flex-col items-center justify-start pt-20 md:pt-24 relative overflow-x-hidden font-sans transition-colors duration-300 pb-20"
     >
-      {/* ─── Background Ambient Glows (Luminous Frosted Aesthetic) ─── */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-10%] left-[20%] w-[45%] h-[45%] rounded-full bg-blue-400/20 dark:bg-blue-600/15 blur-[130px]"></div>
-        <div className="absolute top-[20%] right-[15%] w-[40%] h-[40%] rounded-full bg-teal-300/20 dark:bg-teal-500/15 blur-[120px]"></div>
-        <div className="absolute bottom-[-10%] left-[30%] w-[40%] h-[40%] rounded-full bg-indigo-400/20 dark:bg-indigo-600/15 blur-[140px]"></div>
-        <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-400/15 dark:bg-purple-600/15 blur-[120px]"></div>
+      {/* ─── Background Ambient Glows (Seamless Full-Viewport Glows) ─── */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+        <div className="absolute -top-[15%] left-[10%] w-[45vw] h-[45vw] max-w-[650px] max-h-[650px] rounded-full bg-blue-400/15 dark:bg-blue-600/10 blur-[140px]"></div>
+        <div className="absolute top-[10%] -right-[5%] w-[40vw] h-[40vw] max-w-[550px] max-h-[550px] rounded-full bg-teal-300/15 dark:bg-teal-500/10 blur-[130px]"></div>
+        <div className="absolute top-[35%] left-[15%] w-[40vw] h-[40vw] max-w-[550px] max-h-[550px] rounded-full bg-indigo-400/15 dark:bg-indigo-600/10 blur-[150px]"></div>
+        <div className="absolute top-[30%] right-[5%] w-[45vw] h-[45vw] max-w-[600px] max-h-[600px] rounded-full bg-purple-400/12 dark:bg-purple-600/10 blur-[140px]"></div>
       </div>
 
       {/* ─── Drag Overlay ─── */}
