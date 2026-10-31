@@ -112,9 +112,9 @@ export default function TargetScrubber({
   const isAtDetent = DETENTS.some((d) => d.kb === value);
 
   return (
-    <div className="space-y-4 rounded-2xl p-4 sm:p-5 border border-slate-200/80 dark:border-white/[0.08] bg-white/60 dark:bg-white/[0.03] backdrop-blur-md shadow-xs">
+    <div className="space-y-4 rounded-2xl p-4 sm:p-5 border border-slate-200/80 dark:border-white/[0.07] bg-white/60 dark:bg-[#141824]/90 backdrop-blur-md shadow-xs dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
       {/* ─── Digital Byte Readout Hardware Card ─── */}
-      <div className="relative overflow-hidden rounded-2xl p-4 bg-gradient-to-b from-slate-900 to-slate-950 text-white shadow-xl border border-slate-800">
+      <div className="relative overflow-hidden rounded-2xl p-4 bg-gradient-to-b from-slate-900 to-slate-950 dark:bg-[#080A10] text-white shadow-xl border border-slate-800 dark:border-blue-500/30 dark:shadow-[inset_0_0_32px_rgba(59,130,246,0.12)]">
         {/* Subtle grid mesh background */}
         <div className="absolute inset-0 pb-dot-matrix opacity-20 pointer-events-none" />
 
@@ -308,7 +308,7 @@ export default function TargetScrubber({
                 className={`p-2.5 rounded-xl text-left transition-all border flex items-center gap-2.5 ${
                   isCurrent
                     ? 'bg-blue-500/10 border-blue-500/60 shadow-xs'
-                    : 'bg-white dark:bg-white/[0.03] border-slate-200/80 dark:border-white/[0.07] hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50 dark:hover:bg-white/[0.06]'
+                    : 'bg-white dark:bg-[#141824]/90 border-slate-200/80 dark:border-white/[0.07] hover:border-slate-300 dark:hover:border-blue-500/40 hover:bg-slate-50 dark:hover:bg-[#191E2D]'
                 }`}
               >
                 <div

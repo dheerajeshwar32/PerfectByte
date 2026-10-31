@@ -71,18 +71,18 @@ export default function ToolShell({
   }, [onToggleAiDrawer, navigate, location.pathname]);
 
   return (
-    <div className="min-h-screen relative flex flex-col bg-slate-50/80 dark:bg-[#0B0E1B] text-slate-900 dark:text-slate-100 selection:bg-[#5668FF] selection:text-white transition-colors duration-300">
-      {/* ─── Ambient Sapphire/Violet Illumination & Architectural Dot Matrix ─── */}
+    <div className="min-h-screen relative flex flex-col bg-slate-50/80 dark:bg-[#06070A] text-slate-900 dark:text-slate-100 selection:bg-[#5668FF] selection:text-white transition-colors duration-300">
+      {/* ─── Ambient Sapphire/Violet Illumination & Architectural Dot Matrix (Tier 1) ─── */}
       <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
-        {/* Top Radial Flare matching Home aesthetic */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[95vw] max-w-[1400px] h-[550px] bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(59,130,246,0.12),transparent)] dark:bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(59,130,246,0.18),transparent)]" />
+        {/* Top Radial Flare matching Obsidian Studio aesthetic */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[95vw] max-w-[1400px] h-[550px] bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(59,130,246,0.12),transparent)] dark:bg-[radial-gradient(ellipse_80%_50%_at_50%_-15%,rgba(59,130,246,0.16),transparent)]" />
         <div className="absolute top-48 left-1/4 w-[40vw] h-[300px] bg-purple-500/[0.04] dark:bg-purple-600/[0.07] blur-[120px]" />
-        <div className="absolute inset-0 pb-dot-matrix opacity-70 dark:opacity-50" />
+        <div className="absolute inset-0 pb-dot-matrix opacity-70 dark:opacity-40" />
       </div>
 
       {/* ─── Unified Collision-Free Top Navigation Header ─── */}
       <header
-        className="pwa-header sticky top-0 z-40 w-full h-16 border-b border-slate-200/80 dark:border-white/[0.08] bg-white/80 dark:bg-[#0B0E1B]/85 backdrop-blur-2xl transition-colors"
+        className="pwa-header sticky top-0 z-40 w-full h-16 border-b border-slate-200/80 dark:border-white/[0.08] bg-white/80 dark:bg-[#080A10]/90 backdrop-blur-2xl transition-colors"
         style={{ boxShadow: 'inset 0 1px 0 0 var(--pb-specular)' }}
       >
         <div className="max-w-[1360px] h-full mx-auto px-4 sm:px-6 flex items-center justify-between gap-3">
@@ -107,7 +107,7 @@ export default function ToolShell({
             </div>
 
             {badgeText && (
-              <span className="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-bold tracking-tight">
+              <span className="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 border border-emerald-500/20 dark:border-emerald-500/25 text-[10px] font-mono font-bold tracking-tight">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 {badgeText}
               </span>
@@ -117,7 +117,7 @@ export default function ToolShell({
           {/* Center: Apple/Raycast Segmented Tool Switcher Pill Dock */}
           <nav
             aria-label="Studio Tools Dock"
-            className="hidden md:flex items-center p-1 rounded-full bg-slate-200/60 dark:bg-black/40 border border-slate-300/60 dark:border-white/10 backdrop-blur-xl shadow-inner shrink-0"
+            className="hidden md:flex items-center p-1 rounded-full bg-slate-200/60 dark:bg-[#0D0F17]/90 border border-slate-300/60 dark:border-white/[0.08] backdrop-blur-xl shadow-inner shrink-0"
           >
             {TOOL_TABS.map((tab) => {
               const isActive = location.pathname === tab.path;
@@ -129,13 +129,13 @@ export default function ToolShell({
                   className={`relative px-3 py-1.5 rounded-full text-xs font-semibold transition-colors flex items-center gap-1.5 ${
                     isActive
                       ? 'text-slate-900 dark:text-white'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                   }`}
                 >
                   {isActive && (
                     <motion.div
                       layoutId="activeToolPill"
-                      className="absolute inset-0 rounded-full bg-white dark:bg-[#1E2028] shadow-sm border border-slate-200/80 dark:border-white/10"
+                      className="absolute inset-0 rounded-full bg-white dark:bg-white/[0.1] shadow-sm border border-slate-200/80 dark:border-white/15 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_2px_8px_rgba(0,0,0,0.4)]"
                       transition={{ type: 'spring', stiffness: 450, damping: 35 }}
                     />
                   )}
@@ -193,9 +193,9 @@ export default function ToolShell({
         </div>
       </header>
 
-      {/* ─── Main Studio Stage (Centered 12-Column Glassmorphic Bento Frame) ─── */}
+      {/* ─── Main Studio Stage (Tier 2: Centered 12-Column Glassmorphic Bento Frame) ─── */}
       <main className="flex-1 w-full max-w-[1360px] mx-auto px-3 sm:px-6 py-4 sm:py-6 flex flex-col pb-28 md:pb-8">
-        <div className="w-full flex-1 rounded-[24px] sm:rounded-[28px] border border-slate-200/80 dark:border-white/[0.08] bg-white/75 dark:bg-[#0D0E12]/80 backdrop-blur-2xl shadow-[0_24px_80px_-15px_rgba(15,23,42,0.08)] dark:shadow-[0_24px_80px_-15px_rgba(0,0,0,0.6)] p-4 sm:p-6 lg:p-7 relative overflow-hidden flex flex-col">
+        <div className="w-full flex-1 rounded-[24px] sm:rounded-[28px] border border-slate-200/80 dark:border-white/[0.08] bg-white/75 dark:bg-[#0C0E14]/90 backdrop-blur-2xl shadow-[0_24px_80px_-15px_rgba(15,23,42,0.08)] dark:shadow-[0_24px_80px_-15px_rgba(0,0,0,0.85),inset_0_1px_0_0_rgba(255,255,255,0.1)] p-4 sm:p-6 lg:p-7 relative overflow-hidden flex flex-col">
           {/* Studio Top Sub-Header Bar */}
           <div className="flex items-center justify-between pb-4 mb-5 border-b border-slate-200/60 dark:border-white/[0.06] text-xs font-mono text-slate-500">
             <div className="flex items-center gap-2">
@@ -206,7 +206,7 @@ export default function ToolShell({
             <div className="hidden sm:flex items-center gap-3 text-[11px]">
               <span className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                <span>Zero Cloud Uploads</span>
+                <span className="dark:text-emerald-300">Zero Cloud Uploads</span>
               </span>
               <span>•</span>
               <span>Client-Side WebAssembly</span>

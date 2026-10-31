@@ -252,7 +252,7 @@ export default function BulkCompressor() {
                 return (
                   <div
                     key={`${file.name}-${idx}`}
-                    className="flex items-center justify-between p-3 rounded-xl bg-slate-50/80 dark:bg-white/[0.03] hover:bg-white dark:hover:bg-white/[0.06] border border-slate-200/70 dark:border-white/[0.07] transition-all text-xs font-mono shadow-xs"
+                    className="flex items-center justify-between p-3 rounded-xl bg-slate-50/80 dark:bg-[#10131C] hover:bg-white dark:hover:bg-[#191E2D] border border-slate-200/70 dark:border-white/[0.07] transition-all text-xs font-mono shadow-xs"
                   >
                     <div className="flex items-center gap-2.5 truncate pr-3">
                       <span className="w-5 h-5 rounded bg-slate-200/70 dark:bg-white/10 text-slate-600 dark:text-slate-300 flex items-center justify-center text-[10px] shrink-0 font-bold">
@@ -299,7 +299,7 @@ export default function BulkCompressor() {
   const inspectorContent = (
     <div className="space-y-4">
       {/* Telemetry Hero Banner */}
-      <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.08] bg-white/60 dark:bg-white/[0.03] backdrop-blur-md shadow-xs space-y-4">
+      <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white/60 dark:bg-[#141824]/90 backdrop-blur-md shadow-xs dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-4">
         <div className="flex items-center justify-between">
           <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold">
             BATCH STORAGE TELEMETRY
@@ -341,7 +341,7 @@ export default function BulkCompressor() {
       </div>
 
       {/* Batch Output Configuration Card (Balances Height) */}
-      <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.08] bg-white/60 dark:bg-white/[0.03] shadow-xs space-y-4">
+      <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white/60 dark:bg-[#141824]/90 shadow-xs dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-4">
         <div className="flex items-center justify-between">
           <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
             BATCH OUTPUT CONFIGURATION
@@ -363,7 +363,7 @@ export default function BulkCompressor() {
                 className={`py-2 rounded-lg text-xs font-mono font-bold transition-all border cursor-pointer ${
                   targetFormat === fmt
                     ? 'bg-teal-500/15 border-teal-500/50 text-teal-600 dark:text-teal-400 shadow-xs'
-                    : 'bg-white dark:bg-white/[0.03] border-slate-200/70 dark:border-white/[0.06] text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    : 'bg-white dark:bg-[#10131C] border-slate-200/70 dark:border-white/[0.06] text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:hover:border-teal-500/30'
                 }`}
               >
                 {fmt.toUpperCase()}
@@ -384,7 +384,7 @@ export default function BulkCompressor() {
               className={`p-2.5 rounded-xl text-left transition-all border cursor-pointer ${
                 optProfile === 'max_savings'
                   ? 'bg-teal-500/10 border-teal-500/60 text-teal-700 dark:text-teal-300 shadow-xs'
-                  : 'bg-white dark:bg-white/[0.03] border-slate-200/70 dark:border-white/[0.06] text-slate-600 dark:text-slate-400'
+                  : 'bg-white dark:bg-[#10131C] border-slate-200/70 dark:border-white/[0.06] text-slate-600 dark:text-slate-400 dark:hover:border-teal-500/30'
               }`}
             >
               <div className="text-xs font-bold font-mono">Max Byte Savings</div>
@@ -396,7 +396,7 @@ export default function BulkCompressor() {
               className={`p-2.5 rounded-xl text-left transition-all border cursor-pointer ${
                 optProfile === 'visually_lossless'
                   ? 'bg-teal-500/10 border-teal-500/60 text-teal-700 dark:text-teal-300 shadow-xs'
-                  : 'bg-white dark:bg-white/[0.03] border-slate-200/70 dark:border-white/[0.06] text-slate-600 dark:text-slate-400'
+                  : 'bg-white dark:bg-[#10131C] border-slate-200/70 dark:border-white/[0.06] text-slate-600 dark:text-slate-400 dark:hover:border-teal-500/30'
               }`}
             >
               <div className="text-xs font-bold font-mono">Visually Lossless</div>
@@ -407,7 +407,7 @@ export default function BulkCompressor() {
       </div>
 
       {/* Engine & Settings Specs */}
-      <div className="p-4 rounded-2xl border border-slate-200/80 dark:border-white/[0.08] bg-white/60 dark:bg-white/[0.03] space-y-2 text-xs font-mono text-slate-500">
+      <div className="p-4 rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white/60 dark:bg-[#141824]/90 dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-2 text-xs font-mono text-slate-500 dark:text-slate-400">
         <div className="flex items-center justify-between">
           <span>Engine Codec</span>
           <span className="font-bold text-slate-800 dark:text-slate-200">Google WebP (WASM)</span>
@@ -440,7 +440,7 @@ export default function BulkCompressor() {
                 setCompressedFiles([]);
                 setFiles([]);
               }}
-              className="w-full py-2.5 text-xs font-mono text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] text-center cursor-pointer flex items-center justify-center gap-1.5"
+              className="w-full py-2.5 text-xs font-mono text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-colors rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-[#0C0E14] dark:hover:bg-[#191E2D] border border-transparent dark:border-white/[0.06] text-center cursor-pointer flex items-center justify-center gap-1.5"
             >
               <RefreshCw className="w-3 h-3" />
               <span>Clear Batch &amp; Add More</span>
@@ -450,7 +450,7 @@ export default function BulkCompressor() {
           <button
             onClick={handleCompress}
             disabled={files.length === 0 || isProcessing}
-            className="w-full py-3.5 rounded-xl font-bold text-sm transition-all bg-gradient-to-b from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white shadow-[0_8px_24px_-4px_rgba(20,184,166,0.45),inset_0_1px_0_rgba(255,255,255,0.25)] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+            className="w-full py-3.5 rounded-xl font-bold text-sm transition-all bg-gradient-to-b from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white shadow-[0_8px_24px_-4px_rgba(20,184,166,0.45),inset_0_1px_0_rgba(255,255,255,0.25)] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:dark:bg-emerald-500/10 disabled:dark:text-emerald-300/40 disabled:dark:border disabled:dark:border-emerald-500/20 disabled:dark:shadow-none cursor-pointer"
           >
             {isProcessing ? 'Processing Batch...' : `EXECUTE BATCH (${files.length} FILES)`}
           </button>

@@ -350,7 +350,7 @@ export default function TargetCompressor() {
         />
       ) : (
         <div className="space-y-5">
-          <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.08] bg-white/60 dark:bg-white/[0.03] backdrop-blur-md shadow-xs space-y-4">
+          <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white/60 dark:bg-[#141824]/90 backdrop-blur-md shadow-xs dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold">
                 CONVERGENCE TELEMETRY
@@ -386,12 +386,12 @@ export default function TargetCompressor() {
 
             {/* Stats Grid */}
             <div className="grid grid-cols-2 gap-2 text-xs font-mono tabular-nums pt-2 border-t border-slate-200/60 dark:border-white/[0.06]">
-              <div className="p-3 rounded-xl bg-slate-100/70 dark:bg-white/[0.04] border border-slate-200/60 dark:border-white/10">
+              <div className="p-3 rounded-xl bg-slate-100/70 dark:bg-[#0C0E14] border border-slate-200/60 dark:border-white/[0.06]">
                 <span className="text-slate-400 text-[10px] block font-bold">ORIGINAL</span>
                 <span className="font-bold text-slate-800 dark:text-slate-200">{formatBytes(result.originalSize)}</span>
                 <span className="text-[10px] text-slate-400 block">{result.originalSize.toLocaleString()} B</span>
               </div>
-              <div className="p-3 rounded-xl bg-slate-100/70 dark:bg-white/[0.04] border border-slate-200/60 dark:border-white/10 text-right">
+              <div className="p-3 rounded-xl bg-slate-100/70 dark:bg-[#0C0E14] border border-slate-200/60 dark:border-white/[0.06] text-right">
                 <span className="text-slate-400 text-[10px] block font-bold">OUTPUT</span>
                 <span className="font-bold text-blue-500">{formatBytes(result.compressedSize)}</span>
                 <span className="text-[10px] text-slate-400 block">{result.compressedSize.toLocaleString()} B</span>
@@ -448,7 +448,7 @@ export default function TargetCompressor() {
                 compressedFileRef.current = null;
                 setResult(null);
               }}
-              className="w-full py-2.5 text-xs font-mono text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] text-center"
+              className="w-full py-2.5 text-xs font-mono text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-colors rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-[#0C0E14] dark:hover:bg-[#191E2D] border border-transparent dark:border-white/[0.06] text-center"
             >
               ← Compress Another File
             </button>
@@ -460,7 +460,7 @@ export default function TargetCompressor() {
 
   // ─── Collapsible AI Assistant Command Drawer ───
   const aiDrawerContent = (
-    <div className="space-y-2 rounded-xl p-3 bg-purple-500/[0.04] border border-purple-500/20">
+    <div className="space-y-2 rounded-xl p-3 bg-purple-500/[0.04] dark:bg-[#141824]/90 border border-purple-500/20 dark:border-purple-500/30 dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
       <button
         type="button"
         onClick={() => setIsAiDrawerOpen(!isAiDrawerOpen)}
@@ -518,7 +518,7 @@ export default function TargetCompressor() {
                   setTargetKB(c.kb);
                   toast.success(`Loaded ${c.label}`);
                 }}
-                className="px-2 py-1 text-[10px] font-mono bg-white dark:bg-white/[0.04] text-slate-500 hover:text-slate-900 dark:hover:text-slate-200 rounded-md border border-slate-200/60 dark:border-white/10 transition-colors"
+                className="px-2 py-1 text-[10px] font-mono bg-white dark:bg-[#10131C] text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 rounded-md border border-slate-200/60 dark:border-white/[0.07] hover:border-slate-300 dark:hover:border-purple-500/40 transition-colors"
               >
                 {c.label}
               </button>

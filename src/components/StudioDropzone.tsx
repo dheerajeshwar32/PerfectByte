@@ -50,16 +50,16 @@ export default function StudioDropzone({
       aria-label={title}
       className={`group relative w-full min-h-[460px] lg:min-h-[500px] flex-1 rounded-2xl border-2 border-dashed transition-all duration-300 flex flex-col items-center justify-between p-6 sm:p-10 cursor-pointer overflow-hidden ${
         isDragging
-          ? 'border-blue-500 bg-blue-500/10 dark:bg-blue-500/15 scale-[1.008] shadow-[0_0_35px_rgba(59,130,246,0.25)]'
-          : 'border-blue-500/25 hover:border-blue-500/60 bg-gradient-to-b from-blue-50/40 via-white/40 to-white/60 dark:from-blue-950/15 dark:via-transparent dark:to-white/[0.02] hover:shadow-[0_12px_40px_-15px_rgba(59,130,246,0.18)]'
+          ? 'border-blue-500 bg-blue-500/10 dark:bg-blue-500/20 scale-[1.008] shadow-[0_0_35px_rgba(59,130,246,0.25)]'
+          : 'border-blue-500/25 hover:border-blue-500/60 dark:border-blue-500/30 hover:dark:border-blue-400/60 bg-gradient-to-b from-blue-50/40 via-white/40 to-white/60 dark:bg-[#10131C]/80 hover:shadow-[0_12px_40px_-15px_rgba(59,130,246,0.18)]'
       } ${className}`}
       style={{
         boxShadow: 'inset 0 1px 0 0 var(--pb-specular)',
         touchAction: 'pan-y',
       }}
     >
-      {/* Background ambient center radial flare */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-blue-500/5 dark:bg-blue-400/[0.07] blur-[80px] pointer-events-none" />
+      {/* Background ambient center radial spotlight (Tier 3) */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-blue-500/5 dark:bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.12)_0%,transparent_65%)] pointer-events-none" />
 
       {fileInput}
 
@@ -76,7 +76,7 @@ export default function StudioDropzone({
           ))}
         </div>
 
-        <span className="hidden sm:inline-flex items-center gap-1.5 text-[11px] font-mono text-slate-400 dark:text-slate-500">
+        <span className="hidden sm:inline-flex items-center gap-1.5 text-[11px] font-mono text-slate-400 dark:text-emerald-300">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
           <span>WASM SIMD Ready</span>
         </span>
@@ -107,7 +107,7 @@ export default function StudioDropzone({
         </p>
 
         {/* Keyboard shortcut keycaps */}
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/70 dark:bg-black/30 border border-slate-200/70 dark:border-white/10 shadow-xs text-xs font-mono text-slate-600 dark:text-slate-400">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/70 dark:bg-black/40 border border-slate-200/70 dark:border-white/10 shadow-xs text-xs font-mono text-slate-600 dark:text-slate-400">
           <span className="flex items-center gap-1">
             <kbd className="px-1.5 py-0.5 rounded bg-slate-200/80 dark:bg-white/10 text-[10px] font-bold text-slate-700 dark:text-slate-200">⌘V</kbd>
             <span className="text-[11px]">Paste</span>
@@ -123,15 +123,13 @@ export default function StudioDropzone({
       {/* Bottom Micro-Trust Bar */}
       <div className="relative z-10 w-full pt-4 border-t border-slate-200/60 dark:border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] font-mono text-slate-500 dark:text-slate-400">
         <div className="flex items-center gap-1.5">
-          <svg className="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-          </svg>
-          <span className="font-semibold text-slate-700 dark:text-slate-300">Zero Server Uploads</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+          <span className="text-emerald-600 dark:text-emerald-300 font-bold">Zero Server Uploads</span>
+          <span>•</span>
+          <span>Executed in Local WASM Memory</span>
         </div>
 
-        <div className="flex items-center gap-2 text-[10px] text-slate-400 dark:text-slate-500">
-          <span>Executed in Local WASM Memory</span>
-          <span>•</span>
+        <div className="flex items-center gap-1 text-[10px] text-slate-400 dark:text-slate-500">
           <span>Instant Byte Convergence</span>
         </div>
       </div>

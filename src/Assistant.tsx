@@ -293,7 +293,7 @@ export default function Assistant() {
       className={`flex flex-col h-[600px] w-full rounded-2xl border transition-all overflow-hidden relative shadow-xs ${
         isDragging
           ? 'border-purple-500 ring-2 ring-purple-500/30 bg-purple-500/5'
-          : 'border-slate-200/80 dark:border-white/[0.08] bg-white/60 dark:bg-white/[0.02] backdrop-blur-md'
+          : 'border-slate-200/80 dark:border-white/[0.08] bg-white/60 dark:bg-[#10131C]/80 backdrop-blur-md'
       }`}
     >
       <input
@@ -307,7 +307,7 @@ export default function Assistant() {
       />
 
       {/* ─── Integrated Context Bar at Top of Console ─── */}
-      <div className="px-4 py-3 border-b border-slate-200/80 dark:border-white/[0.06] bg-slate-100/60 dark:bg-white/[0.03] flex items-center justify-between gap-3 text-xs font-mono">
+      <div className="px-4 py-3 border-b border-slate-200/80 dark:border-white/[0.06] bg-slate-100/60 dark:bg-[#0D0F17]/90 flex items-center justify-between gap-3 text-xs font-mono">
         {files.length > 0 ? (
           <div className="flex items-center gap-2 truncate">
             <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
@@ -362,7 +362,7 @@ export default function Assistant() {
                     key={intent.title}
                     type="button"
                     onClick={() => executeCommand(intent.prompt)}
-                    className="p-3.5 rounded-xl border border-slate-200/80 dark:border-white/10 bg-white/80 dark:bg-white/[0.04] hover:border-purple-400/50 hover:bg-purple-500/5 transition-all text-left flex flex-col justify-between group shadow-xs cursor-pointer"
+                    className="p-3.5 rounded-xl border border-slate-200/80 dark:border-white/[0.07] bg-white/80 dark:bg-[#10131C] hover:border-purple-400/50 hover:bg-purple-500/5 dark:hover:bg-[#191E2D] transition-all text-left flex flex-col justify-between group shadow-xs cursor-pointer"
                   >
                     <div className="flex items-center justify-between mb-2">
                       <div className="w-8 h-8 rounded-lg bg-blue-500/10 dark:bg-blue-500/15 text-blue-600 dark:text-blue-400 flex items-center justify-center">
@@ -478,7 +478,7 @@ export default function Assistant() {
       </div>
 
       {/* ─── Floating Command Input Dock ─── */}
-      <form onSubmit={handleSubmit} className="p-3 border-t border-slate-200/80 dark:border-white/[0.08] bg-slate-100/70 dark:bg-white/[0.04]">
+      <form onSubmit={handleSubmit} className="p-3 border-t border-slate-200/80 dark:border-white/[0.08] bg-slate-100/70 dark:bg-[#0D0F17]/90">
         <div className="flex items-center gap-2">
           <input
             ref={commandInputRef}
@@ -492,7 +492,7 @@ export default function Assistant() {
           <button
             type="submit"
             disabled={isBusy || !input.trim()}
-            className="px-4 py-2.5 bg-gradient-to-b from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-xl text-xs font-mono font-bold transition-all disabled:opacity-40 shadow-xs cursor-pointer"
+            className="px-4 py-2.5 bg-gradient-to-b from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-xl text-xs font-mono font-bold transition-all disabled:opacity-40 disabled:dark:bg-violet-500/10 disabled:dark:text-violet-300/40 disabled:dark:border disabled:dark:border-violet-500/20 disabled:dark:shadow-none shadow-xs cursor-pointer"
           >
             Run ↵
           </button>
@@ -505,7 +505,7 @@ export default function Assistant() {
   const inspectorContent = (
     <div className="space-y-4">
       {/* 1. Mounted Payload Inspector Card */}
-      <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.08] bg-white/60 dark:bg-white/[0.03] backdrop-blur-md shadow-xs space-y-3">
+      <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white/60 dark:bg-[#141824]/90 backdrop-blur-md shadow-xs dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
             MOUNTED PAYLOAD INSPECTOR
@@ -520,7 +520,7 @@ export default function Assistant() {
 
         {files.length > 0 ? (
           <div className="space-y-2 text-xs font-mono">
-            <div className="p-3 rounded-xl bg-slate-100/70 dark:bg-white/[0.04] border border-slate-200/60 dark:border-white/10 space-y-1.5">
+            <div className="p-3 rounded-xl bg-slate-100/70 dark:bg-[#0C0E14] border border-slate-200/60 dark:border-white/[0.06] space-y-1.5">
               <div className="flex justify-between items-center">
                 <span className="text-slate-400">File Name</span>
                 <span className="font-bold text-slate-800 dark:text-slate-200 truncate max-w-[150px]">
@@ -539,7 +539,7 @@ export default function Assistant() {
                   {files[0].type || 'application/octet-stream'}
                 </span>
               </div>
-              <div className="flex justify-between items-center pt-1 border-t border-slate-200/60 dark:border-white/10">
+              <div className="flex justify-between items-center pt-1 border-t border-slate-200/60 dark:border-white/[0.06]">
                 <span className="text-slate-400">Memory Status</span>
                 <span className="text-emerald-600 dark:text-emerald-400 font-bold">
                   WASM Buffer Ready
@@ -569,7 +569,7 @@ export default function Assistant() {
       </div>
 
       {/* 2. Engine Routing & Execution Pipeline Card */}
-      <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.08] bg-white/60 dark:bg-white/[0.03] shadow-xs space-y-3">
+      <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white/60 dark:bg-[#141824]/90 shadow-xs dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
             EXECUTION PIPELINE ROUTING
@@ -578,19 +578,19 @@ export default function Assistant() {
         </div>
 
         <div className="space-y-2 text-xs font-mono">
-          <div className="p-2.5 rounded-lg bg-slate-100/60 dark:bg-white/[0.03] border border-slate-200/50 dark:border-white/[0.06] flex items-center justify-between">
+          <div className="p-2.5 rounded-lg bg-slate-100/60 dark:bg-[#10131C] border border-slate-200/50 dark:border-white/[0.06] flex items-center justify-between">
             <span className="text-slate-500 dark:text-slate-400">1. Intent Parsing</span>
             <span className="font-bold text-purple-600 dark:text-purple-400">Gemini 2.5 Flash</span>
           </div>
-          <div className="p-2.5 rounded-lg bg-slate-100/60 dark:bg-white/[0.03] border border-slate-200/50 dark:border-white/[0.06] flex items-center justify-between">
+          <div className="p-2.5 rounded-lg bg-slate-100/60 dark:bg-[#10131C] border border-slate-200/50 dark:border-white/[0.06] flex items-center justify-between">
             <span className="text-slate-500 dark:text-slate-400">2. Parameter Extraction</span>
             <span className="font-bold text-slate-800 dark:text-slate-200">Function Calling</span>
           </div>
-          <div className="p-2.5 rounded-lg bg-slate-100/60 dark:bg-white/[0.03] border border-slate-200/50 dark:border-white/[0.06] flex items-center justify-between">
+          <div className="p-2.5 rounded-lg bg-slate-100/60 dark:bg-[#10131C] border border-slate-200/50 dark:border-white/[0.06] flex items-center justify-between">
             <span className="text-slate-500 dark:text-slate-400">3. Local Execution</span>
             <span className="font-bold text-emerald-600 dark:text-emerald-400">Client-Side WASM</span>
           </div>
-          <div className="p-2.5 rounded-lg bg-slate-100/60 dark:bg-white/[0.03] border border-slate-200/50 dark:border-white/[0.06] flex items-center justify-between">
+          <div className="p-2.5 rounded-lg bg-slate-100/60 dark:bg-[#10131C] border border-slate-200/50 dark:border-white/[0.06] flex items-center justify-between">
             <span className="text-slate-500 dark:text-slate-400">4. Byte Verification</span>
             <span className="font-bold text-blue-600 dark:text-blue-400">Binary Convergence</span>
           </div>
@@ -606,7 +606,7 @@ export default function Assistant() {
       </div>
 
       {/* 3. Quick Parameter Overrides / Command Cheat-Sheet Card */}
-      <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.08] bg-white/60 dark:bg-white/[0.03] shadow-xs space-y-3">
+      <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white/60 dark:bg-[#141824]/90 shadow-xs dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
             COMMAND CHEAT-SHEET
@@ -624,7 +624,7 @@ export default function Assistant() {
                 commandInputRef.current?.focus();
                 haptic(8);
               }}
-              className="w-full text-left p-2.5 rounded-xl bg-slate-100/70 hover:bg-purple-500/10 dark:bg-white/[0.03] dark:hover:bg-purple-500/15 text-xs font-mono transition-all flex items-center justify-between border border-slate-200/60 dark:border-white/10 group cursor-pointer"
+              className="w-full text-left p-2.5 rounded-xl bg-slate-100/70 hover:bg-purple-500/10 dark:bg-[#10131C] dark:hover:bg-[#191E2D] dark:hover:border-purple-500/30 text-xs font-mono transition-all flex items-center justify-between border border-slate-200/60 dark:border-white/[0.06] group cursor-pointer"
             >
               <div>
                 <span className="font-bold text-slate-800 dark:text-slate-200 group-hover:text-purple-600 dark:group-hover:text-purple-400 block">

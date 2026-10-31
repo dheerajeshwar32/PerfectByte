@@ -179,7 +179,7 @@ export default function ImageResizer() {
           }
         />
       ) : (
-        <div className="w-full flex-1 min-h-[460px] rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-[#12141C]/80 backdrop-blur-xl p-5 sm:p-6 flex flex-col justify-between">
+        <div className="w-full flex-1 min-h-[460px] rounded-2xl border border-slate-200/80 dark:border-white/[0.08] bg-white/70 dark:bg-[#10131C]/80 backdrop-blur-xl p-5 sm:p-6 flex flex-col justify-between">
           <div>
             {/* Top Identity Strip */}
             <div className="flex items-center justify-between pb-4 border-b border-slate-200/80 dark:border-white/10">
@@ -271,7 +271,7 @@ export default function ImageResizer() {
   const inspectorContent = (
     <div className="flex flex-col gap-5">
       {/* Dimension Studio Console */}
-      <div className="p-5 rounded-2xl bg-slate-50/90 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.08] space-y-4">
+      <div className="p-5 rounded-2xl bg-slate-50/90 dark:bg-[#141824]/90 border border-slate-200/80 dark:border-white/[0.07] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-4">
         <div className="flex items-center justify-between">
           <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 block font-bold">
             DIMENSION STUDIO
@@ -285,7 +285,7 @@ export default function ImageResizer() {
             className={`text-xs font-mono font-semibold px-2.5 py-1 rounded-lg transition-all border flex items-center gap-1.5 cursor-pointer ${
               lockRatio
                 ? 'bg-blue-500/15 border-blue-500/40 text-blue-600 dark:text-blue-400 shadow-xs'
-                : 'bg-slate-200/60 dark:bg-white/[0.06] border-slate-300 dark:border-white/10 text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                : 'bg-slate-200/60 dark:bg-[#10131C] border-slate-300 dark:border-white/[0.08] text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
             }`}
           >
             {lockRatio ? (
@@ -355,7 +355,7 @@ export default function ImageResizer() {
       </div>
 
       {/* Visual Aspect-Ratio Bento Presets */}
-      <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/90 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.08] space-y-3">
+      <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/90 dark:bg-[#141824]/90 border border-slate-200/80 dark:border-white/[0.07] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-3">
         <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 block font-bold">
           STANDARD PRESETS
         </span>
@@ -371,7 +371,7 @@ export default function ImageResizer() {
                 className={`p-2.5 rounded-xl text-left transition-all border flex flex-col justify-between cursor-pointer ${
                   isSelected
                     ? 'bg-blue-500/10 border-blue-500/60 shadow-xs'
-                    : 'bg-white dark:bg-white/[0.03] border-slate-200/80 dark:border-white/[0.07] hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50 dark:hover:bg-white/[0.06]'
+                    : 'bg-white dark:bg-[#10131C] border-slate-200/80 dark:border-white/[0.06] hover:border-slate-300 dark:hover:border-blue-500/40 hover:bg-slate-50 dark:hover:bg-[#191E2D]'
                 }`}
               >
                 <div className="flex items-center justify-between gap-1 mb-1">
@@ -419,7 +419,7 @@ export default function ImageResizer() {
             type="button"
             onClick={processImage}
             disabled={!file || !width || !height || isProcessing}
-            className="w-full py-4 rounded-xl font-bold text-sm transition-all bg-gradient-to-b from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-[0_8px_24px_-4px_rgba(37,99,235,0.45),inset_0_1px_0_rgba(255,255,255,0.25)] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-4 rounded-xl font-bold text-sm transition-all bg-gradient-to-b from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-[0_8px_24px_-4px_rgba(37,99,235,0.45),inset_0_1px_0_rgba(255,255,255,0.25)] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:dark:bg-blue-500/10 disabled:dark:text-blue-300/40 disabled:dark:border disabled:dark:border-blue-500/20 disabled:dark:shadow-none flex items-center justify-center gap-2 cursor-pointer"
           >
             {isProcessing ? (
               <>
@@ -434,7 +434,7 @@ export default function ImageResizer() {
       </div>
 
       {/* Micro-Trust & Specs Card */}
-      <div className="p-4 rounded-2xl bg-slate-50/60 dark:bg-white/[0.02] border border-slate-200/60 dark:border-white/[0.06] space-y-2 text-xs font-mono text-slate-500 dark:text-slate-400">
+      <div className="p-4 rounded-2xl bg-slate-50/60 dark:bg-[#141824]/90 border border-slate-200/60 dark:border-white/[0.07] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-2 text-xs font-mono text-slate-500 dark:text-slate-400">
         <div className="flex items-center justify-between">
           <span>Resampling</span>
           <span className="text-slate-700 dark:text-slate-300 font-semibold">Bicubic / Lanczos-3</span>
