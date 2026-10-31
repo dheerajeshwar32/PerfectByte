@@ -1,4 +1,5 @@
 import { useState, useRef, type ChangeEvent, type DragEvent } from 'react';
+import { Sparkles, ChevronUp, ChevronDown } from 'lucide-react';
 import ToolShell from './ToolShell';
 import TargetScrubber from './TargetScrubber';
 import StudioDropzone from './components/StudioDropzone';
@@ -463,13 +464,25 @@ export default function TargetCompressor() {
       <button
         type="button"
         onClick={() => setIsAiDrawerOpen(!isAiDrawerOpen)}
-        className="w-full flex items-center justify-between text-xs font-mono font-bold text-slate-700 dark:text-slate-300 hover:text-purple-500 transition-colors"
+        className="w-full flex items-center justify-between text-xs font-mono font-bold text-slate-700 dark:text-slate-300 hover:text-purple-500 transition-colors cursor-pointer"
       >
         <span className="flex items-center gap-2">
-          <span className="text-purple-500">✦</span>
+          <Sparkles className="w-3.5 h-3.5 text-purple-500" />
           <span>AI ASSISTANT COMMAND DRAWER</span>
         </span>
-        <span className="text-[10px] text-slate-400">{isAiDrawerOpen ? '▲ Close' : '▼ Expand'}</span>
+        <span className="text-[10px] text-slate-400 flex items-center gap-1">
+          {isAiDrawerOpen ? (
+            <>
+              <ChevronUp className="w-3 h-3" />
+              <span>Close</span>
+            </>
+          ) : (
+            <>
+              <ChevronDown className="w-3 h-3" />
+              <span>Expand</span>
+            </>
+          )}
+        </span>
       </button>
 
       {isAiDrawerOpen && (

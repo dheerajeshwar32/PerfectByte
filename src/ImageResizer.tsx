@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { Lock, Unlock } from 'lucide-react';
 import ToolShell from './ToolShell';
 import StudioDropzone from './components/StudioDropzone';
 import { useDocumentTitle } from './useDocumentTitle';
@@ -281,13 +282,23 @@ export default function ImageResizer() {
               setLockRatio(!lockRatio);
               haptic(8);
             }}
-            className={`text-xs font-mono font-semibold px-2.5 py-1 rounded-lg transition-all border ${
+            className={`text-xs font-mono font-semibold px-2.5 py-1 rounded-lg transition-all border flex items-center gap-1.5 cursor-pointer ${
               lockRatio
                 ? 'bg-blue-500/15 border-blue-500/40 text-blue-600 dark:text-blue-400 shadow-xs'
                 : 'bg-slate-200/60 dark:bg-white/[0.06] border-slate-300 dark:border-white/10 text-slate-500 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
-            {lockRatio ? '🔒 Aspect Ratio Locked' : '🔓 Freeform Mode'}
+            {lockRatio ? (
+              <>
+                <Lock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                <span>Locked 1:1</span>
+              </>
+            ) : (
+              <>
+                <Unlock className="w-3.5 h-3.5" />
+                <span>Freeform Mode</span>
+              </>
+            )}
           </button>
         </div>
 
@@ -344,12 +355,12 @@ export default function ImageResizer() {
       </div>
 
       {/* Visual Aspect-Ratio Bento Presets */}
-      <div className="p-5 rounded-2xl bg-slate-50/90 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.08] space-y-3">
+      <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/90 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.08] space-y-3">
         <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 block font-bold">
           STANDARD PRESETS
         </span>
 
-        <div className="grid grid-cols-2 gap-2 max-h-[220px] overflow-y-auto pr-1">
+        <div className="grid grid-cols-2 gap-2.5">
           {PRESETS.map((p) => {
             const isSelected = width === p.width && height === p.height;
             return (
@@ -357,7 +368,7 @@ export default function ImageResizer() {
                 key={p.label}
                 type="button"
                 onClick={() => handlePresetClick(p)}
-                className={`p-2.5 rounded-xl text-left transition-all border flex flex-col justify-between ${
+                className={`p-2.5 rounded-xl text-left transition-all border flex flex-col justify-between cursor-pointer ${
                   isSelected
                     ? 'bg-blue-500/10 border-blue-500/60 shadow-xs'
                     : 'bg-white dark:bg-white/[0.03] border-slate-200/80 dark:border-white/[0.07] hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50 dark:hover:bg-white/[0.06]'

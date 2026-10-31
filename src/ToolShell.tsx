@@ -2,6 +2,17 @@ import { type ReactNode, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTheme } from './ThemeContext';
+import {
+  Target,
+  Zap,
+  FileText,
+  Maximize2,
+  Sparkles,
+  History as HistoryIcon,
+  Sun,
+  Moon,
+  ArrowLeft,
+} from 'lucide-react';
 
 interface ToolShellProps {
   /** Content for the interactive left stage (7 columns on desktop) */
@@ -23,11 +34,11 @@ interface ToolShellProps {
 }
 
 const TOOL_TABS = [
-  { path: '/target-size', label: 'Target Size', icon: '🎯' },
-  { path: '/bulk-compress', label: 'Bulk', icon: '⚡' },
-  { path: '/pdf-tools', label: 'PDF Studio', icon: '📄' },
-  { path: '/resize', label: 'Resizer', icon: '📐' },
-  { path: '/assistant', label: 'AI Command', icon: '✦' },
+  { path: '/target-size', label: 'Target Size', icon: Target },
+  { path: '/bulk-compress', label: 'Bulk', icon: Zap },
+  { path: '/pdf-tools', label: 'PDF Studio', icon: FileText },
+  { path: '/resize', label: 'Resizer', icon: Maximize2 },
+  { path: '/assistant', label: 'AI Command', icon: Sparkles },
 ];
 
 export default function ToolShell({
@@ -82,9 +93,7 @@ export default function ToolShell({
               aria-label="Back to Home"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-white/[0.06] dark:hover:bg-white/[0.1] text-xs font-semibold text-slate-700 dark:text-slate-300 transition-all border border-slate-200/60 dark:border-white/10 shadow-xs"
             >
-              <svg className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-              </svg>
+              <ArrowLeft className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
               <span>Home</span>
             </Link>
 
@@ -112,6 +121,7 @@ export default function ToolShell({
           >
             {TOOL_TABS.map((tab) => {
               const isActive = location.pathname === tab.path;
+              const IconComp = tab.icon;
               return (
                 <Link
                   key={tab.path}
@@ -129,7 +139,9 @@ export default function ToolShell({
                       transition={{ type: 'spring', stiffness: 450, damping: 35 }}
                     />
                   )}
-                  <span className="relative z-10 text-[11px]">{tab.icon}</span>
+                  <span className="relative z-10 flex items-center">
+                    <IconComp className="w-3.5 h-3.5" />
+                  </span>
                   <span className="relative z-10">{tab.label}</span>
                 </Link>
               );
@@ -148,9 +160,10 @@ export default function ToolShell({
                 }
               }}
               title="AI Command (⌘J)"
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-400 border border-purple-500/20 text-xs font-semibold font-mono transition-all shadow-xs"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-400 border border-purple-500/20 text-xs font-semibold font-mono transition-all shadow-xs cursor-pointer"
             >
-              <span>✦ AI</span>
+              <Sparkles className="w-3.5 h-3.5 text-purple-500" />
+              <span>AI</span>
               <kbd className="hidden sm:inline-block text-[10px] bg-purple-500/20 px-1 rounded font-bold">⌘J</kbd>
             </button>
 
@@ -160,9 +173,7 @@ export default function ToolShell({
               aria-label="View History"
               className="px-2.5 sm:px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-white/[0.06] dark:hover:bg-white/[0.1] text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200/60 dark:border-white/10 flex items-center gap-1.5 transition-all shadow-xs"
             >
-              <svg className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+              <HistoryIcon className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
               <span className="hidden sm:inline">History</span>
             </Link>
 
@@ -170,16 +181,12 @@ export default function ToolShell({
             <button
               onClick={toggleTheme}
               aria-label="Toggle Theme"
-              className="p-1.5 sm:p-2 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-white/[0.06] dark:hover:bg-white/[0.1] text-slate-700 dark:text-slate-300 border border-slate-200/60 dark:border-white/10 transition-all shadow-xs"
+              className="p-1.5 sm:p-2 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-white/[0.06] dark:hover:bg-white/[0.1] text-slate-700 dark:text-slate-300 border border-slate-200/60 dark:border-white/10 transition-all shadow-xs cursor-pointer"
             >
               {isDark ? (
-                <svg className="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
+                <Sun className="w-4 h-4 text-amber-400" />
               ) : (
-                <svg className="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </svg>
+                <Moon className="w-4 h-4 text-indigo-600" />
               )}
             </button>
           </div>
@@ -206,18 +213,20 @@ export default function ToolShell({
             </div>
           </div>
 
-          {/* 12-Column Studio Bento Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 flex-1 items-start">
+          {/* 12-Column Studio Bento Grid (items-stretch ensures equal height columns) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 flex-1 items-stretch">
             {/* Left 7 Columns: Interactive Canvas / Stage */}
-            <section className="lg:col-span-7 flex flex-col w-full h-full min-w-0" aria-label="Interactive Canvas">
+            <section className="lg:col-span-7 flex flex-col w-full min-w-0" aria-label="Interactive Canvas">
               {canvas}
             </section>
 
             {/* Right 5 Columns: Precision Inspector Console */}
-            <aside className="lg:col-span-5 flex flex-col w-full min-w-0 space-y-5" aria-label="Inspector Controls">
-              {inspector}
+            <aside className="lg:col-span-5 flex flex-col justify-between w-full min-w-0 space-y-4" aria-label="Inspector Controls">
+              <div className="space-y-4 flex-1">
+                {inspector}
+              </div>
               {aiDrawer && (
-                <div className="pt-2">
+                <div className="pt-2 shrink-0">
                   {aiDrawer}
                 </div>
               )}

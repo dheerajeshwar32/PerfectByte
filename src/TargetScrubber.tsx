@@ -1,5 +1,14 @@
 import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { haptic } from './usePWA';
+import {
+  Landmark,
+  FileCheck,
+  MessageCircle,
+  GraduationCap,
+  Briefcase,
+  Mail,
+  Zap,
+} from 'lucide-react';
 
 interface TargetScrubberProps {
   value: number; // in KB
@@ -22,12 +31,12 @@ const DETENTS = [
 ];
 
 const PRESETS = [
-  { label: 'Govt Portal', sub: '100,000 bytes', icon: '🏛️', kb: 100 },
-  { label: 'Strict Portal', sub: '200,000 bytes', icon: '📋', kb: 200 },
-  { label: 'WhatsApp', sub: '50,000 bytes', icon: '💬', kb: 50 },
-  { label: 'University', sub: '500,000 bytes', icon: '🎓', kb: 500 },
-  { label: 'LinkedIn', sub: '2,000,000 bytes', icon: '💼', kb: 2000 },
-  { label: 'Email Safe', sub: '5,000,000 bytes', icon: '📧', kb: 5000 },
+  { label: 'Govt Portal', sub: '100,000 bytes', icon: Landmark, kb: 100 },
+  { label: 'Strict Portal', sub: '200,000 bytes', icon: FileCheck, kb: 200 },
+  { label: 'WhatsApp', sub: '50,000 bytes', icon: MessageCircle, kb: 50 },
+  { label: 'University', sub: '500,000 bytes', icon: GraduationCap, kb: 500 },
+  { label: 'LinkedIn', sub: '2,000,000 bytes', icon: Briefcase, kb: 2000 },
+  { label: 'Email Safe', sub: '5,000,000 bytes', icon: Mail, kb: 5000 },
 ];
 
 function kbToPercent(kb: number, min: number, max: number): number {
@@ -103,13 +112,13 @@ export default function TargetScrubber({
   const isAtDetent = DETENTS.some((d) => d.kb === value);
 
   return (
-    <div className="space-y-5 rounded-2xl p-5 border border-slate-200/80 dark:border-white/[0.08] bg-white/60 dark:bg-white/[0.03] backdrop-blur-md shadow-xs">
+    <div className="space-y-4 rounded-2xl p-4 sm:p-5 border border-slate-200/80 dark:border-white/[0.08] bg-white/60 dark:bg-white/[0.03] backdrop-blur-md shadow-xs">
       {/* ─── Digital Byte Readout Hardware Card ─── */}
-      <div className="relative overflow-hidden rounded-2xl p-5 bg-gradient-to-b from-slate-900 to-slate-950 text-white shadow-xl border border-slate-800">
+      <div className="relative overflow-hidden rounded-2xl p-4 bg-gradient-to-b from-slate-900 to-slate-950 text-white shadow-xl border border-slate-800">
         {/* Subtle grid mesh background */}
         <div className="absolute inset-0 pb-dot-matrix opacity-20 pointer-events-none" />
 
-        <div className="relative z-10 flex items-center justify-between mb-3">
+        <div className="relative z-10 flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <span className="text-[10px] font-mono uppercase font-bold tracking-widest text-slate-400">
               TARGET CAPACITY
@@ -122,15 +131,16 @@ export default function TargetScrubber({
 
           {isAtDetent && (
             <span className="text-[10px] font-mono text-emerald-400 font-bold flex items-center gap-1">
+              <Zap className="w-3 h-3 text-emerald-400" />
               <span>MAGNETIC SNAP</span>
             </span>
           )}
         </div>
 
         {/* Center Readout */}
-        <div className="relative z-10 flex flex-col items-center justify-center py-2">
+        <div className="relative z-10 flex flex-col items-center justify-center py-1">
           {isEditing ? (
-            <div className="flex items-baseline gap-2 px-4 py-2 rounded-xl bg-white/10 border border-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.3)]">
+            <div className="flex items-baseline gap-2 px-4 py-1.5 rounded-xl bg-white/10 border border-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.3)]">
               <input
                 ref={inputRef}
                 type="number"
@@ -147,9 +157,9 @@ export default function TargetScrubber({
                 min={min}
                 max={max}
                 aria-label="Target file size in kilobytes"
-                className="w-32 text-5xl font-extrabold font-mono tabular-nums text-center bg-transparent outline-none text-white tracking-tight"
+                className="w-32 text-4xl sm:text-5xl font-extrabold font-mono tabular-nums text-center bg-transparent outline-none text-white tracking-tight"
               />
-              <span className="text-2xl font-black text-blue-400 font-mono">KB</span>
+              <span className="text-xl sm:text-2xl font-black text-blue-400 font-mono">KB</span>
             </div>
           ) : (
             <button
@@ -159,14 +169,14 @@ export default function TargetScrubber({
                 setIsEditing(true);
               }}
               disabled={disabled}
-              className="group flex items-baseline gap-2 px-5 py-2 rounded-xl hover:bg-white/[0.06] transition-all cursor-text"
+              className="group flex items-baseline gap-2 px-4 py-1 rounded-xl hover:bg-white/[0.06] transition-all cursor-text"
               aria-label={`Target: ${value} KB. Click to directly type size.`}
               title="Click to type exact byte size"
             >
-              <span className="text-5xl font-extrabold font-mono tabular-nums text-white tracking-tight drop-shadow-md">
+              <span className="text-4xl sm:text-5xl font-extrabold font-mono tabular-nums text-white tracking-tight drop-shadow-md">
                 {value.toLocaleString()}
               </span>
-              <span className="text-2xl font-bold text-blue-400 font-mono">KB</span>
+              <span className="text-xl sm:text-2xl font-bold text-blue-400 font-mono">KB</span>
               <span className="opacity-0 group-hover:opacity-100 text-[10px] text-slate-400 font-mono transition-opacity ml-1.5">
                 [EDIT]
               </span>
@@ -174,27 +184,36 @@ export default function TargetScrubber({
           )}
 
           {/* Dual-Unit Live Telemetry Badges */}
-          <div className="flex items-center gap-2.5 mt-2.5 text-xs font-mono tabular-nums text-slate-400">
-            <span className="px-2.5 py-1 rounded-md bg-white/[0.06] border border-white/10 text-slate-200 font-semibold">
+          <div className="flex items-center gap-2 mt-2 text-xs font-mono tabular-nums text-slate-400">
+            <span className="px-2 py-0.5 rounded-md bg-white/[0.06] border border-white/10 text-slate-200 font-semibold text-[11px]">
               {targetBytes.toLocaleString()} bytes
             </span>
             <span>•</span>
-            <span className="px-2.5 py-1 rounded-md bg-white/[0.06] border border-white/10 text-slate-200 font-semibold">
+            <span className="px-2 py-0.5 rounded-md bg-white/[0.06] border border-white/10 text-slate-200 font-semibold text-[11px]">
               {(targetBytes / 1024).toFixed(1)} KiB
             </span>
           </div>
         </div>
       </div>
 
-      {/* ─── Tactile Ruler Scrubber Track ─── */}
-      <div className="space-y-2">
-        <div className="relative pt-1">
-          {/* Custom fill overlay */}
+      {/* ─── Unified Tactile Ruler Scrubber Track ─── */}
+      <div className="space-y-1.5 pt-0.5">
+        <div className="relative py-2 flex items-center">
+          {/* Single unified custom slider track */}
+          <div className="relative h-2 w-full rounded-full bg-slate-200 dark:bg-white/10 overflow-hidden">
+            <div
+              className="absolute left-0 top-0 h-full rounded-full bg-blue-600"
+              style={{ width: `${sliderPercent}%` }}
+            />
+          </div>
+
+          {/* Active Thumb centered vertically on track */}
           <div
-            className="absolute top-1 left-0 h-2 rounded-l-full bg-gradient-to-r from-blue-500 to-indigo-500 pointer-events-none z-10"
-            style={{ width: `${sliderPercent}%` }}
+            className="pointer-events-none absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-white dark:bg-[#1E2028] border-2 border-blue-600 shadow-[0_2px_8px_rgba(37,99,235,0.45)] z-10 transition-transform active:scale-110"
+            style={{ left: `calc(10px + (${sliderPercent} / 100) * (100% - 20px))` }}
           />
 
+          {/* Invisible interactive range input covering the full slider */}
           <input
             type="range"
             min="0"
@@ -204,79 +223,80 @@ export default function TargetScrubber({
             onChange={(e) => handleSliderChange(Number(e.target.value))}
             disabled={disabled}
             aria-label="Target file size scrubber"
-            className="scrubber-track relative z-20 cursor-grab active:cursor-grabbing w-full"
+            className="absolute inset-0 w-full h-full opacity-0 cursor-grab active:cursor-grabbing z-20"
           />
+        </div>
 
-          {/* SVG Ruler Tick Marks & Graduations */}
-          <div className="relative w-full h-8 mt-1.5 overflow-hidden">
-            <svg className="w-full h-full select-none" viewBox="0 0 1000 32" preserveAspectRatio="none">
-              {Array.from({ length: 41 }, (_, i) => {
-                const x = (i / 40) * 1000;
-                return (
+        {/* SVG Ruler Tick Marks & Graduations with px-2 horizontal padding */}
+        <div className="relative w-full h-8 px-2 select-none">
+          <svg className="w-full h-full select-none" viewBox="0 0 1000 32" preserveAspectRatio="none">
+            {Array.from({ length: 41 }, (_, i) => {
+              const x = (i / 40) * 1000;
+              return (
+                <line
+                  key={`fine-${i}`}
+                  x1={x}
+                  y1={0}
+                  x2={x}
+                  y2={i % 4 === 0 ? 8 : 4}
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  className="text-slate-300 dark:text-zinc-700"
+                />
+              );
+            })}
+
+            {DETENTS.map((d) => {
+              const pct = kbToPercent(d.kb, min, max);
+              const x = (pct / 100) * 1000;
+              const isSelected = d.kb === value;
+
+              return (
+                <g
+                  key={d.label}
+                  onClick={() => {
+                    onChange(d.kb);
+                    haptic(10);
+                  }}
+                  className="cursor-pointer"
+                >
                   <line
-                    key={`fine-${i}`}
                     x1={x}
                     y1={0}
                     x2={x}
-                    y2={i % 4 === 0 ? 8 : 4}
-                    stroke="currentColor"
-                    strokeWidth="1"
-                    className="text-slate-300 dark:text-zinc-700"
+                    y2={isSelected ? 16 : 10}
+                    stroke={isSelected ? '#3B82F6' : 'currentColor'}
+                    strokeWidth={isSelected ? '2.5' : '1.5'}
+                    className={isSelected ? '' : 'text-slate-400 dark:text-zinc-600'}
                   />
-                );
-              })}
-
-              {DETENTS.map((d) => {
-                const pct = kbToPercent(d.kb, min, max);
-                const x = (pct / 100) * 1000;
-                const isSelected = d.kb === value;
-
-                return (
-                  <g
-                    key={d.label}
-                    onClick={() => {
-                      onChange(d.kb);
-                      haptic(10);
-                    }}
-                    className="cursor-pointer"
+                  <text
+                    x={x}
+                    y={28}
+                    textAnchor="middle"
+                    fontSize="9.5"
+                    fontWeight={isSelected ? 'bold' : 'normal'}
+                    fill={isSelected ? '#3B82F6' : 'currentColor'}
+                    className={isSelected ? '' : 'text-slate-400 dark:text-zinc-500 hover:text-slate-700'}
+                    fontFamily="ui-monospace, monospace"
                   >
-                    <line
-                      x1={x}
-                      y1={0}
-                      x2={x}
-                      y2={isSelected ? 16 : 10}
-                      stroke={isSelected ? '#3B82F6' : 'currentColor'}
-                      strokeWidth={isSelected ? '2.5' : '1.5'}
-                      className={isSelected ? '' : 'text-slate-400 dark:text-zinc-600'}
-                    />
-                    <text
-                      x={x}
-                      y={28}
-                      textAnchor="middle"
-                      fontSize="9.5"
-                      fontWeight={isSelected ? 'bold' : 'normal'}
-                      fill={isSelected ? '#3B82F6' : 'currentColor'}
-                      className={isSelected ? '' : 'text-slate-400 dark:text-zinc-500 hover:text-slate-700'}
-                      fontFamily="ui-monospace, monospace"
-                    >
-                      {d.label}
-                    </text>
-                  </g>
-                );
-              })}
-            </svg>
-          </div>
+                    {d.label}
+                  </text>
+                </g>
+              );
+            })}
+          </svg>
         </div>
       </div>
 
-      {/* ─── Quick Portal Presets Grid (2-Column Bento Tiles with Byte Sub-Labels) ─── */}
-      <div className="space-y-2 pt-1">
+      {/* ─── Quick Portal Presets Grid (2-Column Bento Tiles with lucide-react vector icons) ─── */}
+      <div className="space-y-2 pt-0.5">
         <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-bold block">
           QUICK PORTAL LIMITS
         </span>
         <div className="grid grid-cols-2 gap-2">
           {PRESETS.map((p) => {
             const isCurrent = value === p.kb;
+            const IconComp = p.icon;
             return (
               <button
                 key={p.label}
@@ -285,24 +305,28 @@ export default function TargetScrubber({
                   onChange(p.kb);
                   haptic(10);
                 }}
-                disabled={disabled}
-                className={`p-3 rounded-xl transition-all text-left flex flex-col justify-between border ${
+                className={`p-2.5 rounded-xl text-left transition-all border flex items-center gap-2.5 ${
                   isCurrent
-                    ? 'bg-blue-500 text-white border-blue-600 shadow-[0_4px_16px_rgba(59,130,246,0.35)] scale-[1.02]'
-                    : 'bg-white/80 dark:bg-white/[0.04] text-slate-700 dark:text-slate-300 border-slate-200/80 dark:border-white/[0.08] hover:bg-slate-100 dark:hover:bg-white/[0.08] hover:border-blue-400/50'
+                    ? 'bg-blue-500/10 border-blue-500/60 shadow-xs'
+                    : 'bg-white dark:bg-white/[0.03] border-slate-200/80 dark:border-white/[0.07] hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-50 dark:hover:bg-white/[0.06]'
                 }`}
               >
-                <div className="flex items-center justify-between w-full mb-1">
-                  <span className="text-base">{p.icon}</span>
-                  {isCurrent && <span className="w-2 h-2 rounded-full bg-white animate-pulse" />}
-                </div>
-                <div className="font-semibold text-xs leading-tight">{p.label}</div>
                 <div
-                  className={`text-[10px] font-mono mt-1 ${
-                    isCurrent ? 'text-blue-100' : 'text-slate-400 dark:text-slate-500'
+                  className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
+                    isCurrent
+                      ? 'bg-blue-500 text-white shadow-xs'
+                      : 'bg-blue-500/10 dark:bg-blue-500/15 text-blue-600 dark:text-blue-400'
                   }`}
                 >
-                  {p.sub}
+                  <IconComp className="w-4 h-4" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                    {p.label}
+                  </div>
+                  <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400 font-medium">
+                    {p.sub}
+                  </div>
                 </div>
               </button>
             );
