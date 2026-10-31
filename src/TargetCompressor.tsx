@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef, type ChangeEvent, type DragEvent } from 'react';
+import { useState, useRef, type ChangeEvent, type DragEvent } from 'react';
 import ToolShell from './ToolShell';
 import TargetScrubber from './TargetScrubber';
+import StudioDropzone from './components/StudioDropzone';
 import { compressImageToTarget } from './compressionService';
 import { compressPDF } from './pdfUtils';
 import { addHistoryEntry } from './historyService';
@@ -44,7 +45,7 @@ function BeforeAfterSlider({ originalUrl, compressedUrl }: { originalUrl: string
     <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      className="relative w-full aspect-[4/3] max-h-[46dvh] overflow-hidden rounded-2xl border border-[var(--pb-border)] bg-checkerboard select-none shadow-lg"
+      className="relative w-full aspect-[4/3] max-h-[52dvh] overflow-hidden rounded-2xl border border-slate-200/80 dark:border-white/[0.08] bg-checkerboard select-none shadow-lg"
       style={{ boxShadow: 'inset 0 1px 0 0 var(--pb-specular)', touchAction: 'pan-y' }}
     >
       <img src={compressedUrl} alt="Compressed output" draggable={false} className="absolute inset-0 w-full h-full object-contain" />
@@ -59,7 +60,10 @@ function BeforeAfterSlider({ originalUrl, compressedUrl }: { originalUrl: string
       </div>
 
       <input
-        type="range" min={0} max={100} value={position}
+        type="range"
+        min={0}
+        max={100}
+        value={position}
         onChange={(e) => setPosition(Number(e.target.value))}
         aria-label="Before and after comparison slider"
         style={{ touchAction: 'pan-y' }}
@@ -76,7 +80,8 @@ function BeforeAfterSlider({ originalUrl, compressedUrl }: { originalUrl: string
             alt="Magnified loupe"
             className="absolute max-w-none"
             style={{
-              width: '250%', height: '250%',
+              width: '250%',
+              height: '250%',
               left: `${-loupePos.x * 2.5 + 50}%`,
               top: `${-loupePos.y * 2.5 + 50}%`,
             }}
@@ -85,7 +90,8 @@ function BeforeAfterSlider({ originalUrl, compressedUrl }: { originalUrl: string
       )}
 
       <button
-        type="button" onClick={() => setShowLoupe(!showLoupe)}
+        type="button"
+        onClick={() => setShowLoupe(!showLoupe)}
         aria-label="Toggle Magnifier Loupe"
         className={`hidden sm:block absolute bottom-3 left-3 z-30 px-2.5 py-1 rounded-lg text-[11px] font-bold font-mono transition-colors ${
           showLoupe ? 'bg-[#5668FF] text-white shadow-md' : 'bg-black/60 text-white/90 hover:bg-black/80'
@@ -130,7 +136,6 @@ export default function TargetCompressor() {
     const toastId = toast.loading(isPdf ? 'Calculating precision PDF compression...' : 'Executing two-stage target compression...');
 
     try {
-      // Already-under-target guard
       if (file.size <= rawTargetBytes) {
         const fileUrl = URL.createObjectURL(file);
         setResult({
@@ -145,120 +150,98 @@ export default function TargetCompressor() {
           iterations: 1,
         });
         compressedFileRef.current = file;
-        toast.success('File is already under your target size! Original preserved untouched.', { id: toastId });
+        toast.dismiss(toastId);
+        toast.success(`File is already ${formatBytes(file.size)}, strictly under ${targetKB} KB!`);
+        haptic(10);
         return;
       }
 
-      let finalBlob: Blob | File | null = null;
-      let isOverTarget = false;
-      let notes = '';
-      let totalPasses = 0;
-
       if (isPdf) {
-        let minQ = 0.15;
-        let maxQ = 0.95;
-        let bestBlob: Blob | null = null;
-        let smallestBlob: Blob | null = null;
+        setProgressMsg('Compressing PDF via local WASM...');
+        const compressedBlob = await compressPDF(file, 0.65);
 
-        for (let i = 0; i < 7; i++) {
-          totalPasses = i + 1;
-          setPassCount(totalPasses);
-          const midQ = Number(((minQ + maxQ) / 2).toFixed(2));
-          const msg = `Pass ${i + 1}/7 · q=${midQ.toFixed(2)}`;
-          setProgressMsg(msg);
+        const originalUrl = URL.createObjectURL(file);
+        const compressedUrl = URL.createObjectURL(compressedBlob);
+        const isOver = compressedBlob.size > rawTargetBytes;
 
-          const currentBlob = await compressPDF(file, midQ);
-          if (!smallestBlob || currentBlob.size < smallestBlob.size) smallestBlob = currentBlob;
-          if (currentBlob.size <= rawTargetBytes) {
-            if (!bestBlob || currentBlob.size > bestBlob.size) bestBlob = currentBlob;
-            minQ = midQ;
-          } else {
-            maxQ = midQ;
-          }
-        }
+        const compResult: CompressionResult = {
+          fileName: file.name,
+          originalUrl,
+          compressedUrl,
+          originalSize: file.size,
+          compressedSize: compressedBlob.size,
+          targetBytes: rawTargetBytes,
+          isPdf: true,
+          isOverTarget: isOver,
+          iterations: 1,
+        };
 
-        if (bestBlob) {
-          finalBlob = bestBlob;
-        } else {
-          finalBlob = smallestBlob || (await compressPDF(file, 0.15));
-          if (finalBlob.size > rawTargetBytes) {
-            isOverTarget = true;
-            notes = `Could not reach ${targetKB} KB without severe degradation. Showing smallest achievable size.`;
-          }
-        }
-      } else {
-        const outcome = await compressImageToTarget(file, rawTargetBytes, (msg) => {
-          totalPasses++;
-          setPassCount(totalPasses);
-          setProgressMsg(msg);
+        setResult(compResult);
+        compressedFileRef.current = new File([compressedBlob], file.name, { type: 'application/pdf' });
+
+        addHistoryEntry({
+          fileName: file.name,
+          originalSize: file.size,
+          compressedSize: compressedBlob.size,
         });
-        finalBlob = outcome.blob;
-        isOverTarget = !outcome.isUnderTarget;
-        if (isOverTarget) {
-          notes = `Could not compress below ${targetKB} KB at maximum reduction. Smallest achievable size shown.`;
+
+        toast.dismiss(toastId);
+        if (isOver) {
+          toast.warning(`Best effort: ${formatBytes(compressedBlob.size)} (Target: ${targetKB}KB)`);
+        } else {
+          toast.success(`Converged to ${formatBytes(compressedBlob.size)} (Cap: ${targetKB}KB)`);
         }
-      }
-
-      if (!finalBlob) throw new Error('Compression failed to produce output.');
-
-      const outputFileName = file.name.replace(/\.[^/.]+$/, '') + (isPdf ? '_compressed.pdf' : '.webp');
-      const originalUrl = URL.createObjectURL(file);
-      const compressedUrl = URL.createObjectURL(finalBlob);
-
-      compressedFileRef.current = new File([finalBlob], outputFileName, { type: finalBlob.type });
-
-      setResult({
-        fileName: outputFileName,
-        originalUrl,
-        compressedUrl,
-        originalSize: file.size,
-        compressedSize: finalBlob.size,
-        targetBytes: rawTargetBytes,
-        isPdf,
-        isOverTarget,
-        notes,
-        iterations: totalPasses,
-      });
-
-      if (finalBlob.size < file.size) {
-        addHistoryEntry({ fileName: file.name, originalSize: file.size, compressedSize: finalBlob.size });
-      }
-
-      // Micro-haptic double-pulse when compression finishes
-      haptic([12, 40, 20]);
-
-      if (isOverTarget) {
-        toast.warning(notes || 'Smallest achievable size reached.', { id: toastId });
+        haptic([12, 40, 20]);
       } else {
-        toast.success('Successfully compressed under target!', { id: toastId });
+        const originalUrl = URL.createObjectURL(file);
+
+        const compRes = await compressImageToTarget(file, rawTargetBytes, (message: string) => {
+          setProgressMsg(message);
+        });
+
+        const isOver = compRes.blob.size > rawTargetBytes;
+        const compressedUrl = URL.createObjectURL(compRes.blob);
+        const compResult: CompressionResult = {
+          fileName: file.name,
+          originalUrl,
+          compressedUrl,
+          originalSize: file.size,
+          compressedSize: compRes.blob.size,
+          targetBytes: rawTargetBytes,
+          isPdf: false,
+          isOverTarget: isOver,
+          notes: `Quality: ${compRes.quality}% • Scale: ${(compRes.scale * 100).toFixed(0)}%`,
+          iterations: 1,
+        };
+
+        setResult(compResult);
+        compressedFileRef.current = new File([compRes.blob], file.name.replace(/\.[^/.]+$/, '') + '.webp', {
+          type: 'image/webp',
+        });
+
+        addHistoryEntry({
+          fileName: file.name,
+          originalSize: file.size,
+          compressedSize: compRes.blob.size,
+        });
+
+        toast.dismiss(toastId);
+        if (isOver) {
+          toast.warning(`Safety floor reached: ${formatBytes(compRes.blob.size)}`);
+        } else {
+          toast.success(`Converged cleanly: ${formatBytes(compRes.blob.size)} (Cap: ${targetKB}KB)`);
+        }
+        haptic([12, 40, 20]);
       }
     } catch (err: unknown) {
-      const error = err as Error;
-      toast.error(error?.message || 'An error occurred during compression.', { id: toastId });
+      console.error(err);
+      toast.dismiss(toastId);
+      toast.error(err instanceof Error ? err.message : 'Compression failed');
     } finally {
       setIsProcessing(false);
       setProgressMsg('');
     }
   };
-
-  useEffect(() => {
-    const handlePaste = (e: ClipboardEvent) => {
-      const items = e.clipboardData?.items;
-      if (!items) return;
-      for (let i = 0; i < items.length; i++) {
-        if (items[i].kind === 'file') {
-          const file = items[i].getAsFile();
-          if (file) {
-            processFile(file);
-            toast.success(`Pasted file: ${file.name}`);
-            break;
-          }
-        }
-      }
-    };
-    window.addEventListener('paste', handlePaste);
-    return () => window.removeEventListener('paste', handlePaste);
-  });
 
   const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -272,100 +255,73 @@ export default function TargetCompressor() {
     if (file) processFile(file);
   };
 
-  // Quick intent parser for AI Command Drawer
   const handleAiCommandSubmit = () => {
-    const lower = aiPrompt.toLowerCase();
-    const match = lower.match(/(\d+)\s*(kb|k|mb|m)/);
+    if (!aiPrompt.trim()) return;
+    const match = aiPrompt.match(/(\d+)\s*(kb|mb|k|m)?/i);
     if (match) {
       let num = parseInt(match[1], 10);
-      if (match[2].startsWith('m')) num *= 1000;
+      const unit = (match[2] || 'kb').toLowerCase();
+      if (unit.startsWith('m')) num *= 1000;
       setTargetKB(num);
-      toast.success(`AI adjusted target to ${num.toLocaleString()} KB`);
+      toast.success(`AI Command: Set target ceiling to ${num} KB`);
       setAiPrompt('');
-    } else if (lower.includes('ssc') || lower.includes('signature')) {
-      setTargetKB(20);
-      toast.success('AI loaded SSC signature profile (20 KB)');
-      setAiPrompt('');
-    } else if (lower.includes('upsc') || lower.includes('photo')) {
-      setTargetKB(50);
-      toast.success('AI loaded UPSC photo profile (50 KB)');
-      setAiPrompt('');
+      haptic(10);
     } else {
-      toast.info('Adjusted parameters. Ready for compression.');
+      toast.info('Specify a target size like "50KB" or "1MB"');
     }
   };
 
-  // ─── Canvas Content (70% Left/Center or Mobile Top 52%) ───
+  // ─── Left Canvas Stage (7 Columns) ───
   const canvasContent = (
-    <div className="flex flex-col items-center justify-center w-full gap-4">
-      {/* Live Byte Badge Pinned Above Preview */}
+    <div className="flex flex-col w-full h-full min-h-[460px] justify-center items-center gap-4">
       {result && (
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full pb-control font-mono text-xs border border-[var(--pb-border)] shadow-sm animate-fade-in">
-          <span className="text-zinc-400 line-through">{formatBytes(result.originalSize)}</span>
-          <span className="text-[#5668FF] font-bold">→</span>
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 dark:bg-white/[0.06] font-mono text-xs border border-slate-200 dark:border-white/10 shadow-xs animate-fade-in">
+          <span className="text-slate-400 line-through">{formatBytes(result.originalSize)}</span>
+          <span className="text-blue-500 font-bold">→</span>
           <span className="text-emerald-500 font-bold">{formatBytes(result.compressedSize)}</span>
-          <span className="text-zinc-400 text-[10px]">
+          <span className="text-slate-400 text-[10px]">
             (-{Math.max(0, ((result.originalSize - result.compressedSize) / result.originalSize * 100)).toFixed(0)}%)
           </span>
         </div>
       )}
 
       {!result ? (
-        /* Interactive Dropzone */
-        <div
+        <StudioDropzone
+          isDragging={isDragging}
           onDrop={handleDrop}
           onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
           onDragLeave={() => setIsDragging(false)}
-          className={`relative w-full max-w-xl p-10 md:p-14 border-2 border-dashed rounded-3xl transition-all duration-300 cursor-pointer group/drop pb-panel ${
-            isDragging
-              ? 'border-[#5668FF] bg-[#5668FF]/5 dark:bg-[#5668FF]/10 scale-[1.01]'
-              : 'border-zinc-300 dark:border-zinc-700/60 hover:border-[#5668FF]/60'
-          }`}
-          style={{ boxShadow: 'inset 0 1px 0 0 var(--pb-specular)', touchAction: 'pan-y' }}
-        >
-          <input
-            type="file"
-            accept=".pdf,.png,.jpg,.jpeg,.webp"
-            onChange={handleFileUpload}
-            disabled={isProcessing}
-            aria-label="Upload file to compress"
-            ref={fileInputRef}
-            className="absolute inset-0 z-10 w-full h-full opacity-0 cursor-pointer"
-          />
-          <div className="flex flex-col items-center gap-4 relative z-0">
-            <div className="w-14 h-14 rounded-2xl pb-control flex items-center justify-center group-hover/drop:scale-110 transition-transform">
-              <svg className="w-7 h-7 text-[#5668FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-              </svg>
-            </div>
-            <div className="text-center">
-              <p className="text-base font-bold text-zinc-800 dark:text-zinc-100 mb-1">
-                {isProcessing ? 'Optimizing...' : 'Drop image or PDF here'}
-              </p>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                or <span className="text-[#5668FF] font-semibold hover:underline">browse from device</span>
-              </p>
-              <div className="flex items-center justify-center gap-2 mt-4 text-[11px] font-mono text-zinc-400">
-                <span className="px-2 py-0.5 rounded bg-[var(--pb-control)] border border-[var(--pb-border)]">Ctrl/Cmd+V to Paste</span>
-                <span className="px-2 py-0.5 rounded bg-[var(--pb-control)] border border-[var(--pb-border)]">Enter to Trigger</span>
-              </div>
-            </div>
-          </div>
-        </div>
+          onClick={() => fileInputRef.current?.click()}
+          title="Drop image or PDF to compress to exact byte size"
+          subtitle="Precision binary search compression algorithm fits your file under the strict byte ceiling"
+          formats={['PNG', 'JPEG', 'WebP', 'PDF']}
+          isProcessing={isProcessing}
+          processingMessage={progressMsg || `Running convergence search (Pass ${passCount})...`}
+          fileInput={
+            <input
+              type="file"
+              accept=".pdf,.png,.jpg,.jpeg,.webp"
+              onChange={handleFileUpload}
+              disabled={isProcessing}
+              aria-label="Upload file to compress"
+              ref={fileInputRef}
+              className="absolute inset-0 z-10 w-full h-full opacity-0 cursor-pointer"
+            />
+          }
+        />
       ) : (
-        /* Result Preview Slider */
         <div className="w-full space-y-3">
           {!result.isPdf ? (
             <BeforeAfterSlider originalUrl={result.originalUrl} compressedUrl={result.compressedUrl} />
           ) : (
-            <div className="w-full aspect-[4/3] max-h-[46dvh] rounded-2xl pb-panel p-6 flex flex-col items-center justify-center text-center">
+            <div className="w-full aspect-[4/3] max-h-[46dvh] rounded-2xl p-6 flex flex-col items-center justify-center text-center bg-slate-100/60 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/10 shadow-sm">
               <div className="w-16 h-16 rounded-2xl bg-orange-500/10 text-orange-500 flex items-center justify-center mb-3">
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
-              <h3 className="font-bold text-sm text-zinc-800 dark:text-zinc-200 mb-1">{result.fileName}</h3>
-              <p className="text-xs text-zinc-400 max-w-sm">
+              <h3 className="font-bold text-sm text-slate-800 dark:text-slate-200 mb-1">{result.fileName}</h3>
+              <p className="text-xs text-slate-400 max-w-sm">
                 PDF rasterized &amp; recompressed to exact byte budget with zero metadata leakage.
               </p>
             </div>
@@ -374,18 +330,17 @@ export default function TargetCompressor() {
       )}
 
       {isProcessing && (
-        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-xl pb-control border border-[#5668FF]/40 text-xs font-mono text-[#5668FF]">
-          <span className="w-2 h-2 rounded-full bg-[#5668FF] animate-ping" />
+        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-xl bg-blue-500/10 border border-blue-500/30 text-xs font-mono text-blue-500">
+          <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping" />
           <span>{progressMsg || `Running convergence search (Pass ${passCount})...`}</span>
         </div>
       )}
     </div>
   );
 
-  // ─── Inspector Rail Content (360px Fixed Desktop / Mobile Sheet) ───
+  // ─── Right Precision Inspector Console (5 Columns) ───
   const inspectorContent = (
-    <div className="space-y-4">
-      {/* Target Scrubber */}
+    <div className="space-y-5">
       {!result ? (
         <TargetScrubber
           value={targetKB}
@@ -393,77 +348,76 @@ export default function TargetCompressor() {
           disabled={isProcessing}
         />
       ) : (
-        /* Convergence Telemetry & Outcome Panel */
-        <div className="space-y-4">
-          <div className="pb-panel p-4 rounded-2xl space-y-3">
+        <div className="space-y-5">
+          <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.08] bg-white/60 dark:bg-white/[0.03] backdrop-blur-md shadow-xs space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
-                Convergence Telemetry
+              <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold">
+                CONVERGENCE TELEMETRY
               </span>
               {result.isAlreadyUnderTarget ? (
-                <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 text-[9px] font-mono font-bold">
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 text-[9px] font-mono font-bold">
                   UNTOUCHED
                 </span>
               ) : (
-                <span className="px-2 py-0.5 rounded-full bg-[#5668FF]/10 text-[#5668FF] border border-[#5668FF]/20 text-[9px] font-mono font-bold">
+                <span className="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/20 text-[9px] font-mono font-bold">
                   PASS {result.iterations || 1} CONVERGED
                 </span>
               )}
             </div>
 
-            {/* Huge Reduction Number */}
+            {/* Reduction Callout */}
             <div className="flex items-baseline justify-between">
               <div>
-                <span className="text-[10px] font-mono text-zinc-400 block">REDUCTION</span>
-                <span className="text-5xl font-black font-mono tabular-nums text-zinc-900 dark:text-white">
+                <span className="text-[10px] font-mono text-slate-400 block font-bold">REDUCTION</span>
+                <span className="text-5xl font-black font-mono tabular-nums text-slate-900 dark:text-white">
                   {result.originalSize > 0
                     ? `-${Math.max(0, ((result.originalSize - result.compressedSize) / result.originalSize * 100)).toFixed(0)}%`
                     : '0%'}
                 </span>
               </div>
               <div className="text-right">
-                <span className="text-[10px] font-mono text-zinc-400 block">SPACE FREED</span>
+                <span className="text-[10px] font-mono text-slate-400 block font-bold">SPACE FREED</span>
                 <span className="text-xl font-bold font-mono text-emerald-500">
                   {formatBytes(Math.max(0, result.originalSize - result.compressedSize))}
                 </span>
               </div>
             </div>
 
-            {/* Specular Stats Grid */}
-            <div className="grid grid-cols-2 gap-2 text-xs font-mono tabular-nums pt-2 border-t border-[var(--pb-border)]">
-              <div className="pb-control p-2.5 rounded-xl">
-                <span className="text-zinc-500 text-[10px] block">ORIGINAL FILE</span>
-                <span className="font-bold text-zinc-800 dark:text-zinc-200">{formatBytes(result.originalSize)}</span>
-                <span className="text-[10px] text-zinc-500 block">{result.originalSize.toLocaleString()} B</span>
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 gap-2 text-xs font-mono tabular-nums pt-2 border-t border-slate-200/60 dark:border-white/[0.06]">
+              <div className="p-3 rounded-xl bg-slate-100/70 dark:bg-white/[0.04] border border-slate-200/60 dark:border-white/10">
+                <span className="text-slate-400 text-[10px] block font-bold">ORIGINAL</span>
+                <span className="font-bold text-slate-800 dark:text-slate-200">{formatBytes(result.originalSize)}</span>
+                <span className="text-[10px] text-slate-400 block">{result.originalSize.toLocaleString()} B</span>
               </div>
-              <div className="pb-control p-2.5 rounded-xl text-right">
-                <span className="text-zinc-500 text-[10px] block">FINAL OUTPUT</span>
-                <span className="font-bold text-[#5668FF]">{formatBytes(result.compressedSize)}</span>
-                <span className="text-[10px] text-zinc-500 block">{result.compressedSize.toLocaleString()} B</span>
+              <div className="p-3 rounded-xl bg-slate-100/70 dark:bg-white/[0.04] border border-slate-200/60 dark:border-white/10 text-right">
+                <span className="text-slate-400 text-[10px] block font-bold">OUTPUT</span>
+                <span className="font-bold text-blue-500">{formatBytes(result.compressedSize)}</span>
+                <span className="text-[10px] text-slate-400 block">{result.compressedSize.toLocaleString()} B</span>
               </div>
             </div>
 
-            {/* Precision Quota Meter */}
+            {/* Quota Meter */}
             <div className="space-y-1.5 pt-1">
               <div className="flex justify-between text-[11px] font-mono">
-                <span className="text-zinc-500">Target Ceiling</span>
-                <span className="font-bold text-zinc-700 dark:text-zinc-300">
+                <span className="text-slate-400 font-semibold">Target Ceiling</span>
+                <span className="font-bold text-slate-700 dark:text-slate-300">
                   {result.compressedSize.toLocaleString()} / {result.targetBytes.toLocaleString()} B
                 </span>
               </div>
-              <div className="w-full h-2 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
+              <div className="w-full h-2 rounded-full bg-slate-200 dark:bg-zinc-800 overflow-hidden">
                 <div
-                  className="h-full rounded-full transition-all duration-500 bg-[#5668FF]"
+                  className="h-full rounded-full transition-all duration-500 bg-blue-500"
                   style={{ width: `${Math.min(100, (result.compressedSize / result.targetBytes) * 100)}%` }}
                 />
               </div>
-              <div className="text-[10px] font-mono text-right text-zinc-400">
+              <div className="text-[10px] font-mono text-right text-slate-400">
                 {((result.compressedSize / result.targetBytes) * 100).toFixed(1)}% of maximum budget used
               </div>
             </div>
           </div>
 
-          {/* Primary Action Button (OS Share Sheet on Mobile / Direct Download on Desktop) */}
+          {/* Primary Action Button */}
           <div className="space-y-2">
             <button
               onClick={async () => {
@@ -476,7 +430,7 @@ export default function TargetCompressor() {
                   a.click();
                 }
               }}
-              className="w-full py-3.5 rounded-xl font-bold text-sm transition-all bg-[#5668FF] hover:bg-[#4858E0] text-white shadow-[0_4px_20px_rgba(86,104,255,0.4)] active:scale-[0.98] flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-xl font-bold text-sm transition-all bg-gradient-to-b from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-[0_8px_24px_-4px_rgba(37,99,235,0.45),inset_0_1px_0_rgba(255,255,255,0.25)] active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
@@ -493,7 +447,7 @@ export default function TargetCompressor() {
                 compressedFileRef.current = null;
                 setResult(null);
               }}
-              className="w-full py-2.5 text-xs font-mono text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors rounded-xl pb-control text-center"
+              className="w-full py-2.5 text-xs font-mono text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] text-center"
             >
               ← Compress Another File
             </button>
@@ -505,17 +459,17 @@ export default function TargetCompressor() {
 
   // ─── Collapsible AI Assistant Command Drawer ───
   const aiDrawerContent = (
-    <div className="space-y-2">
+    <div className="space-y-2 rounded-xl p-3 bg-purple-500/[0.04] border border-purple-500/20">
       <button
         type="button"
         onClick={() => setIsAiDrawerOpen(!isAiDrawerOpen)}
-        className="w-full flex items-center justify-between text-xs font-mono font-bold text-zinc-700 dark:text-zinc-300 hover:text-[#5668FF] transition-colors"
+        className="w-full flex items-center justify-between text-xs font-mono font-bold text-slate-700 dark:text-slate-300 hover:text-purple-500 transition-colors"
       >
         <span className="flex items-center gap-2">
           <span className="text-purple-500">✦</span>
           <span>AI ASSISTANT COMMAND DRAWER</span>
         </span>
-        <span className="text-[10px] text-zinc-500">{isAiDrawerOpen ? '▲ Close' : '▼ Expand'}</span>
+        <span className="text-[10px] text-slate-400">{isAiDrawerOpen ? '▲ Close' : '▼ Expand'}</span>
       </button>
 
       {isAiDrawerOpen && (
@@ -527,12 +481,12 @@ export default function TargetCompressor() {
               onChange={(e) => setAiPrompt(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') handleAiCommandSubmit(); }}
               placeholder="e.g. Fit SSC photo 50KB or shrink 80%"
-              className="flex-1 px-3 py-1.5 text-xs font-mono rounded-lg pb-control outline-none border border-[var(--pb-border)] focus:border-[#5668FF] text-zinc-900 dark:text-white"
+              className="flex-1 px-3 py-1.5 text-xs font-mono rounded-lg outline-none border border-slate-200 dark:border-white/10 bg-white dark:bg-black/30 focus:border-purple-500 text-slate-900 dark:text-white"
             />
             <button
               type="button"
               onClick={handleAiCommandSubmit}
-              className="px-3 py-1.5 text-xs font-mono font-bold bg-[#5668FF] text-white rounded-lg hover:bg-[#4858E0] transition-colors"
+              className="px-3 py-1.5 text-xs font-mono font-bold bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors shadow-xs"
             >
               Set
             </button>
@@ -543,7 +497,7 @@ export default function TargetCompressor() {
               { label: 'SSC Signature (20KB)', kb: 20 },
               { label: 'UPSC Photo (50KB)', kb: 50 },
               { label: 'Email Safe (1MB)', kb: 1000 },
-            ].map(c => (
+            ].map((c) => (
               <button
                 key={c.label}
                 type="button"
@@ -551,7 +505,7 @@ export default function TargetCompressor() {
                   setTargetKB(c.kb);
                   toast.success(`Loaded ${c.label}`);
                 }}
-                className="px-2 py-1 text-[10px] font-mono pb-control text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 rounded-md transition-colors"
+                className="px-2 py-1 text-[10px] font-mono bg-white dark:bg-white/[0.04] text-slate-500 hover:text-slate-900 dark:hover:text-slate-200 rounded-md border border-slate-200/60 dark:border-white/10 transition-colors"
               >
                 {c.label}
               </button>
@@ -566,9 +520,12 @@ export default function TargetCompressor() {
     <ToolShell
       title="Target File Size"
       accentColor="bg-blue-500"
+      badgeText="100% LOCAL WASM"
       canvas={canvasContent}
       inspector={inspectorContent}
       aiDrawer={aiDrawerContent}
+      onToggleAiDrawer={() => setIsAiDrawerOpen(!isAiDrawerOpen)}
+      isAiDrawerOpen={isAiDrawerOpen}
     />
   );
 }

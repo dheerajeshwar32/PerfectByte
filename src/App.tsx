@@ -1,11 +1,12 @@
-import { useEffect, useState, Suspense, lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Link } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
 import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
 import { Toaster } from 'sonner';
 import Home from './Home';
 import BottomDock from './BottomDock';
-import { useIsMobile, syncThemeColor } from './usePWA';
+import { useIsMobile } from './usePWA';
+import { ThemeProvider, useTheme } from './ThemeContext';
 
 const TargetCompressor = lazy(() => import('./TargetCompressor'));
 const BulkCompressor = lazy(() => import('./BulkCompressor'));
@@ -25,13 +26,19 @@ function LoadingSpinner() {
   );
 }
 
-function AnimatedRoutes() {
+function MainLayout() {
   const location = useLocation();
   const isMobile = useIsMobile();
-  const isToolRoute = location.pathname !== '/' && location.pathname !== '/privacy' && location.pathname !== '/history';
+  const { isDark, toggleTheme } = useTheme();
+  const isToolRoute =
+    location.pathname !== '/' &&
+    location.pathname !== '/privacy' &&
+    location.pathname !== '/history';
 
   return (
     <>
+      <Toaster position="bottom-right" theme={isDark ? 'dark' : 'light'} richColors />
+
       <AnimatePresence mode="wait">
         <motion.div
           key={location.pathname}
@@ -57,40 +64,9 @@ function AnimatedRoutes() {
         </motion.div>
       </AnimatePresence>
 
-      {/* 4-Tab Bottom Dock: active on mobile during workbench sessions */}
-      {isMobile && isToolRoute && <BottomDock />}
-    </>
-  );
-}
-
-export default function App() {
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('theme') === 'dark' ||
-        (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    }
-    return false;
-  });
-
-  useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-    syncThemeColor(isDark);
-  }, [isDark]);
-
-  return (
-    <MotionConfig reducedMotion="user">
-      <Router>
-        <Toaster position="bottom-right" theme={isDark ? 'dark' : 'light'} richColors />
-        <AnimatedRoutes />
-        <Analytics />
-
-        {/* Global Dark Mode Switcher & History Shortcut */}
+      {/* Floating Dark Mode Switcher & History Shortcut ONLY on landing / static pages.
+          On tool pages, ToolShell provides a unified, collision-free top bar. */}
+      {!isToolRoute && (
         <div className="fixed top-3 right-3 sm:top-4 sm:right-4 md:top-6 md:right-10 flex items-center gap-2 z-[60]">
           <Link
             to="/history"
@@ -103,7 +79,7 @@ export default function App() {
             <span className="hidden sm:inline">History</span>
           </Link>
           <button
-            onClick={() => setIsDark(!isDark)}
+            onClick={toggleTheme}
             className="p-1.5 sm:p-2 rounded-full bg-white/70 dark:bg-[#12182B]/80 backdrop-blur-xl border border-slate-200/60 dark:border-white/10 shadow-sm text-slate-700 dark:text-slate-300 hover:scale-105 active:scale-95 transition-all"
             aria-label="Toggle Dark Mode"
           >
@@ -118,7 +94,23 @@ export default function App() {
             )}
           </button>
         </div>
-      </Router>
-    </MotionConfig>
+      )}
+
+      {/* 4-Tab Bottom Dock: active on mobile during workbench sessions */}
+      {isMobile && isToolRoute && <BottomDock />}
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <MotionConfig reducedMotion="user">
+        <Router>
+          <MainLayout />
+          <Analytics />
+        </Router>
+      </MotionConfig>
+    </ThemeProvider>
   );
 }
