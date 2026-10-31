@@ -102,7 +102,7 @@ function BeforeAfterSlider({ originalUrl, compressedUrl }: { originalUrl: string
 
 export default function TargetCompressor() {
   useDocumentTitle('Target Compressor');
-  
+
   const [targetKB, setTargetKB] = useState<number>(200);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -111,7 +111,7 @@ export default function TargetCompressor() {
   const [passCount, setPassCount] = useState<number>(0);
   const [isAiDrawerOpen, setIsAiDrawerOpen] = useState(false);
   const [aiPrompt, setAiPrompt] = useState('');
-  
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const compressedFileRef = useRef<File | null>(null);
 
