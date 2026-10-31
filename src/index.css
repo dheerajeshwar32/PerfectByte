@@ -50,10 +50,7 @@
    ═══════════════════════════════════════════════════ */
 
 html, body {
-  overscroll-behavior-y: none;
   -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
-  user-select: none;
   background-color: var(--pb-canvas);
   color: #09090B;
 }
@@ -196,6 +193,7 @@ textarea,
   outline: none;
   cursor: pointer;
   position: relative;
+  touch-action: pan-x;
 }
 
 .scrubber-track::-webkit-slider-thumb {

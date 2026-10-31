@@ -1,12 +1,11 @@
 import { type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { useIsMobile } from './usePWA';
-import BottomSheet from './BottomSheet';
 
 interface ToolShellProps {
-  /** Content for the main canvas area (desktop left 70% / mobile top 55%) */
+  /** Content for the main canvas area (desktop left 70% / mobile top) */
   canvas: ReactNode;
-  /** Content for the inspector rail (desktop right 360px / mobile bottom sheet) */
+  /** Content for the inspector rail (desktop right 360px / mobile below canvas) */
   inspector: ReactNode;
   /** Tool title shown in the compact header */
   title: string;
@@ -19,17 +18,18 @@ interface ToolShellProps {
 }
 
 /**
- * ToolShell — Zero-Scroll Split Workbench Architecture
+ * ToolShell — Split Workbench Architecture
  *
- * Desktop Viewport:
- * - Fixed zero-scroll workbench (h-dvh overflow-hidden)
+ * Desktop Viewport (>= 1024px):
+ * - Fixed zero-scroll split workbench (h-dvh overflow-hidden)
  * - 70% Left/Center Canvas on subtle dot-matrix background
  * - 360px Right Inspector Rail with 1px specular hairline border & fractal noise
  *
- * Mobile Viewport:
- * - Pinned Top 52% Viewport: Canvas / Before-After Slider
- * - Interactive Bottom Sheet (Bottom 48% / 86% snap points) for controls
- * - Fixed 4-tab glass bottom dock
+ * Mobile / Tablet Viewport (< 1024px):
+ * - Smooth natural single-column momentum scrolling
+ * - Prominent canvas preview & dropzone on top (preserves natural aspect ratios)
+ * - Direct inspector controls, scrubber & thumb-friendly action buttons below
+ * - Zero bottom-sheet gesture conflicts, zero cramped viewports
  */
 export default function ToolShell({
   canvas,
@@ -39,18 +39,18 @@ export default function ToolShell({
   badgeText = '100% LOCAL WASM',
   aiDrawer,
 }: ToolShellProps) {
-  const isMobile = useIsMobile();
+  const isMobile = useIsMobile(1024);
 
   return (
-    <div className="h-dvh flex flex-col pb-canvas overflow-hidden select-none">
+    <div className="h-dvh flex flex-col pb-canvas overflow-hidden">
       {/* ─── Specular Luminance Header Bar ─── */}
       <header
-        className="pwa-header flex items-center justify-between px-4 md:px-6 h-14 shrink-0 border-b border-[var(--pb-border)] pb-panel z-30"
+        className="pwa-header flex items-center justify-between px-3 md:px-6 h-14 shrink-0 border-b border-[var(--pb-border)] pb-panel z-30"
         style={{
           boxShadow: 'inset 0 1px 0 0 var(--pb-specular)',
         }}
       >
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 sm:gap-3">
           <Link
             to="/"
             aria-label="Back to Tools"
@@ -63,7 +63,7 @@ export default function ToolShell({
 
           <div className="flex items-center gap-2">
             <div className={`w-2 h-2 rounded-full ${accentColor}`} />
-            <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100 tracking-tight font-mono uppercase">
+            <span className="text-xs sm:text-sm font-bold text-zinc-900 dark:text-zinc-100 tracking-tight font-mono uppercase truncate max-w-[180px] sm:max-w-none">
               {title}
             </span>
           </div>
@@ -92,26 +92,22 @@ export default function ToolShell({
 
       {/* ─── Workbench Body ─── */}
       {isMobile ? (
-        /* Mobile: Pinned Top 52% Viewport + Interactive Bottom Sheet */
-        <div className="flex-1 relative overflow-hidden flex flex-col">
+        /* Mobile & Tablet: Natural single-column scrollable workbench */
+        <div className="flex-1 overflow-y-auto overscroll-contain p-4 sm:p-6 pb-28 space-y-5 pb-dot-matrix">
           {/* Top Canvas Viewport (Preview / Dropzone / Comparison) */}
-          <div className="h-[48dvh] overflow-y-auto p-3 pb-dot-matrix flex items-center justify-center">
-            <div className="w-full max-w-md mx-auto">
-              {canvas}
-            </div>
+          <div className="w-full max-w-lg mx-auto">
+            {canvas}
           </div>
 
-          {/* Interactive Bottom Sheet (Controls & Scrubber) */}
-          <BottomSheet>
-            <div className="space-y-4">
-              {inspector}
-              {aiDrawer && (
-                <div className="mt-4 pt-4 border-t border-[var(--pb-border)]">
-                  {aiDrawer}
-                </div>
-              )}
-            </div>
-          </BottomSheet>
+          {/* Inspector Controls directly beneath canvas in natural flow */}
+          <div className="w-full max-w-lg mx-auto space-y-4">
+            {inspector}
+            {aiDrawer && (
+              <div className="pt-2">
+                {aiDrawer}
+              </div>
+            )}
+          </div>
         </div>
       ) : (
         /* Desktop: Fixed Zero-Scroll Split Workbench */

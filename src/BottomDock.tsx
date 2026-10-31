@@ -47,7 +47,7 @@ const tabs: DockTab[] = [
 ];
 
 /**
- * Fixed 4-tab translucent bottom dock for mobile PWA.
+ * Fixed 4-tab translucent bottom dock for mobile navigation.
  * Destinations: Compress, PDF, Batch, AI Command.
  */
 export default function BottomDock() {
@@ -55,7 +55,7 @@ export default function BottomDock() {
 
   return (
     <nav
-      className="pwa-bottom-dock fixed bottom-0 left-0 right-0 z-50 h-16 flex items-center justify-around px-2 border-t border-[var(--pb-border)] bg-white/80 dark:bg-[#111114]/85 backdrop-blur-2xl md:hidden"
+      className="pwa-bottom-dock fixed bottom-0 left-0 right-0 z-50 h-14 flex items-center justify-around px-2 border-t border-[var(--pb-border)] bg-white/85 dark:bg-[#0B0E1B]/90 backdrop-blur-2xl md:hidden"
       style={{
         boxShadow: 'inset 0 1px 0 0 var(--pb-specular)',
       }}
@@ -67,7 +67,7 @@ export default function BottomDock() {
           <Link
             key={tab.path}
             to={tab.path}
-            className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-colors min-w-[64px] ${
+            className={`flex flex-col items-center justify-center gap-0.5 px-3 py-1 rounded-xl transition-colors min-w-[64px] ${
               isActive
                 ? 'text-[#5668FF]'
                 : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
@@ -75,15 +75,12 @@ export default function BottomDock() {
             aria-label={tab.label}
             aria-current={isActive ? 'page' : undefined}
           >
-            <div className={`transition-transform duration-200 ${isActive ? 'scale-110' : ''}`}>
+            <div className={`transition-transform duration-200 ${isActive ? 'scale-105' : ''}`}>
               {tab.icon}
             </div>
             <span className={`text-[10px] font-mono font-bold tracking-tight ${isActive ? 'text-[#5668FF]' : ''}`}>
               {tab.label}
             </span>
-            {isActive && (
-              <span className="w-1.5 h-1.5 rounded-full bg-[#5668FF] mt-[-1px]" />
-            )}
           </Link>
         );
       })}

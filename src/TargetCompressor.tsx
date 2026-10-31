@@ -45,7 +45,7 @@ function BeforeAfterSlider({ originalUrl, compressedUrl }: { originalUrl: string
       ref={containerRef}
       onMouseMove={handleMouseMove}
       className="relative w-full aspect-[4/3] max-h-[46dvh] overflow-hidden rounded-2xl border border-[var(--pb-border)] bg-checkerboard select-none shadow-lg"
-      style={{ boxShadow: 'inset 0 1px 0 0 var(--pb-specular)' }}
+      style={{ boxShadow: 'inset 0 1px 0 0 var(--pb-specular)', touchAction: 'pan-y' }}
     >
       <img src={compressedUrl} alt="Compressed output" draggable={false} className="absolute inset-0 w-full h-full object-contain" />
       <div className="absolute inset-0 overflow-hidden" style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}>
@@ -62,6 +62,7 @@ function BeforeAfterSlider({ originalUrl, compressedUrl }: { originalUrl: string
         type="range" min={0} max={100} value={position}
         onChange={(e) => setPosition(Number(e.target.value))}
         aria-label="Before and after comparison slider"
+        style={{ touchAction: 'pan-y' }}
         className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize"
       />
 
@@ -86,7 +87,7 @@ function BeforeAfterSlider({ originalUrl, compressedUrl }: { originalUrl: string
       <button
         type="button" onClick={() => setShowLoupe(!showLoupe)}
         aria-label="Toggle Magnifier Loupe"
-        className={`absolute bottom-3 left-3 z-30 px-2.5 py-1 rounded-lg text-[11px] font-bold font-mono transition-colors ${
+        className={`hidden sm:block absolute bottom-3 left-3 z-30 px-2.5 py-1 rounded-lg text-[11px] font-bold font-mono transition-colors ${
           showLoupe ? 'bg-[#5668FF] text-white shadow-md' : 'bg-black/60 text-white/90 hover:bg-black/80'
         }`}
       >
@@ -320,7 +321,7 @@ export default function TargetCompressor() {
               ? 'border-[#5668FF] bg-[#5668FF]/5 dark:bg-[#5668FF]/10 scale-[1.01]'
               : 'border-zinc-300 dark:border-zinc-700/60 hover:border-[#5668FF]/60'
           }`}
-          style={{ boxShadow: 'inset 0 1px 0 0 var(--pb-specular)' }}
+          style={{ boxShadow: 'inset 0 1px 0 0 var(--pb-specular)', touchAction: 'pan-y' }}
         >
           <input
             type="file"
