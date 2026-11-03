@@ -25,11 +25,13 @@ export default function Home() {
       title: 'Target File Size',
       desc: 'Shrink any image or PDF to fit under strict portal and form upload limits.',
       path: '/target-size',
-      iconColor: 'text-[#5268FF]',
-      glowColor: 'bg-[#5268FF]',
+      cardBg: 'bg-[radial-gradient(120%_100%_at_85%_15%,#DDE7FF_0%,#F4F7FF_48%,#FFFFFF_100%)] dark:bg-[radial-gradient(120%_100%_at_85%_15%,#1E2B6F_0%,#141A38_55%,#11152B_100%)]',
+      cardBorder: 'border-[#C7D7FE] dark:border-[#2B3B80]',
+      iconColor: 'text-[#4F67FF]',
+      glowColor: 'bg-[#4F67FF]',
       badge: {
         icon: (
-          <svg className="w-3.5 h-3.5 text-[#5268FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-3.5 h-3.5 text-[#4F67FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
           </svg>
         ),
@@ -42,11 +44,13 @@ export default function Home() {
       title: 'Bulk Compression',
       desc: 'Compress dozens of photos at once in seconds without losing visual quality.',
       path: '/bulk-compress',
-      iconColor: 'text-[#5268FF]',
-      glowColor: 'bg-[#5268FF]',
+      cardBg: 'bg-[radial-gradient(120%_100%_at_85%_15%,#CCFBF1_0%,#F0FDFA_48%,#FFFFFF_100%)] dark:bg-[radial-gradient(120%_100%_at_85%_15%,#114240_0%,#12262A_55%,#11152B_100%)]',
+      cardBorder: 'border-[#A7F3D0] dark:border-[#1E4E4A]',
+      iconColor: 'text-[#0D9488] dark:text-[#2DD4BF]',
+      glowColor: 'bg-[#0D9488]',
       badge: {
         icon: (
-          <svg className="w-3.5 h-3.5 text-[#5268FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-3.5 h-3.5 text-[#0D9488] dark:text-[#2DD4BF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
           </svg>
         ),
@@ -55,15 +59,55 @@ export default function Home() {
       svg: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
     },
     {
+      id: 'pdf-tools',
+      title: 'PDF Studio',
+      desc: 'Combine multiple PDFs or extract specific pages into a single clean document.',
+      path: '/pdf-tools',
+      cardBg: 'bg-[radial-gradient(120%_100%_at_85%_15%,#FFEDD5_0%,#FFF8F1_48%,#FFFFFF_100%)] dark:bg-[radial-gradient(120%_100%_at_85%_15%,#4A2518_0%,#26181A_55%,#11152B_100%)]',
+      cardBorder: 'border-[#FED7AA] dark:border-[#5C3120]',
+      iconColor: 'text-[#EA580C] dark:text-[#FB923C]',
+      glowColor: 'bg-[#EA580C]',
+      badge: {
+        icon: (
+          <svg className="w-3.5 h-3.5 text-[#EA580C] dark:text-[#FB923C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        ),
+        label: <span className="text-[11px] font-mono font-semibold tracking-wider text-[#2D325A] dark:text-[#F0F4FF] uppercase">LOCAL PDF MANIPULATION</span>
+      },
+      svg: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+    },
+    {
+      id: 'image-resizer',
+      title: 'Image Resizer',
+      desc: 'Resize images to exact pixel dimensions or ready-made social media presets.',
+      path: '/resize',
+      cardBg: 'bg-[radial-gradient(120%_100%_at_85%_15%,#FFE4E6_0%,#FFF5F6_48%,#FFFFFF_100%)] dark:bg-[radial-gradient(120%_100%_at_85%_15%,#4C1D2E_0%,#261523_55%,#11152B_100%)]',
+      cardBorder: 'border-[#FECDD3] dark:border-[#5E253A]',
+      iconColor: 'text-[#E11D48] dark:text-[#FB7185]',
+      glowColor: 'bg-[#E11D48]',
+      badge: {
+        icon: (
+          <svg className="w-3.5 h-3.5 text-[#E11D48] dark:text-[#FB7185]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+          </svg>
+        ),
+        label: <span className="text-[11px] font-mono font-semibold tracking-wider text-[#2D325A] dark:text-[#F0F4FF] uppercase">PIXEL-PERFECT SCALING</span>
+      },
+      svg: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+    },
+    {
       id: 'ai-assistant',
       title: 'AI Command Center',
       desc: 'Type what you want to do in plain English and let AI handle the settings.',
       path: '/assistant',
-      iconColor: 'text-[#5268FF]',
-      glowColor: 'bg-[#5268FF]',
+      cardBg: 'bg-[radial-gradient(120%_100%_at_85%_15%,#F3E8FF_0%,#FAF5FF_48%,#FFFFFF_100%)] dark:bg-[radial-gradient(120%_100%_at_85%_15%,#3B1D5E_0%,#201538_55%,#11152B_100%)]',
+      cardBorder: 'border-[#E9D5FF] dark:border-[#4C2878]',
+      iconColor: 'text-[#8B5CF6] dark:text-[#C084FC]',
+      glowColor: 'bg-[#8B5CF6]',
       badge: {
         icon: (
-          <svg className="w-3.5 h-3.5 text-[#5268FF]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <svg className="w-3.5 h-3.5 text-[#8B5CF6] dark:text-[#C084FC]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M12 2L15 9L22 12L15 15L12 22L9 15L2 12L9 9L12 2Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         ),
@@ -74,57 +118,6 @@ export default function Home() {
         )
       },
       svg: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"></path>
-    },
-    {
-      id: 'format-converter',
-      title: 'Format Converter',
-      desc: 'Convert seamlessly between WebP, PNG, JPEG, and AVIF formats entirely on your device.',
-      path: '/convert',
-      iconColor: 'text-[#5268FF]',
-      glowColor: 'bg-[#5268FF]',
-      badge: {
-        icon: (
-          <svg className="w-3.5 h-3.5 text-[#5268FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-          </svg>
-        ),
-        label: <span className="text-[11px] font-mono font-semibold tracking-wider text-[#2D325A] dark:text-[#F0F4FF] uppercase">MULTI-FORMAT CODECS</span>
-      },
-      svg: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
-    },
-    {
-      id: 'image-resizer',
-      title: 'Image Resizer',
-      desc: 'Resize images to exact pixel dimensions or ready-made social media presets.',
-      path: '/resize',
-      iconColor: 'text-[#5268FF]',
-      glowColor: 'bg-[#5268FF]',
-      badge: {
-        icon: (
-          <svg className="w-3.5 h-3.5 text-[#5268FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-          </svg>
-        ),
-        label: <span className="text-[11px] font-mono font-semibold tracking-wider text-[#2D325A] dark:text-[#F0F4FF] uppercase">PIXEL-PERFECT SCALING</span>
-      },
-      svg: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
-    },
-    {
-      id: 'pdf-tools',
-      title: 'PDF Studio',
-      desc: 'Combine multiple PDFs or extract specific pages into a single clean document.',
-      path: '/pdf-tools',
-      iconColor: 'text-[#5268FF]',
-      glowColor: 'bg-[#5268FF]',
-      badge: {
-        icon: (
-          <svg className="w-3.5 h-3.5 text-[#5268FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-        ),
-        label: <span className="text-[11px] font-mono font-semibold tracking-wider text-[#2D325A] dark:text-[#F0F4FF] uppercase">LOCAL PDF MANIPULATION</span>
-      },
-      svg: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
     }
   ];
 
@@ -275,7 +268,7 @@ export default function Home() {
                 onClick={() => {
                   if (!isActive) setActiveIndex(index);
                 }}
-                className={`relative overflow-hidden bg-[radial-gradient(120%_100%_at_85%_15%,#E8F0FE_0%,#F6F9FF_45%,#FFFFFF_100%)] dark:bg-[radial-gradient(120%_100%_at_85%_15%,#1E264D_0%,#151A36_60%,#11152B_100%)] border border-[#DCE6FA] dark:border-[#262E5A] backdrop-blur-3xl p-5 sm:p-6 md:p-10 rounded-3xl md:rounded-[2.5rem] ${
+                className={`relative overflow-hidden ${tool.cardBg} border ${tool.cardBorder} backdrop-blur-3xl p-5 sm:p-6 md:p-10 rounded-3xl md:rounded-[2.5rem] ${
                   isActive
                     ? 'shadow-[0_30px_60px_-15px_rgba(82,104,255,0.18)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.6)] ring-1 ring-[#5268FF]/30 cursor-default'
                     : 'cursor-pointer shadow-none'
@@ -283,19 +276,19 @@ export default function Home() {
               >
                 {/* Soft ambient corner glow (Apple Frosted Glass Highlight) */}
                 <div
-                  className={`absolute -top-24 -right-24 w-64 h-64 rounded-full blur-[75px] pointer-events-none transition-opacity duration-700 bg-[#5268FF] ${
+                  className={`absolute -top-24 -right-24 w-64 h-64 rounded-full blur-[75px] pointer-events-none transition-opacity duration-700 ${tool.glowColor} ${
                     isActive ? 'opacity-25 dark:opacity-20' : 'opacity-0'
                   }`}
                 />
                 <div
-                  className={`absolute -top-12 -left-12 w-48 h-48 rounded-full blur-[50px] pointer-events-none transition-opacity duration-700 bg-[#5268FF] ${
+                  className={`absolute -top-12 -left-12 w-48 h-48 rounded-full blur-[50px] pointer-events-none transition-opacity duration-700 ${tool.glowColor} ${
                     isActive ? 'opacity-15 dark:opacity-10' : 'opacity-0'
                   }`}
                 />
 
                 <div className="relative z-10 w-full flex flex-col flex-grow">
                   <div
-                    className={`w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl flex items-center justify-center mb-5 md:mb-8 bg-white dark:bg-[#1B2244] text-[#5268FF] shadow-sm border border-[#E2E8F8] dark:border-[#2B3566] transition-transform duration-500 ${
+                    className={`w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl flex items-center justify-center mb-5 md:mb-8 bg-white dark:bg-[#1B2244] ${tool.iconColor} shadow-sm border border-[#E2E8F8] dark:border-[#2B3566] transition-transform duration-500 ${
                       isActive ? 'scale-100' : 'scale-95'
                     }`}
                   >
