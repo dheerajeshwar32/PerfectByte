@@ -350,17 +350,17 @@ export default function TargetCompressor() {
         />
       ) : (
         <div className="space-y-5">
-          <div className="p-5 rounded-2xl border border-[#E2E8F8] bg-white/95 backdrop-blur-xl shadow-[0_10px_35px_-10px_rgba(45,50,90,0.06)] space-y-4">
+          <div className="p-5 rounded-2xl border border-[#E2E8F8] dark:border-[#252D58] bg-white/95 dark:bg-[#151A36] backdrop-blur-xl shadow-[0_10px_35px_-10px_rgba(45,50,90,0.06)] space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-mono uppercase tracking-wider text-[#848DB3] font-bold">
                 CONVERGENCE TELEMETRY
               </span>
               {result.isAlreadyUnderTarget ? (
-                <span className="px-2.5 py-0.5 rounded-full bg-[#EEF2FF] text-[#5268FF] border border-[#C7D4FF] text-[9px] font-mono font-bold">
+                <span className="px-2.5 py-0.5 rounded-full bg-[#EEF2FF] dark:bg-[#1B2244] text-[#5268FF] dark:text-[#7888FF] border border-[#C7D4FF] dark:border-[#2B3566] text-[9px] font-mono font-bold">
                   UNTOUCHED
                 </span>
               ) : (
-                <span className="px-2.5 py-0.5 rounded-full bg-[#EEF2FF] text-[#5268FF] border border-[#C7D4FF] text-[9px] font-mono font-bold">
+                <span className="px-2.5 py-0.5 rounded-full bg-[#EEF2FF] dark:bg-[#1B2244] text-[#5268FF] dark:text-[#7888FF] border border-[#C7D4FF] dark:border-[#2B3566] text-[9px] font-mono font-bold">
                   PASS {result.iterations || 1} CONVERGED
                 </span>
               )}
@@ -370,7 +370,7 @@ export default function TargetCompressor() {
             <div className="flex items-baseline justify-between">
               <div>
                 <span className="text-[10px] font-mono text-[#848DB3] block font-bold">REDUCTION</span>
-                <span className="text-5xl font-black font-mono tabular-nums text-[#2D325A]">
+                <span className="text-5xl font-black font-mono tabular-nums text-[#2D325A] dark:text-[#F0F4FF]">
                   {result.originalSize > 0
                     ? `-${Math.max(0, ((result.originalSize - result.compressedSize) / result.originalSize * 100)).toFixed(0)}%`
                     : '0%'}
@@ -385,13 +385,13 @@ export default function TargetCompressor() {
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-2 gap-2 text-xs font-mono tabular-nums pt-2 border-t border-[#E2E8F8]">
-              <div className="p-3 rounded-xl bg-[#EEF2FF] border border-[#E2E8F8]">
+            <div className="grid grid-cols-2 gap-2 text-xs font-mono tabular-nums pt-2 border-t border-[#E2E8F8] dark:border-[#252D58]">
+              <div className="p-3 rounded-xl bg-[#EEF2FF] dark:bg-[#1B2244] border border-[#E2E8F8] dark:border-[#2B3566]">
                 <span className="text-[#848DB3] text-[10px] block font-bold">ORIGINAL</span>
-                <span className="font-bold text-[#2D325A]">{formatBytes(result.originalSize)}</span>
+                <span className="font-bold text-[#2D325A] dark:text-[#F0F4FF]">{formatBytes(result.originalSize)}</span>
                 <span className="text-[10px] text-[#848DB3] block">{result.originalSize.toLocaleString()} B</span>
               </div>
-              <div className="p-3 rounded-xl bg-[#EEF2FF] border border-[#E2E8F8] text-right">
+              <div className="p-3 rounded-xl bg-[#EEF2FF] dark:bg-[#1B2244] border border-[#E2E8F8] dark:border-[#2B3566] text-right">
                 <span className="text-[#848DB3] text-[10px] block font-bold">OUTPUT</span>
                 <span className="font-bold text-[#5268FF]">{formatBytes(result.compressedSize)}</span>
                 <span className="text-[10px] text-[#848DB3] block">{result.compressedSize.toLocaleString()} B</span>
@@ -402,11 +402,11 @@ export default function TargetCompressor() {
             <div className="space-y-1.5 pt-1">
               <div className="flex justify-between text-[11px] font-mono">
                 <span className="text-[#848DB3] font-semibold">Target Ceiling</span>
-                <span className="font-bold text-[#2D325A]">
+                <span className="font-bold text-[#2D325A] dark:text-[#F0F4FF]">
                   {result.compressedSize.toLocaleString()} / {result.targetBytes.toLocaleString()} B
                 </span>
               </div>
-              <div className="w-full h-2 rounded-full bg-[#E2E8F8] overflow-hidden">
+              <div className="w-full h-2 rounded-full bg-[#E2E8F8] dark:bg-[#1B2244] overflow-hidden">
                 <div
                   className="h-full rounded-full transition-all duration-500 bg-[#5268FF]"
                   style={{ width: `${Math.min(100, (result.compressedSize / result.targetBytes) * 100)}%` }}
@@ -448,7 +448,7 @@ export default function TargetCompressor() {
                 compressedFileRef.current = null;
                 setResult(null);
               }}
-              className="w-full py-2.5 text-xs font-mono text-[#5A628A] hover:text-[#2D325A] transition-colors rounded-xl bg-[#EEF2FF] hover:bg-[#E0E7FF] border border-[#E2E8F8] text-center cursor-pointer"
+              className="w-full py-2.5 text-xs font-mono text-[#5A628A] hover:text-[#2D325A] dark:text-[#9BA6D1] dark:hover:text-[#F0F4FF] transition-colors rounded-xl bg-[#EEF2FF] hover:bg-[#E0E7FF] dark:bg-[#1B2244] dark:hover:bg-[#232C56] border border-[#E2E8F8] dark:border-[#2B3566] text-center cursor-pointer"
             >
               ← Compress Another File
             </button>
@@ -460,11 +460,11 @@ export default function TargetCompressor() {
 
   // ─── Collapsible AI Assistant Command Drawer ───
   const aiDrawerContent = (
-    <div className="space-y-2 rounded-xl p-3 bg-[#EEF2FF] border border-[#C7D4FF]">
+    <div className="space-y-2 rounded-xl p-3 bg-[#EEF2FF] dark:bg-[#151A36] border border-[#C7D4FF] dark:border-[#252D58]">
       <button
         type="button"
         onClick={() => setIsAiDrawerOpen(!isAiDrawerOpen)}
-        className="w-full flex items-center justify-between text-xs font-mono font-bold text-[#2D325A] hover:text-[#5268FF] transition-colors cursor-pointer"
+        className="w-full flex items-center justify-between text-xs font-mono font-bold text-[#2D325A] dark:text-[#F0F4FF] hover:text-[#5268FF] transition-colors cursor-pointer"
       >
         <span className="flex items-center gap-2">
           <Sparkles className="w-3.5 h-3.5 text-[#5268FF]" />
@@ -494,7 +494,7 @@ export default function TargetCompressor() {
               onChange={(e) => setAiPrompt(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') handleAiCommandSubmit(); }}
               placeholder="e.g. Fit SSC photo 50KB or shrink 80%"
-              className="flex-1 px-3 py-1.5 text-xs font-mono rounded-lg outline-none border border-[#C7D4FF] bg-white focus:border-[#5268FF] text-[#2D325A]"
+              className="flex-1 px-3 py-1.5 text-xs font-mono rounded-lg outline-none border border-[#C7D4FF] dark:border-[#2B3566] bg-white dark:bg-[#1B2244] focus:border-[#5268FF] text-[#2D325A] dark:text-[#F0F4FF]"
             />
             <button
               type="button"
@@ -518,7 +518,7 @@ export default function TargetCompressor() {
                   setTargetKB(c.kb);
                   toast.success(`Loaded ${c.label}`);
                 }}
-                className="px-2 py-1 text-[10px] font-mono bg-white text-[#5A628A] hover:text-[#2D325A] rounded-md border border-[#E2E8F8] hover:border-[#5268FF] transition-colors"
+                className="px-2 py-1 text-[10px] font-mono bg-white dark:bg-[#1B2244] text-[#5A628A] dark:text-[#9BA6D1] hover:text-[#2D325A] dark:hover:text-[#F0F4FF] dark:hover:bg-[#232C56] rounded-md border border-[#E2E8F8] dark:border-[#2B3566] hover:border-[#5268FF] transition-colors"
               >
                 {c.label}
               </button>
@@ -533,7 +533,7 @@ export default function TargetCompressor() {
     <ToolShell
       title="Target File Size"
       accentColor="bg-blue-500"
-      badgeText="100% LOCAL WASM"
+      badgeText="EXACT SIZE LIMIT"
       canvas={canvasContent}
       inspector={inspectorContent}
       aiDrawer={aiDrawerContent}

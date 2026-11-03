@@ -12,6 +12,7 @@ import {
   Sun,
   Moon,
   ArrowLeft,
+  Lock,
 } from 'lucide-react';
 
 interface ToolShellProps {
@@ -23,7 +24,7 @@ interface ToolShellProps {
   title: string;
   /** Optional accent color class for the title dot */
   accentColor?: string;
-  /** Optional badge in the header (e.g. 100% LOCAL WASM) */
+  /** Optional badge in the header (e.g. EXACT SIZE LIMIT) */
   badgeText?: string;
   /** Optional bottom drawer for AI Assistant in inspector */
   aiDrawer?: ReactNode;
@@ -46,7 +47,7 @@ export default function ToolShell({
   inspector,
   title,
   accentColor = 'bg-[#5668FF]',
-  badgeText = '100% LOCAL WASM',
+  badgeText = 'EXACT SIZE LIMIT',
   aiDrawer,
   onToggleAiDrawer,
 }: ToolShellProps) {
@@ -187,21 +188,24 @@ export default function ToolShell({
 
       {/* ─── Main Studio Stage (Centered 12-Column Glassmorphic Bento Frame) ─── */}
       <main className="flex-1 w-full max-w-[1360px] mx-auto px-3 sm:px-6 py-4 sm:py-6 flex flex-col pb-28 md:pb-8">
-        <div className="w-full flex-1 rounded-[24px] sm:rounded-[28px] border border-[#E2E8F8] dark:border-white/[0.08] bg-white/95 dark:bg-[#12182B]/90 backdrop-blur-2xl shadow-[0_10px_35px_-10px_rgba(45,50,90,0.06)] dark:shadow-[0_24px_80px_-15px_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.08)] p-4 sm:p-6 lg:p-7 relative overflow-hidden flex flex-col">
+        <div className="w-full flex-1 rounded-[24px] sm:rounded-[28px] border border-[#E2E8F8] dark:border-[#262E5A] bg-white/95 dark:bg-[#11152B]/95 backdrop-blur-2xl shadow-[0_10px_35px_-10px_rgba(45,50,90,0.06)] dark:shadow-[0_24px_80px_-15px_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.08)] p-4 sm:p-6 lg:p-7 relative overflow-hidden flex flex-col">
           {/* Studio Top Sub-Header Bar */}
-          <div className="flex items-center justify-between pb-4 mb-5 border-b border-[#E2E8F8] dark:border-white/[0.06] text-xs font-mono text-[#5A628A] dark:text-slate-400">
+          <div className="flex items-center justify-between pb-4 mb-5 border-b border-[#E2E8F8] dark:border-[#262E5A]/60 text-xs font-mono text-[#5A628A] dark:text-[#9BA6D1]">
             <div className="flex items-center gap-2">
               <span className="text-[#5268FF] dark:text-[#7888FF] font-semibold">PERFECTBYTE STUDIO</span>
               <span>/</span>
-              <span className="text-[#2D325A] dark:text-white font-semibold">{title}</span>
+              <span className="text-[#2D325A] dark:text-[#F0F4FF] font-semibold">{title}</span>
               {badgeText && (
-                <span className="hidden sm:inline-block text-[10px] px-2 py-0.5 rounded-full bg-[#EEF2FF] dark:bg-[#161D33] text-[#5268FF] dark:text-[#7888FF] border border-[#C7D4FF] dark:border-indigo-400/30">
+                <span className="hidden sm:inline-block text-[10px] px-2 py-0.5 rounded-full bg-[#EEF2FF] dark:bg-[#1B2244] text-[#5268FF] dark:text-[#7888FF] border border-[#C7D4FF] dark:border-[#2B3566]">
                   {badgeText}
                 </span>
               )}
             </div>
-            <div className="hidden sm:flex items-center gap-3 text-[11px] text-[#5A628A] dark:text-slate-400">
-              <span>🔒 100% Private • Processed on your device</span>
+            <div className="hidden sm:flex items-center gap-3 text-[11px] text-[#5A628A] dark:text-[#9BA6D1]">
+              <span className="flex items-center">
+                <Lock className="w-3.5 h-3.5 text-[#5268FF] inline-block mr-1.5 -mt-0.5" />
+                100% Private • Processed on your device
+              </span>
             </div>
           </div>
 

@@ -1,6 +1,7 @@
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { useDocumentTitle } from './useDocumentTitle';
+import { Lock } from 'lucide-react';
 
 export default function Privacy() {
   useDocumentTitle('Privacy Architecture');
@@ -33,8 +34,8 @@ export default function Privacy() {
 
         <div className="space-y-4">
           <section className="p-5 rounded-2xl pb-control border border-[var(--pb-border)]">
-            <h2 className="text-sm font-bold text-zinc-900 dark:text-white mb-1.5 flex items-center gap-2">
-              <span>🔒</span> 1. Your Files Never Leave Your Device
+            <h2 className="text-sm font-bold text-zinc-900 dark:text-white mb-1.5 flex items-center">
+              <Lock className="w-4 h-4 text-[#5268FF] inline-block mr-1.5 -mt-0.5" /> 1. Your Files Never Leave Your Device
             </h2>
             <p className="text-xs md:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
               All image conversions, target compression calculations, rasterization, and PDF manipulations execute 100% inside your browser using sandboxed WebAssembly (WASM) modules and HTML5 Canvas hardware acceleration. We run zero backend file conversion servers.

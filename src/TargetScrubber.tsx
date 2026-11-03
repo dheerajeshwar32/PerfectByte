@@ -111,7 +111,7 @@ export default function TargetScrubber({
   const isAtDetent = DETENTS.some((d) => d.kb === value);
 
   return (
-    <div className="space-y-4 rounded-2xl p-4 sm:p-5 border border-[#E2E8F8] bg-white/95 backdrop-blur-xl shadow-[0_10px_35px_-10px_rgba(45,50,90,0.06)]">
+    <div className="space-y-4 rounded-2xl p-4 sm:p-5 border border-[#E2E8F8] dark:border-[#252D58] bg-white/95 dark:bg-[#151A36] backdrop-blur-xl shadow-[0_10px_35px_-10px_rgba(45,50,90,0.06)]">
       {/* ─── Digital Byte Readout Hardware Card ─── */}
       <div className="relative overflow-hidden rounded-2xl p-5 bg-gradient-to-br from-[#343A68] via-[#2D325A] to-[#222647] text-white shadow-[0_14px_32px_-8px_rgba(45,50,90,0.28)] border border-[#5268FF]/30">
         {/* Subtle grid mesh background */}
@@ -187,7 +187,7 @@ export default function TargetScrubber({
       <div className="space-y-1.5 pt-0.5">
         <div className="relative py-2 flex items-center">
           {/* Single unified custom slider track */}
-          <div className="relative h-2 w-full rounded-full bg-[#E2E8F8] overflow-hidden">
+          <div className="relative h-2 w-full rounded-full bg-[#E2E8F8] dark:bg-[#1B2244] overflow-hidden">
             <div
               className="absolute left-0 top-0 h-full rounded-full bg-[#5268FF]"
               style={{ width: `${sliderPercent}%` }}
@@ -196,7 +196,7 @@ export default function TargetScrubber({
 
           {/* Active Thumb centered vertically on track */}
           <div
-            className="pointer-events-none absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-white border-2 border-[#5268FF] shadow-[0_2px_8px_rgba(82,104,255,0.45)] z-10 transition-transform active:scale-110"
+            className="pointer-events-none absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-white dark:bg-[#1B2244] border-2 border-[#5268FF] shadow-[0_2px_8px_rgba(82,104,255,0.45)] z-10 transition-transform active:scale-110"
             style={{ left: `calc(10px + (${sliderPercent} / 100) * (100% - 20px))` }}
           />
 
@@ -292,24 +292,24 @@ export default function TargetScrubber({
                 }}
                 className={`p-2.5 rounded-xl text-left transition-all border flex items-center gap-2.5 cursor-pointer ${
                   isCurrent
-                    ? 'bg-[#EEF2FF] border-[#5268FF] shadow-xs'
-                    : 'bg-white border-[#E2E8F8] hover:border-[#5268FF]/50 hover:bg-[#F6F8FC]'
+                    ? 'bg-[#EEF2FF] dark:bg-[#232C56] border-[#5268FF] shadow-xs'
+                    : 'bg-white dark:bg-[#1B2244] border-[#E2E8F8] dark:border-[#2B3566] hover:border-[#5268FF]/50 dark:hover:bg-[#232C56] hover:bg-[#F6F8FC]'
                 }`}
               >
                 <div
                   className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
                     isCurrent
                       ? 'bg-[#5268FF] text-white shadow-xs'
-                      : 'bg-[#EEF2FF] text-[#5268FF]'
+                      : 'bg-[#EEF2FF] dark:bg-[#151A36] text-[#5268FF]'
                   }`}
                 >
                   <IconComp className="w-4 h-4" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="text-xs font-bold text-[#2D325A] truncate">
+                  <div className="text-xs font-bold text-[#2D325A] dark:text-[#F0F4FF] truncate">
                     {p.label}
                   </div>
-                  <div className="text-[10px] font-mono text-[#5A628A] font-medium">
+                  <div className="text-[10px] font-mono text-[#5A628A] dark:text-[#9BA6D1] font-medium">
                     {p.sub}
                   </div>
                 </div>

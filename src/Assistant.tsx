@@ -291,7 +291,7 @@ export default function Assistant() {
       className={`flex flex-col h-[600px] w-full rounded-2xl border transition-all overflow-hidden relative shadow-xs ${
         isDragging
           ? 'border-purple-500 ring-2 ring-purple-500/30 bg-purple-500/5'
-          : 'border-slate-200/80 dark:border-white/[0.08] bg-white/60 dark:bg-[#10131C]/80 backdrop-blur-md'
+          : 'border-[#E2E8F8] dark:border-[#262E5A] bg-white/60 dark:bg-[#151A36]/90 backdrop-blur-md'
       }`}
     >
       <input
@@ -305,15 +305,15 @@ export default function Assistant() {
       />
 
       {/* ─── Integrated Context Bar at Top of Console ─── */}
-      <div className="px-4 py-3 border-b border-slate-200/80 dark:border-white/[0.06] bg-slate-100/60 dark:bg-[#0D0F17]/90 flex items-center justify-between gap-3 text-xs font-mono">
+      <div className="px-4 py-3 border-b border-[#E2E8F8] dark:border-[#252D58] bg-[#EEF2FF]/60 dark:bg-[#11152B]/90 flex items-center justify-between gap-3 text-xs font-mono">
         {files.length > 0 ? (
           <div className="flex items-center gap-2 truncate">
             <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-            <span className="font-bold text-slate-800 dark:text-slate-200 truncate">{files[0].name}</span>
-            <span className="text-[11px] text-slate-400">({formatBytes(files[0].size)})</span>
+            <span className="font-bold text-[#2D325A] dark:text-[#F0F4FF] truncate">{files[0].name}</span>
+            <span className="text-[11px] text-[#5A628A] dark:text-[#9BA6D1]">({formatBytes(files[0].size)})</span>
             <button
               onClick={() => { setFiles([]); setDownloadUrl(null); }}
-              className="text-slate-400 hover:text-rose-500 ml-1 font-bold text-xs cursor-pointer"
+              className="text-[#5A628A] hover:text-rose-500 ml-1 font-bold text-xs cursor-pointer"
               title="Unmount file"
             >
               <X className="w-3.5 h-3.5" />
@@ -329,9 +329,9 @@ export default function Assistant() {
           </button>
         )}
 
-        <div className="hidden sm:flex items-center gap-1.5 text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">
+        <div className="hidden sm:flex items-center gap-1.5 text-xs font-medium text-[#5268FF] bg-[#EEF2FF] dark:bg-[#1E264D] px-2.5 py-0.5 rounded-full">
           <ShieldCheck className="w-3.5 h-3.5" />
-          <span>Local-First AI Execution</span>
+          <span>Private AI Assistant</span>
         </div>
       </div>
 
@@ -360,10 +360,10 @@ export default function Assistant() {
                     key={intent.title}
                     type="button"
                     onClick={() => executeCommand(intent.prompt)}
-                    className="p-3.5 rounded-xl border border-[#E2E8F8] dark:border-white/[0.07] bg-white/80 dark:bg-[#10131C] hover:border-[#5268FF]/50 hover:bg-[#EEF2FF]/40 dark:hover:bg-[#191E2D] transition-all text-left flex flex-col justify-between group shadow-xs cursor-pointer"
+                    className="p-3.5 rounded-xl border border-[#E2E8F8] dark:border-[#2B3566] bg-white/80 dark:bg-[#1B2244] hover:border-[#5268FF]/50 hover:bg-[#EEF2FF]/40 dark:hover:bg-[#232C56] transition-all text-left flex flex-col justify-between group shadow-xs cursor-pointer"
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <div className="w-8 h-8 rounded-lg bg-[#EEF2FF] dark:bg-blue-500/15 text-[#5268FF] flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-lg bg-[#EEF2FF] dark:bg-[#151A36] text-[#5268FF] flex items-center justify-center">
                         <IconComp className="w-4 h-4" />
                       </div>
                       <span className="text-[#5268FF] text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
@@ -371,10 +371,10 @@ export default function Assistant() {
                         <ArrowRight className="w-3 h-3" />
                       </span>
                     </div>
-                    <div className="font-bold text-xs text-[#2D325A] dark:text-slate-200 mb-1">
+                    <div className="font-bold text-xs text-[#2D325A] dark:text-[#F0F4FF] mb-1">
                       {intent.title}
                     </div>
-                    <div className="text-[11px] text-[#848DB3] leading-tight">
+                    <div className="text-[11px] text-[#848DB3] dark:text-[#6E78A3] leading-tight">
                       {intent.desc}
                     </div>
                   </button>
@@ -476,7 +476,7 @@ export default function Assistant() {
       </div>
 
       {/* ─── Floating Command Input Dock ─── */}
-      <form onSubmit={handleSubmit} className="p-3 border-t border-[#E2E8F8] dark:border-white/[0.08] bg-slate-100/70 dark:bg-[#0D0F17]/90">
+      <form onSubmit={handleSubmit} className="p-3 border-t border-[#E2E8F8] dark:border-[#252D58] bg-slate-100/70 dark:bg-[#11152B]/90">
         <div className="flex items-center gap-2">
           <input
             ref={commandInputRef}
@@ -485,12 +485,12 @@ export default function Assistant() {
             onChange={(e) => setInput(e.target.value)}
             disabled={isBusy}
             placeholder='Type a command (e.g. "compress to 100KB" or "remove blank pages")...'
-            className="flex-1 px-4 py-2.5 text-xs font-mono rounded-xl outline-none border border-[#E2E8F8] dark:border-white/10 bg-white dark:bg-[#10131C] focus:border-[#5268FF] focus:ring-2 focus:ring-[#5268FF]/20 text-[#2D325A] dark:text-white transition-all"
+            className="flex-1 px-4 py-2.5 text-xs font-mono rounded-xl outline-none border border-[#E2E8F8] dark:border-[#2B3566] bg-white dark:bg-[#1B2244] focus:border-[#5268FF] focus:ring-2 focus:ring-[#5268FF]/20 text-[#2D325A] dark:text-[#F0F4FF] transition-all"
           />
           <button
             type="submit"
             disabled={isBusy || !input.trim()}
-            className="px-4 py-2.5 bg-[#5268FF] hover:bg-[#4256E8] text-white rounded-xl text-xs font-mono font-bold transition-all disabled:opacity-40 shadow-xs cursor-pointer"
+            className="px-4 py-2.5 bg-[#5268FF] hover:bg-[#4256E8] text-white rounded-xl text-xs font-mono font-bold transition-all shadow-[0_6px_20px_rgba(82,104,255,0.3)] disabled:bg-[#E8EEFF] disabled:text-[#5268FF]/70 disabled:border disabled:border-[#C7D4FF] disabled:shadow-none dark:disabled:bg-[#1E264D] dark:disabled:text-[#7C8EE8] dark:disabled:border-[#2E3B75] disabled:cursor-not-allowed cursor-pointer"
           >
             Run ↵
           </button>
@@ -501,9 +501,9 @@ export default function Assistant() {
 
   // ─── Right Precision Inspector: Live AI Execution & Pipeline Inspector ───
   const inspectorContent = (
-    <div className="space-y-4">
+    <div className="flex flex-col justify-between h-full space-y-4">
       {/* 1. Mounted Payload Inspector Card */}
-      <div className="p-5 rounded-2xl border border-[#E2E8F8] dark:border-white/[0.08] bg-white/95 dark:bg-[#141824]/90 backdrop-blur-md shadow-xs space-y-3">
+      <div className="p-5 rounded-2xl border border-[#E2E8F8] dark:border-[#252D58] bg-white/95 dark:bg-[#151A36] backdrop-blur-md shadow-xs space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-[10px] font-mono uppercase tracking-wider text-[#848DB3] font-bold block">
             SELECTED FILE
@@ -518,22 +518,22 @@ export default function Assistant() {
 
         {files.length > 0 ? (
           <div className="space-y-2 text-xs font-mono">
-            <div className="p-3 rounded-xl bg-[#EEF2FF]/60 dark:bg-[#0C0E14] border border-[#E2E8F8] dark:border-white/[0.06] space-y-1.5">
+            <div className="p-3 rounded-xl bg-[#EEF2FF]/60 dark:bg-[#1B2244] border border-[#E2E8F8] dark:border-[#2B3566] space-y-1.5">
               <div className="flex justify-between items-center">
                 <span className="text-[#848DB3]">File Name</span>
-                <span className="font-bold text-[#2D325A] dark:text-slate-200 truncate max-w-[150px]">
+                <span className="font-bold text-[#2D325A] dark:text-[#F0F4FF] truncate max-w-[150px]">
                   {files[0].name}
                 </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-[#848DB3]">Size</span>
-                <span className="font-semibold text-[#5A628A] dark:text-slate-300">
+                <span className="font-semibold text-[#5A628A] dark:text-[#9BA6D1]">
                   {formatBytes(files[0].size)}
                 </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-[#848DB3]">Format</span>
-                <span className="font-semibold text-[#5A628A] dark:text-slate-300">
+                <span className="font-semibold text-[#5A628A] dark:text-[#9BA6D1]">
                   {files[0].type || 'Binary Document'}
                 </span>
               </div>
@@ -551,22 +551,22 @@ export default function Assistant() {
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="w-full py-5 px-4 rounded-xl border-2 border-dashed border-[#C7D4FF] hover:border-[#5268FF] text-xs font-mono text-[#5268FF] bg-[#EEF2FF]/40 hover:bg-[#EEF2FF] transition-colors flex flex-col items-center justify-center gap-2 cursor-pointer"
+            className="w-full py-8 px-4 rounded-xl border-2 border-dashed border-[#C7D4FF] dark:border-[#334185] hover:border-[#5268FF] text-xs font-mono text-[#5268FF] bg-[#EEF2FF]/40 hover:bg-[#EEF2FF] dark:bg-[#1B2244] dark:hover:bg-[#232C56] transition-colors flex flex-col items-center justify-center gap-2 cursor-pointer"
           >
             <Upload className="w-5 h-5 text-[#5268FF]" />
             <span className="font-bold">Drop or click to attach a file</span>
-            <span className="text-[10px] text-[#848DB3]">PDF, PNG, JPEG, WebP</span>
+            <span className="text-[10px] text-[#848DB3] dark:text-[#6E78A3]">PDF, PNG, JPEG, WebP</span>
           </button>
         )}
       </div>
 
       {/* 2. Quick Parameter Overrides / Command Cheat-Sheet Card */}
-      <div className="p-5 rounded-2xl border border-[#E2E8F8] dark:border-white/[0.08] bg-white/95 dark:bg-[#141824]/90 shadow-xs space-y-3">
+      <div className="p-5 rounded-2xl border border-[#E2E8F8] dark:border-[#252D58] bg-white/95 dark:bg-[#151A36] shadow-xs space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-[#2D325A] dark:text-white font-bold block">
+          <span className="text-[10px] font-mono uppercase tracking-wider text-[#2D325A] dark:text-[#F0F4FF] font-bold block">
             EXAMPLE COMMANDS
           </span>
-          <Terminal className="w-3.5 h-3.5 text-[#5A628A]" />
+          <Terminal className="w-3.5 h-3.5 text-[#5A628A] dark:text-[#9BA6D1]" />
         </div>
 
         <div className="space-y-1.5">
@@ -579,13 +579,13 @@ export default function Assistant() {
                 commandInputRef.current?.focus();
                 haptic(8);
               }}
-              className="w-full text-left p-2.5 rounded-xl bg-[#EEF2FF]/50 hover:bg-[#EEF2FF] dark:bg-[#10131C] dark:hover:bg-[#191E2D] dark:hover:border-[#5268FF]/30 text-xs font-mono transition-all flex items-center justify-between border border-[#E2E8F8] dark:border-white/[0.06] group cursor-pointer"
+              className="w-full text-left p-2.5 rounded-xl bg-[#EEF2FF]/50 hover:bg-[#EEF2FF] dark:bg-[#1B2244] dark:hover:bg-[#232C56] dark:hover:border-[#5268FF]/30 text-xs font-mono transition-all flex items-center justify-between border border-[#E2E8F8] dark:border-[#2B3566] group cursor-pointer"
             >
               <div>
-                <span className="font-bold text-[#2D325A] dark:text-slate-200 group-hover:text-[#5268FF] block">
+                <span className="font-bold text-[#2D325A] dark:text-[#F0F4FF] group-hover:text-[#5268FF] block">
                   &quot;{item.label}&quot;
                 </span>
-                <span className="text-[10px] text-[#848DB3] block">{item.desc}</span>
+                <span className="text-[10px] text-[#848DB3] dark:text-[#6E78A3] block">{item.desc}</span>
               </div>
               <span className="text-[10px] text-[#5268FF] font-bold opacity-0 group-hover:opacity-100 transition-opacity">
                 + Fill
