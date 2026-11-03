@@ -77,18 +77,18 @@ export default function History() {
               return (
                 <div
                   key={entry.id}
-                  className="bg-[#EEF2FF]/60 dark:bg-[#10131C] border border-[#E2E8F8] dark:border-white/[0.06] p-3.5 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono"
+                  className="bg-[#EEF2FF]/60 dark:bg-[#151A36] border border-[#E2E8F8] dark:border-[#252D58] p-3.5 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono"
                 >
-                  <div className="truncate pr-2">
-                    <span className="font-bold text-[#2D325A] dark:text-slate-200 block truncate" title={entry.fileName}>
+                  <div className="min-w-0 flex-1 pr-3">
+                    <span className="truncate block text-xs sm:text-sm font-semibold text-[#2D325A] dark:text-[#F0F4FF]" title={entry.fileName}>
                       {entry.fileName}
                     </span>
-                    <span className="text-[10px] text-[#848DB3]">{date}</span>
+                    <span className="text-[10px] text-[#848DB3] dark:text-[#6E78A3]">{date}</span>
                   </div>
-                  <div className="flex items-center gap-3 shrink-0">
+                  <div className="shrink-0 flex items-center gap-1.5 text-xs">
                     <span className="text-[#848DB3] line-through">{formatBytes(entry.originalSize)}</span>
                     <span className="text-[#5268FF] font-bold">→ {formatBytes(entry.compressedSize)}</span>
-                    <span className="px-2 py-0.5 rounded-full bg-[#EEF2FF] dark:bg-[#161D33] text-[#5268FF] border border-[#C7D4FF] dark:border-white/10 font-bold text-[10px]">
+                    <span className="px-2 py-0.5 rounded-full bg-[#EEF2FF] dark:bg-[#1B2244] text-[#5268FF] border border-[#C7D4FF] dark:border-[#2B3566] font-bold text-[10px]">
                       -{reduction}%
                     </span>
                   </div>

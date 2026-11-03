@@ -485,12 +485,12 @@ export default function Assistant() {
             onChange={(e) => setInput(e.target.value)}
             disabled={isBusy}
             placeholder='Type a command (e.g. "compress to 100KB" or "remove blank pages")...'
-            className="flex-1 px-4 py-2.5 text-xs font-mono rounded-xl outline-none border border-[#E2E8F8] dark:border-[#2B3566] bg-white dark:bg-[#1B2244] focus:border-[#5268FF] focus:ring-2 focus:ring-[#5268FF]/20 text-[#2D325A] dark:text-[#F0F4FF] transition-all"
+            className="flex-1 px-4 py-2.5 text-base md:text-sm font-mono rounded-xl outline-none border border-[#E2E8F8] dark:border-[#2B3566] bg-white dark:bg-[#1B2244] focus:border-[#5268FF] focus:ring-2 focus:ring-[#5268FF]/20 text-[#2D325A] dark:text-[#F0F4FF] transition-all"
           />
           <button
             type="submit"
             disabled={isBusy || !input.trim()}
-            className="px-4 py-2.5 bg-[#5268FF] hover:bg-[#4256E8] text-white rounded-xl text-xs font-mono font-bold transition-all shadow-[0_6px_20px_rgba(82,104,255,0.3)] disabled:bg-[#E8EEFF] disabled:text-[#5268FF]/70 disabled:border disabled:border-[#C7D4FF] disabled:shadow-none dark:disabled:bg-[#1E264D] dark:disabled:text-[#7C8EE8] dark:disabled:border-[#2E3B75] disabled:cursor-not-allowed cursor-pointer"
+            className="h-12 md:h-10 px-4 bg-[#5268FF] hover:bg-[#4256E8] text-white rounded-xl text-xs font-mono font-bold transition-all shadow-[0_6px_20px_rgba(82,104,255,0.3)] disabled:bg-[#E8EEFF] disabled:text-[#5268FF]/70 disabled:border disabled:border-[#C7D4FF] disabled:shadow-none dark:disabled:bg-[#1E264D] dark:disabled:text-[#7C8EE8] dark:disabled:border-[#2E3B75] disabled:cursor-not-allowed cursor-pointer flex items-center justify-center shrink-0"
           >
             Run ↵
           </button>

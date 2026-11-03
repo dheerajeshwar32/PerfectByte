@@ -317,7 +317,7 @@ export default function ImageResizer() {
                 onChange={(e) => handleWidthChange(e.target.value)}
                 placeholder="Width"
                 aria-label="Target width in pixels"
-                className="w-full pl-3 pr-10 py-2.5 rounded-xl text-sm font-mono font-bold bg-[#EEF2FF]/60 dark:bg-[#1B2244] text-[#2D325A] dark:text-[#F0F4FF] border border-[#E2E8F8] dark:border-[#2B3566] focus:border-[#5268FF] focus:ring-2 focus:ring-[#5268FF]/20 outline-none transition-all shadow-inner"
+                className="w-full pl-3 pr-10 py-2.5 rounded-xl text-base md:text-sm font-mono font-bold bg-[#EEF2FF]/60 dark:bg-[#1B2244] text-[#2D325A] dark:text-[#F0F4FF] border border-[#E2E8F8] dark:border-[#2B3566] focus:border-[#5268FF] focus:ring-2 focus:ring-[#5268FF]/20 outline-none transition-all shadow-inner"
               />
               <span className="absolute right-3 text-[10px] font-mono font-bold text-[#848DB3] dark:text-[#6E78A3] pointer-events-none select-none">
                 PX
@@ -338,7 +338,7 @@ export default function ImageResizer() {
                 onChange={(e) => handleHeightChange(e.target.value)}
                 placeholder="Height"
                 aria-label="Target height in pixels"
-                className="w-full pl-3 pr-10 py-2.5 rounded-xl text-sm font-mono font-bold bg-[#EEF2FF]/60 dark:bg-[#1B2244] text-[#2D325A] dark:text-[#F0F4FF] border border-[#E2E8F8] dark:border-[#2B3566] focus:border-[#5268FF] focus:ring-2 focus:ring-[#5268FF]/20 outline-none transition-all shadow-inner"
+                className="w-full pl-3 pr-10 py-2.5 rounded-xl text-base md:text-sm font-mono font-bold bg-[#EEF2FF]/60 dark:bg-[#1B2244] text-[#2D325A] dark:text-[#F0F4FF] border border-[#E2E8F8] dark:border-[#2B3566] focus:border-[#5268FF] focus:ring-2 focus:ring-[#5268FF]/20 outline-none transition-all shadow-inner"
               />
               <span className="absolute right-3 text-[10px] font-mono font-bold text-[#848DB3] dark:text-[#6E78A3] pointer-events-none select-none">
                 PX
@@ -360,7 +360,7 @@ export default function ImageResizer() {
           STANDARD PRESETS
         </span>
 
-        <div className="grid grid-cols-2 gap-2.5">
+        <div className="grid grid-cols-2 gap-2">
           {PRESETS.map((p) => {
             const isSelected = width === p.width && height === p.height;
             return (
@@ -368,7 +368,7 @@ export default function ImageResizer() {
                 key={p.label}
                 type="button"
                 onClick={() => handlePresetClick(p)}
-                className={`p-2.5 rounded-xl text-left transition-all border flex flex-col justify-between cursor-pointer ${
+                className={`p-2.5 md:p-3 rounded-xl text-left transition-all border flex flex-col justify-between cursor-pointer ${
                   isSelected
                     ? 'bg-[#5268FF]/10 dark:bg-[#5268FF]/25 border-[#5268FF]/60 shadow-xs'
                     : 'bg-[#EEF2FF]/50 dark:bg-[#1B2244] border-[#E2E8F8] dark:border-[#2B3566] hover:border-[#5268FF]/40 hover:bg-[#EEF2FF] dark:hover:bg-[#232C56]'
@@ -398,7 +398,7 @@ export default function ImageResizer() {
             <a
               href={resultUrl}
               download={file ? `resized_${file.name}` : 'resized_image.png'}
-              className="w-full py-4 rounded-xl font-bold text-sm text-center block transition-all bg-[#5268FF] hover:bg-[#4256E8] text-white shadow-[0_6px_20px_rgba(82,104,255,0.28)]"
+              className="w-full h-12 md:h-11 rounded-xl font-bold text-sm text-center flex items-center justify-center transition-all bg-[#5268FF] hover:bg-[#4256E8] text-white shadow-[0_6px_20px_rgba(82,104,255,0.28)]"
             >
               Download Resized Image
             </a>
@@ -419,7 +419,7 @@ export default function ImageResizer() {
             type="button"
             onClick={processImage}
             disabled={!file || !width || !height || isProcessing}
-            className="w-full py-4 rounded-xl font-bold text-sm transition-all bg-[#5268FF] hover:bg-[#4256E8] text-white shadow-[0_6px_20px_rgba(82,104,255,0.3)] active:scale-[0.98] disabled:bg-[#E8EEFF] disabled:text-[#5268FF]/70 disabled:border disabled:border-[#C7D4FF] disabled:shadow-none dark:disabled:bg-[#1E264D] dark:disabled:text-[#7C8EE8] dark:disabled:border-[#2E3B75] disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full h-12 md:h-11 rounded-xl font-bold text-sm transition-all bg-[#5268FF] hover:bg-[#4256E8] text-white shadow-[0_6px_20px_rgba(82,104,255,0.3)] active:scale-[0.98] disabled:bg-[#E8EEFF] disabled:text-[#5268FF]/70 disabled:border disabled:border-[#C7D4FF] disabled:shadow-none dark:disabled:bg-[#1E264D] dark:disabled:text-[#7C8EE8] dark:disabled:border-[#2E3B75] disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
           >
             {isProcessing ? (
               <>

@@ -49,7 +49,7 @@ export default function StudioDropzone({
         }
       }}
       aria-label={title}
-      className={`group relative w-full min-h-[460px] lg:min-h-[500px] flex-1 rounded-2xl border-2 border-dashed transition-all duration-300 flex flex-col items-center justify-between p-6 sm:p-10 cursor-pointer overflow-hidden ${
+      className={`group relative w-full min-h-[175px] py-5 px-4 md:min-h-[500px] md:p-8 flex-1 rounded-2xl md:rounded-3xl border-2 border-dashed transition-all duration-300 flex flex-col items-center justify-between cursor-pointer overflow-hidden ${
         isDragging
           ? 'border-[#5268FF] bg-[#EEF2FF] dark:bg-[#1D254E] scale-[1.008] shadow-[0_0_35px_rgba(82,104,255,0.25)]'
           : 'bg-[radial-gradient(circle_at_50%_45%,#EBF0FF_0%,#F6F8FC_55%,#FFFFFF_100%)] dark:bg-[radial-gradient(circle_at_50%_45%,#1D254E_0%,#131836_60%,#0E1229_100%)] border-[#C7D4FF] dark:border-[#334185] hover:border-[#5268FF] dark:hover:border-[#5268FF] hover:shadow-[0_12px_40px_-15px_rgba(82,104,255,0.18)]'
@@ -64,8 +64,8 @@ export default function StudioDropzone({
 
       {fileInput}
 
-      {/* Top formats badge strip */}
-      <div className="relative z-10 w-full flex items-center justify-between gap-2">
+      {/* Top formats badge strip (hidden on mobile to preserve vertical space) */}
+      <div className="relative z-10 w-full hidden md:flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5 flex-wrap">
           {formats.map((fmt) => (
             <span
@@ -79,45 +79,53 @@ export default function StudioDropzone({
       </div>
 
       {/* Center 3D-Style Floating Icon & Callout */}
-      <div className="relative z-10 flex flex-col items-center text-center my-auto py-6 max-w-md">
-        <div className="relative mb-5">
+      <div className="relative z-10 flex flex-col items-center text-center my-auto py-2 md:py-6 max-w-md">
+        <div className="relative mb-2.5 md:mb-5">
           {/* Soft periwinkle ambient glow behind icon */}
           <div className="absolute inset-0 rounded-2xl bg-[#5268FF]/20 blur-xl scale-125 group-hover:scale-150 transition-transform duration-500" />
 
           {/* Squircle icon card */}
-          <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white dark:bg-[#1A2142] shadow-[0_8px_24px_rgba(82,104,255,0.18)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.4)] border border-[#E2E8F8] dark:border-[#2E3A72] flex items-center justify-center group-hover:scale-105 group-hover:-translate-y-1 transition-all duration-300">
+          <div className="relative w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-white dark:bg-[#1A2142] shadow-[0_8px_24px_rgba(82,104,255,0.18)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.4)] border border-[#E2E8F8] dark:border-[#2E3A72] flex items-center justify-center group-hover:scale-105 group-hover:-translate-y-1 transition-all duration-300 text-[#5268FF]">
             {icon || (
-              <svg className={`w-8 h-8 sm:w-10 sm:h-10 ${iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className={`w-6 h-6 md:w-8 md:h-8 ${iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
               </svg>
             )}
           </div>
         </div>
 
-        <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-[#2D325A] dark:text-[#F0F4FF] mb-2">
+        <h3 className="text-base md:text-xl font-bold tracking-tight text-[#2D325A] dark:text-[#F0F4FF] mb-1 md:mb-2 text-center">
           {isProcessing ? processingMessage : title}
         </h3>
 
-        <p className="text-xs sm:text-sm text-[#5A628A] dark:text-[#9BA6D1] leading-relaxed mb-5">
+        <p className="text-xs md:text-sm text-[#5A628A] dark:text-[#9BA6D1] leading-relaxed mb-3 md:mb-5 text-center max-w-xs md:max-w-md">
           {subtitle}
         </p>
 
-        {/* Keyboard shortcut keycaps */}
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/90 dark:bg-[#1A2142] border border-[#E2E8F8] dark:border-[#2E3A72] shadow-xs text-xs font-mono text-[#5A628A] dark:text-[#9BA6D1]">
-          <span className="flex items-center gap-1">
-            <kbd className="px-1.5 py-0.5 rounded bg-[#EEF2FF] dark:bg-[#232C56] text-[10px] font-bold text-[#2D325A] dark:text-[#F0F4FF]">⌘V</kbd>
-            <span className="text-[11px]">Paste</span>
-          </span>
-          <span className="text-[#C7D4FF] dark:text-[#334185]">·</span>
-          <span className="flex items-center gap-1">
-            <kbd className="px-1.5 py-0.5 rounded bg-[#EEF2FF] dark:bg-[#232C56] text-[10px] font-bold text-[#2D325A] dark:text-[#F0F4FF]">↵</kbd>
-            <span className="text-[11px]">Browse</span>
+        {/* Action pills: native button on mobile, keycaps on desktop */}
+        <div className="flex items-center gap-2">
+          {/* ⌘V Paste (desktop only) */}
+          <div className="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/90 dark:bg-[#1A2142] border border-[#E2E8F8] dark:border-[#2E3A72] shadow-xs text-xs font-mono text-[#5A628A] dark:text-[#9BA6D1]">
+            <span className="flex items-center gap-1">
+              <kbd className="px-1.5 py-0.5 rounded bg-[#EEF2FF] dark:bg-[#232C56] text-[10px] font-bold text-[#2D325A] dark:text-[#F0F4FF]">⌘V</kbd>
+              <span className="text-[11px]">Paste</span>
+            </span>
+            <span className="text-[#C7D4FF] dark:text-[#334185]">·</span>
+            <span className="flex items-center gap-1">
+              <kbd className="px-1.5 py-0.5 rounded bg-[#EEF2FF] dark:bg-[#232C56] text-[10px] font-bold text-[#2D325A] dark:text-[#F0F4FF]">↵</kbd>
+              <span className="text-[11px]">Browse</span>
+            </span>
+          </div>
+
+          {/* Mobile Tap Trigger */}
+          <span className="inline-flex md:hidden bg-[#5268FF] text-white px-4 py-2 rounded-full text-xs font-semibold shadow-sm active:scale-95 transition">
+            Choose File
           </span>
         </div>
       </div>
 
-      {/* Bottom Micro-Trust Bar */}
-      <div className="relative z-10 w-full pt-4 border-t border-[#E2E8F8] dark:border-[#262E5A] flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] font-mono text-[#5A628A] dark:text-[#9BA6D1]">
+      {/* Bottom Micro-Trust Bar (hidden on mobile to eliminate clutter) */}
+      <div className="relative z-10 w-full pt-4 border-t border-[#E2E8F8] dark:border-[#262E5A] hidden md:flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] font-mono text-[#5A628A] dark:text-[#9BA6D1]">
         <div className="flex items-center">
           <Lock className="w-3.5 h-3.5 text-[#5268FF] inline-block mr-1.5 -mt-0.5" />
           <span className="font-semibold text-[#5A628A] dark:text-[#9BA6D1]">Files never leave your device</span>

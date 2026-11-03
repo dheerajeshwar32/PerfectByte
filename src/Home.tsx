@@ -214,7 +214,7 @@ export default function Home() {
           </AnimatePresence>
         </div>
 
-        <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-indigo-900 to-slate-600 dark:from-white dark:to-slate-300 mb-2 md:mb-4 leading-tight transition-colors px-4 pb-2">
+        <h1 className="text-[34px] leading-[1.08] sm:text-5xl md:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-indigo-900 to-slate-600 dark:from-white dark:to-slate-300 mb-2 md:mb-4 transition-colors px-3 pb-2 text-center">
           Flawless files. <br className="hidden sm:block" />
           <span
             className="text-[#5668FF] drop-shadow-sm inline-block"
@@ -267,16 +267,18 @@ export default function Home() {
               key={tool.id}
               animate={{ x: xOffset, scale, zIndex, opacity, filter: blur }}
               transition={{ type: "spring", stiffness: 260, damping: 25 }}
-              className="absolute w-[88%] sm:w-[90%] md:w-full max-w-[460px]"
+              className={`absolute w-full max-w-[345px] sm:max-w-[390px] md:max-w-[460px] mx-auto ${
+                isActive ? 'block' : 'hidden md:block'
+              }`}
             >
               <div
                 onClick={() => {
                   if (!isActive) setActiveIndex(index);
                 }}
-                className={`relative overflow-hidden bg-white/70 dark:bg-[#12182B]/80 backdrop-blur-3xl p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border ${
+                className={`relative overflow-hidden bg-white/70 dark:bg-[#151A36] backdrop-blur-3xl p-5 sm:p-6 md:p-10 rounded-3xl md:rounded-[2.5rem] border ${
                   isActive
-                    ? 'border-white/80 dark:border-indigo-400/30 shadow-[0_30px_60px_-15px_rgba(86,104,255,0.15)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.6)] ring-1 ring-[#5668FF]/20 cursor-default'
-                    : 'border-white/40 dark:border-white/5 cursor-pointer shadow-none'
+                    ? 'border-white/80 dark:border-[#252D58] shadow-[0_30px_60px_-15px_rgba(86,104,255,0.15)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.6)] ring-1 ring-[#5668FF]/20 cursor-default'
+                    : 'border-white/40 dark:border-[#252D58]/40 cursor-pointer shadow-none'
                 } flex flex-col items-start text-left transition-all duration-500 h-[360px] md:h-[420px] group`}
               >
                 {/* Soft ambient corner glow (Apple Frosted Glass Highlight) */}

@@ -242,3 +242,25 @@ textarea,
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
+
+@media (max-width: 767px) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    overscroll-behavior-y: none;
+    -webkit-font-smoothing: antialiased;
+  }
+  button, a, [role="button"], label {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+

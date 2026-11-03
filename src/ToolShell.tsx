@@ -72,7 +72,7 @@ export default function ToolShell({
   }, [onToggleAiDrawer, navigate, location.pathname]);
 
   return (
-    <div className="min-h-screen relative flex flex-col bg-[#F6F8FC] dark:bg-[#0B0E1B] text-[#2D325A] dark:text-[#E2E8F8] selection:bg-[#5268FF] selection:text-white transition-colors duration-300">
+    <div className="min-h-screen pb-24 md:pb-8 relative flex flex-col bg-[#F6F8FC] dark:bg-[#0E1229] text-[#2D325A] dark:text-[#E2E8F8] selection:bg-[#5268FF] selection:text-white transition-colors duration-300">
       {/* ─── Ambient Sapphire/Violet Illumination & Architectural Dot Matrix ─── */}
       <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[95vw] max-w-[1400px] h-[550px] bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(82,104,255,0.09),transparent)] dark:bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(82,104,255,0.18),transparent)]" />
@@ -82,7 +82,7 @@ export default function ToolShell({
 
       {/* ─── Unified Collision-Free Top Navigation Header ─── */}
       <header
-        className="pwa-header sticky top-0 z-40 w-full h-16 border-b border-[#E2E8F8] dark:border-white/[0.08] bg-white/90 dark:bg-[#0B0E1B]/90 backdrop-blur-2xl transition-colors"
+        className="pwa-header sticky top-0 z-40 w-full h-14 px-3 md:px-6 bg-[#F6F8FC]/85 dark:bg-[#0E1229]/85 backdrop-blur-2xl border-b border-[#E2E8F8] dark:border-[#252D58] flex items-center justify-between transition-colors"
         style={{ boxShadow: 'inset 0 1px 0 0 var(--pb-specular)' }}
       >
         <div className="max-w-[1360px] h-full mx-auto px-4 sm:px-6 flex items-center justify-between gap-3">
@@ -188,12 +188,11 @@ export default function ToolShell({
 
       {/* ─── Main Studio Stage (Centered 12-Column Glassmorphic Bento Frame) ─── */}
       <main className="flex-1 w-full max-w-[1360px] mx-auto px-3 sm:px-6 py-4 sm:py-6 flex flex-col pb-28 md:pb-8">
-        <div className="w-full flex-1 rounded-[24px] sm:rounded-[28px] border border-[#E2E8F8] dark:border-[#262E5A] bg-white/95 dark:bg-[#11152B]/95 backdrop-blur-2xl shadow-[0_10px_35px_-10px_rgba(45,50,90,0.06)] dark:shadow-[0_24px_80px_-15px_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.08)] p-4 sm:p-6 lg:p-7 relative overflow-hidden flex flex-col">
+        <div className="w-full flex-1 p-3 sm:p-4 md:p-8 rounded-2xl md:rounded-3xl border-0 md:border border-[#E2E8F8] dark:border-[#262E5A] bg-transparent md:bg-white/95 md:dark:bg-[#11152B]/95 shadow-none md:shadow-[0_10px_35px_-10px_rgba(45,50,90,0.06)] dark:md:shadow-[0_24px_80px_-15px_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.08)] backdrop-blur-2xl relative overflow-hidden flex flex-col">
           {/* Studio Top Sub-Header Bar */}
           <div className="flex items-center justify-between pb-4 mb-5 border-b border-[#E2E8F8] dark:border-[#262E5A]/60 text-xs font-mono text-[#5A628A] dark:text-[#9BA6D1]">
             <div className="flex items-center gap-2">
-              <span className="text-[#5268FF] dark:text-[#7888FF] font-semibold">PERFECTBYTE STUDIO</span>
-              <span>/</span>
+              <span className="hidden sm:inline text-[#5268FF] dark:text-[#7888FF] font-semibold">PERFECTBYTE STUDIO / </span>
               <span className="text-[#2D325A] dark:text-[#F0F4FF] font-semibold">{title}</span>
               {badgeText && (
                 <span className="hidden sm:inline-block text-[10px] px-2 py-0.5 rounded-full bg-[#EEF2FF] dark:bg-[#1B2244] text-[#5268FF] dark:text-[#7888FF] border border-[#C7D4FF] dark:border-[#2B3566]">
@@ -203,7 +202,7 @@ export default function ToolShell({
             </div>
             <div className="hidden sm:flex items-center gap-3 text-[11px] text-[#5A628A] dark:text-[#9BA6D1]">
               <span className="flex items-center">
-                <Lock className="w-3.5 h-3.5 text-[#5268FF] inline-block mr-1.5 -mt-0.5" />
+                <Lock className="w-3.5 h-3.5 text-[#5268FF] inline-block mr-1.5 -mt-0.5 shrink-0" />
                 100% Private • Processed on your device
               </span>
             </div>

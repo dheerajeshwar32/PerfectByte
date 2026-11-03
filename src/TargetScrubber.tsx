@@ -113,7 +113,7 @@ export default function TargetScrubber({
   return (
     <div className="space-y-4 rounded-2xl p-4 sm:p-5 border border-[#E2E8F8] dark:border-[#252D58] bg-white/95 dark:bg-[#151A36] backdrop-blur-xl shadow-[0_10px_35px_-10px_rgba(45,50,90,0.06)]">
       {/* ─── Digital Byte Readout Hardware Card ─── */}
-      <div className="relative overflow-hidden rounded-2xl p-5 bg-gradient-to-br from-[#343A68] via-[#2D325A] to-[#222647] text-white shadow-[0_14px_32px_-8px_rgba(45,50,90,0.28)] border border-[#5268FF]/30">
+      <div className="relative overflow-hidden rounded-2xl p-4 md:p-6 bg-gradient-to-br from-[#343A68] via-[#2D325A] to-[#222647] text-white shadow-[0_14px_32px_-8px_rgba(45,50,90,0.28)] border border-[#5268FF]/30">
         {/* Subtle grid mesh background */}
         <div className="absolute inset-0 pb-dot-matrix opacity-20 pointer-events-none" />
 
@@ -196,7 +196,7 @@ export default function TargetScrubber({
 
           {/* Active Thumb centered vertically on track */}
           <div
-            className="pointer-events-none absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-white dark:bg-[#1B2244] border-2 border-[#5268FF] shadow-[0_2px_8px_rgba(82,104,255,0.45)] z-10 transition-transform active:scale-110"
+            className="pointer-events-none absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-6 h-6 md:w-5 md:h-5 rounded-full bg-white dark:bg-[#1B2244] border-2 border-[#5268FF] shadow-[0_2px_8px_rgba(82,104,255,0.45)] z-10 transition-transform active:scale-110"
             style={{ left: `calc(10px + (${sliderPercent} / 100) * (100% - 20px))` }}
           />
 
@@ -210,7 +210,7 @@ export default function TargetScrubber({
             onChange={(e) => handleSliderChange(Number(e.target.value))}
             disabled={disabled}
             aria-label="Target file size scrubber"
-            className="absolute inset-0 w-full h-full opacity-0 cursor-grab active:cursor-grabbing z-20"
+            className="absolute inset-0 w-full h-full opacity-0 cursor-grab active:cursor-grabbing z-20 touch-pan-y [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:h-6"
           />
         </div>
 
@@ -237,6 +237,7 @@ export default function TargetScrubber({
               const pct = kbToPercent(d.kb, min, max);
               const x = (pct / 100) * 1000;
               const isSelected = d.kb === value;
+              const isMajor = ['50K', '200K', '1M', '10M'].includes(d.label);
 
               return (
                 <g
@@ -245,7 +246,7 @@ export default function TargetScrubber({
                     onChange(d.kb);
                     haptic(10);
                   }}
-                  className="cursor-pointer"
+                  className={`cursor-pointer ${isMajor ? '' : 'hidden md:block'}`}
                 >
                   <line
                     x1={x}

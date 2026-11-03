@@ -460,7 +460,7 @@ export default function TargetCompressor() {
 
   // ─── Collapsible AI Assistant Command Drawer ───
   const aiDrawerContent = (
-    <div className="space-y-2 rounded-xl p-3 bg-[#EEF2FF] dark:bg-[#151A36] border border-[#C7D4FF] dark:border-[#252D58]">
+    <div className="space-y-2 rounded-xl p-3 bg-[#EEF2FF] dark:bg-[#151A36] border border-[#C7D4FF] dark:border-[#252D58] mb-4 md:mb-0">
       <button
         type="button"
         onClick={() => setIsAiDrawerOpen(!isAiDrawerOpen)}
