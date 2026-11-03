@@ -9,11 +9,11 @@
 
 @layer base {
   :root {
-    /* Light Mode Surfaces */
-    --pb-canvas: #FAFAFA;
+    /* Light Mode Surfaces — Cool Ice Alabaster */
+    --pb-canvas: #F6F8FC;
     --pb-surface: #FFFFFF;
-    --pb-control: #F4F4F5;
-    --pb-control-hover: #E4E4E7;
+    --pb-control: #EEF2FF;
+    --pb-control-hover: #E0E7FF;
 
     /* Light Specular Border & Highlight */
     --pb-border: rgba(0, 0, 0, 0.08);
@@ -51,12 +51,22 @@
 
 html, body {
   -webkit-tap-highlight-color: transparent;
-  background-color: var(--pb-canvas);
-  color: #09090B;
+  background-color: #F6F8FC;
+  color: #2D325A;
 }
 
-.dark html, .dark body {
+.dark, .dark body {
+  background-color: #0B0E1B;
   color: #FAFAFA;
+}
+
+/* ═══════════════════════════════════════════════════
+   Chromatic RGB Split Accent ("Zero compromises.")
+   ═══════════════════════════════════════════════════ */
+
+.chromatic-accent {
+  color: #5268FF;
+  text-shadow: -1.2px 0px 0px rgba(0, 229, 255, 0.75), 1.2px 0px 0px rgba(255, 46, 147, 0.65);
 }
 
 /* Re-allow selectable text inside user-facing content & inputs */

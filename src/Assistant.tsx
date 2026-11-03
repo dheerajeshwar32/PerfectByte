@@ -15,8 +15,6 @@ import {
   Scissors,
   Zap,
   ShieldCheck,
-  Cpu,
-  CheckCircle2,
   Terminal,
   Upload,
   X,
@@ -40,34 +38,34 @@ const STARTER_INTENTS = [
   {
     icon: Landmark,
     title: 'Compress for Govt Portal (50KB)',
-    desc: 'Enforce strict 50KB upper ceiling with binary search convergence',
+    desc: 'Shrink your file under 50 KB for official forms',
     prompt: 'compress for government portal under 50KB',
   },
   {
     icon: FileText,
     title: 'Shrink PDF under 100KB',
-    desc: 'Compress documents for strict university and visa portals',
+    desc: 'Make any PDF small enough for portal uploads',
     prompt: 'compress to 100KB',
   },
   {
     icon: Scissors,
     title: 'Remove Blank PDF Pages',
-    desc: 'Detect and eliminate empty trailing pages cleanly',
+    desc: 'Automatically find and delete empty pages',
     prompt: 'remove blank pages from this PDF',
   },
   {
     icon: Zap,
     title: 'Convert to WebP Format',
-    desc: 'Convert image asset to next-gen WebP with SIMD encoding',
+    desc: 'Convert images to modern, lightweight WebP',
     prompt: 'convert to webp',
   },
 ];
 
 const CHEAT_SHEET_COMMANDS = [
-  { label: 'compress to 85KB', desc: 'Binary search compression' },
-  { label: 'strip blank pages', desc: 'Lossless PDF page pruning' },
-  { label: 'resize to 1080x1080', desc: 'Exact pixel dimensioning' },
-  { label: 'shrink PDF under 200KB', desc: 'Strict gateway document quota' },
+  { label: 'compress to 85KB', desc: 'Shrinks file to exact size' },
+  { label: 'strip blank pages', desc: 'Deletes empty pages' },
+  { label: 'resize to 1080x1080', desc: 'Changes width and height' },
+  { label: 'shrink PDF under 200KB', desc: 'Fits PDF under portal limit' },
 ];
 
 export default function Assistant() {
@@ -324,10 +322,10 @@ export default function Assistant() {
         ) : (
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-2 text-purple-600 dark:text-purple-400 hover:text-purple-700 font-semibold cursor-pointer"
+            className="flex items-center gap-2 text-[#5268FF] hover:text-[#4256E8] font-semibold cursor-pointer"
           >
             <Upload className="w-3.5 h-3.5" />
-            <span>Mount File for Local WASM Execution</span>
+            <span>Attach a file for AI editing</span>
           </button>
         )}
 
@@ -343,14 +341,14 @@ export default function Assistant() {
         {messages.length === 0 ? (
           <div className="h-full flex flex-col justify-center py-6">
             <div className="text-center mb-6">
-              <div className="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 flex items-center justify-center mx-auto mb-3 shadow-xs">
-                <Sparkles className="w-6 h-6 text-purple-500" />
+              <div className="w-12 h-12 rounded-2xl bg-[#EEF2FF] text-[#5268FF] border border-[#C7D4FF] flex items-center justify-center mx-auto mb-3 shadow-xs">
+                <Sparkles className="w-6 h-6 text-[#5268FF]" />
               </div>
-              <h4 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-1">
-                AI Natural Language Command Console
+              <h4 className="text-lg font-bold text-[#2D325A] dark:text-slate-100 mb-1">
+                Tell PerfectByte what you need
               </h4>
-              <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
-                Type what you need or click an intent card below. All processing executes 100% locally in your browser.
+              <p className="text-xs text-[#5A628A] dark:text-slate-400 max-w-sm mx-auto">
+                Pick a quick action below or type what you want in plain English.
               </p>
             </div>
 
@@ -362,21 +360,21 @@ export default function Assistant() {
                     key={intent.title}
                     type="button"
                     onClick={() => executeCommand(intent.prompt)}
-                    className="p-3.5 rounded-xl border border-slate-200/80 dark:border-white/[0.07] bg-white/80 dark:bg-[#10131C] hover:border-purple-400/50 hover:bg-purple-500/5 dark:hover:bg-[#191E2D] transition-all text-left flex flex-col justify-between group shadow-xs cursor-pointer"
+                    className="p-3.5 rounded-xl border border-[#E2E8F8] dark:border-white/[0.07] bg-white/80 dark:bg-[#10131C] hover:border-[#5268FF]/50 hover:bg-[#EEF2FF]/40 dark:hover:bg-[#191E2D] transition-all text-left flex flex-col justify-between group shadow-xs cursor-pointer"
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <div className="w-8 h-8 rounded-lg bg-blue-500/10 dark:bg-blue-500/15 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-lg bg-[#EEF2FF] dark:bg-blue-500/15 text-[#5268FF] flex items-center justify-center">
                         <IconComp className="w-4 h-4" />
                       </div>
-                      <span className="text-purple-500 text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+                      <span className="text-[#5268FF] text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
                         <span>Run</span>
                         <ArrowRight className="w-3 h-3" />
                       </span>
                     </div>
-                    <div className="font-bold text-xs text-slate-800 dark:text-slate-200 mb-1">
+                    <div className="font-bold text-xs text-[#2D325A] dark:text-slate-200 mb-1">
                       {intent.title}
                     </div>
-                    <div className="text-[11px] text-slate-400 leading-tight">
+                    <div className="text-[11px] text-[#848DB3] leading-tight">
                       {intent.desc}
                     </div>
                   </button>
@@ -389,16 +387,16 @@ export default function Assistant() {
             {messages.map((msg, i) =>
               msg.role === 'user' ? (
                 <motion.div key={i} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} className="flex justify-end">
-                  <div className="max-w-[80%] bg-[#5668FF] text-white rounded-2xl rounded-tr-sm px-4 py-2.5 text-xs sm:text-sm font-medium leading-relaxed shadow-sm">
+                  <div className="max-w-[80%] bg-[#5268FF] text-white rounded-2xl rounded-tr-sm px-4 py-2.5 text-xs sm:text-sm font-medium leading-relaxed shadow-sm">
                     {msg.text}
                   </div>
                 </motion.div>
               ) : (
                 <motion.div key={i} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} className="flex gap-3 items-start max-w-[85%]">
-                  <div className="w-7 h-7 rounded-lg bg-purple-500/10 border border-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
+                  <div className="w-7 h-7 rounded-lg bg-[#EEF2FF] border border-[#C7D4FF] text-[#5268FF] flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
                     <Sparkles className="w-3.5 h-3.5" />
                   </div>
-                  <div className="text-xs sm:text-sm font-medium leading-relaxed text-slate-700 dark:text-slate-300 pt-0.5">
+                  <div className="text-xs sm:text-sm font-medium leading-relaxed text-[#2D325A] dark:text-slate-300 pt-0.5">
                     {msg.text}
                   </div>
                 </motion.div>
@@ -407,13 +405,13 @@ export default function Assistant() {
 
             {isBusy && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-3 items-center">
-                <div className="w-7 h-7 rounded-lg bg-purple-500/10 text-purple-500 flex items-center justify-center text-xs">
+                <div className="w-7 h-7 rounded-lg bg-[#EEF2FF] text-[#5268FF] flex items-center justify-center text-xs">
                   <Sparkles className="w-3.5 h-3.5 animate-spin" />
                 </div>
                 <div className="flex gap-1">
-                  <div className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce" />
-                  <div className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce [animation-delay:150ms]" />
-                  <div className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce [animation-delay:300ms]" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#5268FF] animate-bounce" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#5268FF] animate-bounce [animation-delay:150ms]" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#5268FF] animate-bounce [animation-delay:300ms]" />
                 </div>
               </motion.div>
             )}
@@ -421,31 +419,31 @@ export default function Assistant() {
             {/* Output Download Card */}
             {downloadUrl && (
               <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="ml-10 my-2">
-                <div className="p-4 rounded-xl border border-slate-200/80 dark:border-white/10 bg-white/80 dark:bg-white/[0.04] space-y-3 max-w-sm shadow-md">
+                <div className="p-4 rounded-xl border border-[#E2E8F8] dark:border-white/10 bg-white/80 dark:bg-white/[0.04] space-y-3 max-w-sm shadow-md">
                   {hasSizes && (
                     <div className="flex items-baseline justify-between">
                       <div>
-                        <span className="text-[10px] font-mono text-slate-400 font-bold">REDUCTION</span>
-                        <span className="text-3xl font-black font-mono tabular-nums text-purple-600 dark:text-purple-400 block">
+                        <span className="text-[10px] font-mono text-[#848DB3] font-bold">REDUCTION</span>
+                        <span className="text-3xl font-black font-mono tabular-nums text-[#5268FF] block">
                           -{reductionPercent}%
                         </span>
                       </div>
                       <div className="text-right font-mono text-xs">
-                        <span className="text-slate-400 line-through block">{formatBytes(downloadUrl.originalSize!)}</span>
+                        <span className="text-[#848DB3] line-through block">{formatBytes(downloadUrl.originalSize!)}</span>
                         <span className="font-bold text-emerald-500">{formatBytes(downloadUrl.compressedSize!)}</span>
                       </div>
                     </div>
                   )}
 
                   {lastTargetKB !== null && (
-                    <div className="flex items-center justify-between text-xs font-mono pt-2 border-t border-slate-200/60 dark:border-white/10">
-                      <span className="text-slate-400">Stepper:</span>
+                    <div className="flex items-center justify-between text-xs font-mono pt-2 border-t border-[#E2E8F8] dark:border-white/10">
+                      <span className="text-[#848DB3]">Stepper:</span>
                       <div className="flex items-center gap-1">
                         <button
                           type="button"
                           onClick={() => handleNudgeTarget(Math.max(10, lastTargetKB - 25))}
                           disabled={isBusy}
-                          className="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 dark:bg-white/10 text-xs font-bold cursor-pointer"
+                          className="px-2 py-0.5 rounded bg-[#EEF2FF] hover:bg-[#E0E7FF] dark:bg-white/10 text-xs font-bold text-[#2D325A] dark:text-white cursor-pointer"
                         >
                           -25K
                         </button>
@@ -453,7 +451,7 @@ export default function Assistant() {
                           type="button"
                           onClick={() => handleNudgeTarget(lastTargetKB + 25)}
                           disabled={isBusy}
-                          className="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 dark:bg-white/10 text-xs font-bold cursor-pointer"
+                          className="px-2 py-0.5 rounded bg-[#EEF2FF] hover:bg-[#E0E7FF] dark:bg-white/10 text-xs font-bold text-[#2D325A] dark:text-white cursor-pointer"
                         >
                           +25K
                         </button>
@@ -464,7 +462,7 @@ export default function Assistant() {
                   <a
                     href={downloadUrl.url}
                     download={downloadUrl.name}
-                    className="w-full py-2.5 bg-gradient-to-b from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-mono font-bold text-xs rounded-lg text-center block shadow-xs transition-all"
+                    className="w-full py-2.5 bg-[#5268FF] hover:bg-[#4256E8] text-white font-mono font-bold text-xs rounded-lg text-center block shadow-xs transition-all"
                   >
                     Download {downloadUrl.name}
                   </a>
@@ -478,7 +476,7 @@ export default function Assistant() {
       </div>
 
       {/* ─── Floating Command Input Dock ─── */}
-      <form onSubmit={handleSubmit} className="p-3 border-t border-slate-200/80 dark:border-white/[0.08] bg-slate-100/70 dark:bg-[#0D0F17]/90">
+      <form onSubmit={handleSubmit} className="p-3 border-t border-[#E2E8F8] dark:border-white/[0.08] bg-slate-100/70 dark:bg-[#0D0F17]/90">
         <div className="flex items-center gap-2">
           <input
             ref={commandInputRef}
@@ -487,12 +485,12 @@ export default function Assistant() {
             onChange={(e) => setInput(e.target.value)}
             disabled={isBusy}
             placeholder='Type a command (e.g. "compress to 100KB" or "remove blank pages")...'
-            className="flex-1 px-4 py-2.5 text-xs font-mono rounded-xl outline-none border border-slate-200 dark:border-white/10 bg-white dark:bg-black/40 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 text-slate-900 dark:text-white transition-all"
+            className="flex-1 px-4 py-2.5 text-xs font-mono rounded-xl outline-none border border-[#E2E8F8] dark:border-white/10 bg-white dark:bg-[#10131C] focus:border-[#5268FF] focus:ring-2 focus:ring-[#5268FF]/20 text-[#2D325A] dark:text-white transition-all"
           />
           <button
             type="submit"
             disabled={isBusy || !input.trim()}
-            className="px-4 py-2.5 bg-gradient-to-b from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-xl text-xs font-mono font-bold transition-all disabled:opacity-40 disabled:dark:bg-violet-500/10 disabled:dark:text-violet-300/40 disabled:dark:border disabled:dark:border-violet-500/20 disabled:dark:shadow-none shadow-xs cursor-pointer"
+            className="px-4 py-2.5 bg-[#5268FF] hover:bg-[#4256E8] text-white rounded-xl text-xs font-mono font-bold transition-all disabled:opacity-40 shadow-xs cursor-pointer"
           >
             Run ↵
           </button>
@@ -505,44 +503,38 @@ export default function Assistant() {
   const inspectorContent = (
     <div className="space-y-4">
       {/* 1. Mounted Payload Inspector Card */}
-      <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white/60 dark:bg-[#141824]/90 backdrop-blur-md shadow-xs dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-3">
+      <div className="p-5 rounded-2xl border border-[#E2E8F8] dark:border-white/[0.08] bg-white/95 dark:bg-[#141824]/90 backdrop-blur-md shadow-xs space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
-            MOUNTED PAYLOAD INSPECTOR
+          <span className="text-[10px] font-mono uppercase tracking-wider text-[#848DB3] font-bold block">
+            SELECTED FILE
           </span>
           {files.length > 0 && (
             <span className="flex items-center gap-1 text-[10px] font-mono font-semibold text-emerald-500">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              IN-MEMORY
+              READY
             </span>
           )}
         </div>
 
         {files.length > 0 ? (
           <div className="space-y-2 text-xs font-mono">
-            <div className="p-3 rounded-xl bg-slate-100/70 dark:bg-[#0C0E14] border border-slate-200/60 dark:border-white/[0.06] space-y-1.5">
+            <div className="p-3 rounded-xl bg-[#EEF2FF]/60 dark:bg-[#0C0E14] border border-[#E2E8F8] dark:border-white/[0.06] space-y-1.5">
               <div className="flex justify-between items-center">
-                <span className="text-slate-400">File Name</span>
-                <span className="font-bold text-slate-800 dark:text-slate-200 truncate max-w-[150px]">
+                <span className="text-[#848DB3]">File Name</span>
+                <span className="font-bold text-[#2D325A] dark:text-slate-200 truncate max-w-[150px]">
                   {files[0].name}
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-slate-400">Payload Size</span>
-                <span className="font-semibold text-slate-700 dark:text-slate-300">
-                  {formatBytes(files[0].size)} ({files[0].size.toLocaleString()} B)
+                <span className="text-[#848DB3]">Size</span>
+                <span className="font-semibold text-[#5A628A] dark:text-slate-300">
+                  {formatBytes(files[0].size)}
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-slate-400">MIME Type</span>
-                <span className="font-semibold text-slate-700 dark:text-slate-300">
-                  {files[0].type || 'application/octet-stream'}
-                </span>
-              </div>
-              <div className="flex justify-between items-center pt-1 border-t border-slate-200/60 dark:border-white/[0.06]">
-                <span className="text-slate-400">Memory Status</span>
-                <span className="text-emerald-600 dark:text-emerald-400 font-bold">
-                  WASM Buffer Ready
+                <span className="text-[#848DB3]">Format</span>
+                <span className="font-semibold text-[#5A628A] dark:text-slate-300">
+                  {files[0].type || 'Binary Document'}
                 </span>
               </div>
             </div>
@@ -552,66 +544,29 @@ export default function Assistant() {
               onClick={() => { setFiles([]); setDownloadUrl(null); }}
               className="w-full py-2 text-xs font-mono text-rose-500 hover:text-rose-600 dark:hover:text-rose-400 bg-rose-500/5 hover:bg-rose-500/10 rounded-lg transition-colors text-center cursor-pointer font-semibold"
             >
-              Unmount Active File
+              Remove File
             </button>
           </div>
         ) : (
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="w-full py-5 px-4 rounded-xl border-2 border-dashed border-purple-500/30 hover:border-purple-500/60 text-xs font-mono text-purple-600 dark:text-purple-400 bg-purple-500/5 hover:bg-purple-500/10 transition-colors flex flex-col items-center justify-center gap-2 cursor-pointer"
+            className="w-full py-5 px-4 rounded-xl border-2 border-dashed border-[#C7D4FF] hover:border-[#5268FF] text-xs font-mono text-[#5268FF] bg-[#EEF2FF]/40 hover:bg-[#EEF2FF] transition-colors flex flex-col items-center justify-center gap-2 cursor-pointer"
           >
-            <Upload className="w-5 h-5 text-purple-500" />
-            <span className="font-bold">Drop or click to mount file</span>
-            <span className="text-[10px] text-slate-400">PDF, PNG, JPEG, WebP</span>
+            <Upload className="w-5 h-5 text-[#5268FF]" />
+            <span className="font-bold">Drop or click to attach a file</span>
+            <span className="text-[10px] text-[#848DB3]">PDF, PNG, JPEG, WebP</span>
           </button>
         )}
       </div>
 
-      {/* 2. Engine Routing & Execution Pipeline Card */}
-      <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white/60 dark:bg-[#141824]/90 shadow-xs dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-3">
+      {/* 2. Quick Parameter Overrides / Command Cheat-Sheet Card */}
+      <div className="p-5 rounded-2xl border border-[#E2E8F8] dark:border-white/[0.08] bg-white/95 dark:bg-[#141824]/90 shadow-xs space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
-            EXECUTION PIPELINE ROUTING
+          <span className="text-[10px] font-mono uppercase tracking-wider text-[#2D325A] dark:text-white font-bold block">
+            EXAMPLE COMMANDS
           </span>
-          <Cpu className="w-3.5 h-3.5 text-purple-500" />
-        </div>
-
-        <div className="space-y-2 text-xs font-mono">
-          <div className="p-2.5 rounded-lg bg-slate-100/60 dark:bg-[#10131C] border border-slate-200/50 dark:border-white/[0.06] flex items-center justify-between">
-            <span className="text-slate-500 dark:text-slate-400">1. Intent Parsing</span>
-            <span className="font-bold text-purple-600 dark:text-purple-400">Gemini 2.5 Flash</span>
-          </div>
-          <div className="p-2.5 rounded-lg bg-slate-100/60 dark:bg-[#10131C] border border-slate-200/50 dark:border-white/[0.06] flex items-center justify-between">
-            <span className="text-slate-500 dark:text-slate-400">2. Parameter Extraction</span>
-            <span className="font-bold text-slate-800 dark:text-slate-200">Function Calling</span>
-          </div>
-          <div className="p-2.5 rounded-lg bg-slate-100/60 dark:bg-[#10131C] border border-slate-200/50 dark:border-white/[0.06] flex items-center justify-between">
-            <span className="text-slate-500 dark:text-slate-400">3. Local Execution</span>
-            <span className="font-bold text-emerald-600 dark:text-emerald-400">Client-Side WASM</span>
-          </div>
-          <div className="p-2.5 rounded-lg bg-slate-100/60 dark:bg-[#10131C] border border-slate-200/50 dark:border-white/[0.06] flex items-center justify-between">
-            <span className="text-slate-500 dark:text-slate-400">4. Byte Verification</span>
-            <span className="font-bold text-blue-600 dark:text-blue-400">Binary Convergence</span>
-          </div>
-        </div>
-
-        <div className="pt-2 border-t border-slate-200/60 dark:border-white/[0.06] flex items-center justify-between text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
-          <span className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>Zero File Bytes Sent to Cloud</span>
-          </span>
-          <span>Metadata-Only</span>
-        </div>
-      </div>
-
-      {/* 3. Quick Parameter Overrides / Command Cheat-Sheet Card */}
-      <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white/60 dark:bg-[#141824]/90 shadow-xs dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-3">
-        <div className="flex items-center justify-between">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
-            COMMAND CHEAT-SHEET
-          </span>
-          <Terminal className="w-3.5 h-3.5 text-slate-400" />
+          <Terminal className="w-3.5 h-3.5 text-[#5A628A]" />
         </div>
 
         <div className="space-y-1.5">
@@ -624,15 +579,15 @@ export default function Assistant() {
                 commandInputRef.current?.focus();
                 haptic(8);
               }}
-              className="w-full text-left p-2.5 rounded-xl bg-slate-100/70 hover:bg-purple-500/10 dark:bg-[#10131C] dark:hover:bg-[#191E2D] dark:hover:border-purple-500/30 text-xs font-mono transition-all flex items-center justify-between border border-slate-200/60 dark:border-white/[0.06] group cursor-pointer"
+              className="w-full text-left p-2.5 rounded-xl bg-[#EEF2FF]/50 hover:bg-[#EEF2FF] dark:bg-[#10131C] dark:hover:bg-[#191E2D] dark:hover:border-[#5268FF]/30 text-xs font-mono transition-all flex items-center justify-between border border-[#E2E8F8] dark:border-white/[0.06] group cursor-pointer"
             >
               <div>
-                <span className="font-bold text-slate-800 dark:text-slate-200 group-hover:text-purple-600 dark:group-hover:text-purple-400 block">
+                <span className="font-bold text-[#2D325A] dark:text-slate-200 group-hover:text-[#5268FF] block">
                   &quot;{item.label}&quot;
                 </span>
-                <span className="text-[10px] text-slate-400 block">{item.desc}</span>
+                <span className="text-[10px] text-[#848DB3] block">{item.desc}</span>
               </div>
-              <span className="text-[10px] text-purple-500 font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+              <span className="text-[10px] text-[#5268FF] font-bold opacity-0 group-hover:opacity-100 transition-opacity">
                 + Fill
               </span>
             </button>
@@ -645,8 +600,8 @@ export default function Assistant() {
   return (
     <ToolShell
       title="AI Command Center"
-      accentColor="bg-purple-500"
-      badgeText="GEMINI ROUTING"
+      accentColor="bg-[#5268FF]"
+      badgeText="GEMINI AI"
       canvas={canvasContent}
       inspector={inspectorContent}
     />

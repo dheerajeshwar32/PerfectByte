@@ -8,7 +8,7 @@ import { useDocumentTitle } from './useDocumentTitle';
 import { formatBytes } from './utils';
 import { haptic } from './usePWA';
 import JSZip from 'jszip';
-import { Settings2, Download, RefreshCw, Zap } from 'lucide-react';
+import { Settings2, Download, RefreshCw } from 'lucide-react';
 
 interface CompressedFile {
   name: string;
@@ -157,10 +157,10 @@ export default function BulkCompressor() {
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
           onClick={() => fileInputRef.current?.click()}
-          title="Drop multiple images for bulk processing"
-          subtitle="Queue hundreds of files for concurrent parallel WebAssembly optimization"
+          title="Drop multiple images to compress at once"
+          subtitle="Shrink dozens of photos in seconds without losing visual quality."
           formats={['PNG', 'JPEG', 'WebP']}
-          iconColor="text-teal-500"
+          iconColor="text-[#5268FF]"
           fileInput={
             <input
               ref={fileInputRef}
@@ -299,26 +299,22 @@ export default function BulkCompressor() {
   const inspectorContent = (
     <div className="space-y-4">
       {/* Telemetry Hero Banner */}
-      <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white/60 dark:bg-[#141824]/90 backdrop-blur-md shadow-xs dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-4">
+      <div className="p-5 rounded-2xl border border-[#E2E8F8] dark:border-white/[0.08] bg-white/95 dark:bg-[#141824]/90 backdrop-blur-md shadow-xs space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold">
-            BATCH STORAGE TELEMETRY
-          </span>
-          <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20 text-[10px] font-mono font-bold">
-            <Zap className="w-3 h-3 text-teal-500" />
-            4x SIMD Active
+          <span className="text-[10px] font-mono uppercase tracking-wider text-[#848DB3] font-bold">
+            TOTAL SPACE SAVED
           </span>
         </div>
 
         {compressedFiles.length > 0 ? (
           <div className="space-y-2">
             <div>
-              <span className="text-[10px] font-mono text-slate-400 block font-bold">LIFETIME STORAGE SAVED</span>
-              <span className="text-4xl sm:text-5xl font-black font-mono tabular-nums text-emerald-500 tracking-tight">
+              <span className="text-[10px] font-mono text-[#848DB3] block font-bold">LIFETIME STORAGE SAVED</span>
+              <span className="text-4xl sm:text-5xl font-black font-mono tabular-nums text-[#5268FF] chromatic-accent tracking-tight">
                 {formatBytes(totalReduction)}
               </span>
             </div>
-            <div className="text-xs font-mono text-slate-400">
+            <div className="text-xs font-mono text-[#5A628A] dark:text-slate-400">
               Reduced from {formatBytes(totalOriginal)} by{' '}
               {totalOriginal > 0 ? ((totalReduction / totalOriginal) * 100).toFixed(0) : 0}%
             </div>
@@ -326,33 +322,33 @@ export default function BulkCompressor() {
         ) : (
           <div className="space-y-3">
             <div>
-              <span className="text-[10px] font-mono text-slate-400 block font-bold">LIFETIME STORAGE SAVED</span>
-              <span className="text-4xl sm:text-5xl font-black font-mono tabular-nums text-teal-600 dark:text-teal-400 tracking-tight">
+              <span className="text-[10px] font-mono text-[#848DB3] block font-bold">LIFETIME STORAGE SAVED</span>
+              <span className="text-4xl sm:text-5xl font-black font-mono tabular-nums text-[#5268FF] chromatic-accent tracking-tight">
                 {formatBytes(Math.max(0, stats.totalOriginal - stats.totalCompressed))}
               </span>
             </div>
 
-            <div className="flex items-center justify-between text-xs font-mono pt-2 border-t border-slate-200/60 dark:border-white/[0.06]">
-              <span className="text-slate-400">Files Processed</span>
-              <span className="font-bold text-slate-700 dark:text-slate-300">{stats.count} files</span>
+            <div className="flex items-center justify-between text-xs font-mono pt-2 border-t border-[#E2E8F8] dark:border-white/[0.06]">
+              <span className="text-[#848DB3]">Files Processed</span>
+              <span className="font-bold text-[#2D325A] dark:text-white">{stats.count} files</span>
             </div>
           </div>
         )}
       </div>
 
-      {/* Batch Output Configuration Card (Balances Height) */}
-      <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white/60 dark:bg-[#141824]/90 shadow-xs dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-4">
+      {/* Batch Output Configuration Card */}
+      <div className="p-5 rounded-2xl border border-[#E2E8F8] dark:border-white/[0.08] bg-white/95 dark:bg-[#141824]/90 shadow-xs space-y-4">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
-            BATCH OUTPUT CONFIGURATION
+          <span className="text-[10px] font-mono uppercase tracking-wider text-[#2D325A] dark:text-white font-bold block">
+            OUTPUT SETTINGS
           </span>
-          <Settings2 className="w-3.5 h-3.5 text-slate-400" />
+          <Settings2 className="w-3.5 h-3.5 text-[#5A628A]" />
         </div>
 
         {/* Target Format Pills */}
         <div className="space-y-1.5">
-          <label className="text-[11px] font-mono text-slate-500 dark:text-slate-400 font-semibold block">
-            TARGET CODEC
+          <label className="text-[11px] font-mono text-[#5A628A] dark:text-slate-400 font-semibold block">
+            OUTPUT FORMAT
           </label>
           <div className="grid grid-cols-4 gap-1.5">
             {(['auto', 'webp', 'jpeg', 'png'] as const).map((fmt) => (
@@ -362,8 +358,8 @@ export default function BulkCompressor() {
                 onClick={() => { setTargetFormat(fmt); haptic(8); }}
                 className={`py-2 rounded-lg text-xs font-mono font-bold transition-all border cursor-pointer ${
                   targetFormat === fmt
-                    ? 'bg-teal-500/15 border-teal-500/50 text-teal-600 dark:text-teal-400 shadow-xs'
-                    : 'bg-white dark:bg-[#10131C] border-slate-200/70 dark:border-white/[0.06] text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:hover:border-teal-500/30'
+                    ? 'bg-[#5268FF]/15 border-[#5268FF]/50 text-[#5268FF] shadow-xs'
+                    : 'bg-white dark:bg-[#10131C] border-[#E2E8F8] dark:border-white/[0.06] text-[#5A628A] dark:text-slate-400 hover:text-[#2D325A] dark:hover:text-white'
                 }`}
               >
                 {fmt.toUpperCase()}
@@ -373,8 +369,8 @@ export default function BulkCompressor() {
         </div>
 
         {/* Optimization Profile */}
-        <div className="space-y-1.5 pt-2 border-t border-slate-200/60 dark:border-white/[0.06]">
-          <label className="text-[11px] font-mono text-slate-500 dark:text-slate-400 font-semibold block">
+        <div className="space-y-1.5 pt-2 border-t border-[#E2E8F8] dark:border-white/[0.06]">
+          <label className="text-[11px] font-mono text-[#5A628A] dark:text-slate-400 font-semibold block">
             OPTIMIZATION PROFILE
           </label>
           <div className="grid grid-cols-2 gap-2">
@@ -383,42 +379,26 @@ export default function BulkCompressor() {
               onClick={() => { setOptProfile('max_savings'); haptic(8); }}
               className={`p-2.5 rounded-xl text-left transition-all border cursor-pointer ${
                 optProfile === 'max_savings'
-                  ? 'bg-teal-500/10 border-teal-500/60 text-teal-700 dark:text-teal-300 shadow-xs'
-                  : 'bg-white dark:bg-[#10131C] border-slate-200/70 dark:border-white/[0.06] text-slate-600 dark:text-slate-400 dark:hover:border-teal-500/30'
+                  ? 'bg-[#5268FF]/10 border-[#5268FF]/60 text-[#5268FF] shadow-xs'
+                  : 'bg-white dark:bg-[#10131C] border-[#E2E8F8] dark:border-white/[0.06] text-[#5A628A] dark:text-slate-400'
               }`}
             >
-              <div className="text-xs font-bold font-mono">Max Byte Savings</div>
-              <div className="text-[10px] text-slate-400 mt-0.5">Aggressive binary search</div>
+              <div className="text-xs font-bold font-mono">Smallest File Size</div>
+              <div className="text-[10px] text-[#848DB3] mt-0.5">Saves the most storage space</div>
             </button>
             <button
               type="button"
               onClick={() => { setOptProfile('visually_lossless'); haptic(8); }}
               className={`p-2.5 rounded-xl text-left transition-all border cursor-pointer ${
                 optProfile === 'visually_lossless'
-                  ? 'bg-teal-500/10 border-teal-500/60 text-teal-700 dark:text-teal-300 shadow-xs'
-                  : 'bg-white dark:bg-[#10131C] border-slate-200/70 dark:border-white/[0.06] text-slate-600 dark:text-slate-400 dark:hover:border-teal-500/30'
+                  ? 'bg-[#5268FF]/10 border-[#5268FF]/60 text-[#5268FF] shadow-xs'
+                  : 'bg-white dark:bg-[#10131C] border-[#E2E8F8] dark:border-white/[0.06] text-[#5A628A] dark:text-slate-400'
               }`}
             >
-              <div className="text-xs font-bold font-mono">Visually Lossless</div>
-              <div className="text-[10px] text-slate-400 mt-0.5">Retains subtle fidelity</div>
+              <div className="text-xs font-bold font-mono">Best Visual Quality</div>
+              <div className="text-[10px] text-[#848DB3] mt-0.5">Keeps original sharpness</div>
             </button>
           </div>
-        </div>
-      </div>
-
-      {/* Engine & Settings Specs */}
-      <div className="p-4 rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white/60 dark:bg-[#141824]/90 dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-2 text-xs font-mono text-slate-500 dark:text-slate-400">
-        <div className="flex items-center justify-between">
-          <span>Engine Codec</span>
-          <span className="font-bold text-slate-800 dark:text-slate-200">Google WebP (WASM)</span>
-        </div>
-        <div className="flex items-center justify-between">
-          <span>Worker Concurrency</span>
-          <span className="font-bold text-teal-600 dark:text-teal-400">4 Parallel Web Workers</span>
-        </div>
-        <div className="flex items-center justify-between">
-          <span>Security / Privacy</span>
-          <span className="font-bold text-emerald-500">100% In-Memory RAM</span>
         </div>
       </div>
 
@@ -428,10 +408,10 @@ export default function BulkCompressor() {
           <>
             <button
               onClick={handleDownloadAll}
-              className="w-full py-3.5 rounded-xl font-bold text-sm transition-all bg-gradient-to-b from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white shadow-[0_8px_24px_-4px_rgba(20,184,166,0.45),inset_0_1px_0_rgba(255,255,255,0.25)] active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-3.5 rounded-xl font-bold text-sm transition-all bg-[#5268FF] hover:bg-[#4256E8] text-white shadow-[0_6px_20px_rgba(82,104,255,0.28)] active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
             >
               <Download className="w-4 h-4" />
-              <span>Download ZIP Archive ({compressedFiles.length})</span>
+              <span>Download All ({compressedFiles.length})</span>
             </button>
 
             <button
@@ -440,19 +420,19 @@ export default function BulkCompressor() {
                 setCompressedFiles([]);
                 setFiles([]);
               }}
-              className="w-full py-2.5 text-xs font-mono text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-colors rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-[#0C0E14] dark:hover:bg-[#191E2D] border border-transparent dark:border-white/[0.06] text-center cursor-pointer flex items-center justify-center gap-1.5"
+              className="w-full py-2.5 text-xs font-mono text-[#5A628A] hover:text-[#2D325A] dark:text-slate-400 dark:hover:text-slate-200 transition-colors rounded-xl bg-[#EEF2FF] hover:bg-[#E0E7FF] dark:bg-[#10131C] dark:hover:bg-[#191E2D] border border-[#E2E8F8] dark:border-white/[0.06] text-center cursor-pointer flex items-center justify-center gap-1.5"
             >
               <RefreshCw className="w-3 h-3" />
-              <span>Clear Batch &amp; Add More</span>
+              <span>Clear &amp; Add More</span>
             </button>
           </>
         ) : (
           <button
             onClick={handleCompress}
             disabled={files.length === 0 || isProcessing}
-            className="w-full py-3.5 rounded-xl font-bold text-sm transition-all bg-gradient-to-b from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white shadow-[0_8px_24px_-4px_rgba(20,184,166,0.45),inset_0_1px_0_rgba(255,255,255,0.25)] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:dark:bg-emerald-500/10 disabled:dark:text-emerald-300/40 disabled:dark:border disabled:dark:border-emerald-500/20 disabled:dark:shadow-none cursor-pointer"
+            className="w-full py-3.5 rounded-xl font-bold text-sm transition-all bg-[#5268FF] hover:bg-[#4256E8] text-white shadow-[0_6px_20px_rgba(82,104,255,0.28)] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
           >
-            {isProcessing ? 'Processing Batch...' : `EXECUTE BATCH (${files.length} FILES)`}
+            {isProcessing ? 'Compressing Images...' : `Compress All Images (${files.length})`}
           </button>
         )}
       </div>
@@ -462,8 +442,8 @@ export default function BulkCompressor() {
   return (
     <ToolShell
       title="Bulk Compression"
-      accentColor="bg-teal-500"
-      badgeText="4x PARALLEL WORKERS"
+      accentColor="bg-[#5268FF]"
+      badgeText="MULTI-FILE BATCH"
       canvas={canvasContent}
       inspector={inspectorContent}
     />

@@ -31,12 +31,12 @@ const DETENTS = [
 ];
 
 const PRESETS = [
-  { label: 'Govt Portal', sub: '100,000 bytes', icon: Landmark, kb: 100 },
-  { label: 'Strict Portal', sub: '200,000 bytes', icon: FileCheck, kb: 200 },
-  { label: 'WhatsApp', sub: '50,000 bytes', icon: MessageCircle, kb: 50 },
-  { label: 'University', sub: '500,000 bytes', icon: GraduationCap, kb: 500 },
-  { label: 'LinkedIn', sub: '2,000,000 bytes', icon: Briefcase, kb: 2000 },
-  { label: 'Email Safe', sub: '5,000,000 bytes', icon: Mail, kb: 5000 },
+  { label: 'Govt Portal', sub: 'Under 100 KB', icon: Landmark, kb: 100 },
+  { label: 'Strict Portal', sub: 'Under 200 KB', icon: FileCheck, kb: 200 },
+  { label: 'WhatsApp', sub: 'Under 50 KB', icon: MessageCircle, kb: 50 },
+  { label: 'University', sub: 'Under 500 KB', icon: GraduationCap, kb: 500 },
+  { label: 'LinkedIn', sub: 'Under 2 MB', icon: Briefcase, kb: 2000 },
+  { label: 'Email Safe', sub: 'Under 5 MB', icon: Mail, kb: 5000 },
 ];
 
 function kbToPercent(kb: number, min: number, max: number): number {
@@ -108,39 +108,32 @@ export default function TargetScrubber({
     setIsEditing(false);
   };
 
-  const targetBytes = value * 1000;
   const isAtDetent = DETENTS.some((d) => d.kb === value);
 
   return (
-    <div className="space-y-4 rounded-2xl p-4 sm:p-5 border border-slate-200/80 dark:border-white/[0.07] bg-white/60 dark:bg-[#141824]/90 backdrop-blur-md shadow-xs dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
+    <div className="space-y-4 rounded-2xl p-4 sm:p-5 border border-[#E2E8F8] bg-white/95 backdrop-blur-xl shadow-[0_10px_35px_-10px_rgba(45,50,90,0.06)]">
       {/* ─── Digital Byte Readout Hardware Card ─── */}
-      <div className="relative overflow-hidden rounded-2xl p-4 bg-gradient-to-b from-slate-900 to-slate-950 dark:bg-[#080A10] text-white shadow-xl border border-slate-800 dark:border-blue-500/30 dark:shadow-[inset_0_0_32px_rgba(59,130,246,0.12)]">
+      <div className="relative overflow-hidden rounded-2xl p-5 bg-gradient-to-br from-[#343A68] via-[#2D325A] to-[#222647] text-white shadow-[0_14px_32px_-8px_rgba(45,50,90,0.28)] border border-[#5268FF]/30">
         {/* Subtle grid mesh background */}
         <div className="absolute inset-0 pb-dot-matrix opacity-20 pointer-events-none" />
 
         <div className="relative z-10 flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono uppercase font-bold tracking-widest text-slate-400">
-              TARGET CAPACITY
-            </span>
-            <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[9px] font-mono font-bold tracking-tight">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-              LOCKED UPPER CAP
-            </span>
-          </div>
+          <span className="text-[10px] font-mono uppercase font-bold tracking-widest text-[#C7D4FF]">
+            MAXIMUM FILE SIZE
+          </span>
 
           {isAtDetent && (
-            <span className="text-[10px] font-mono text-emerald-400 font-bold flex items-center gap-1">
-              <Zap className="w-3 h-3 text-emerald-400" />
-              <span>MAGNETIC SNAP</span>
+            <span className="text-[10px] font-mono text-[#C7D2FE] font-bold flex items-center gap-1">
+              <Zap className="w-3 h-3 text-[#5268FF]" />
+              <span>Guaranteed Under Limit</span>
             </span>
           )}
         </div>
 
         {/* Center Readout */}
-        <div className="relative z-10 flex flex-col items-center justify-center py-1">
+        <div className="relative z-10 flex flex-col items-center justify-center py-2">
           {isEditing ? (
-            <div className="flex items-baseline gap-2 px-4 py-1.5 rounded-xl bg-white/10 border border-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.3)]">
+            <div className="flex items-baseline gap-2 px-4 py-1.5 rounded-xl bg-white/10 border border-[#5268FF] shadow-[0_0_20px_rgba(82,104,255,0.3)]">
               <input
                 ref={inputRef}
                 type="number"
@@ -159,7 +152,7 @@ export default function TargetScrubber({
                 aria-label="Target file size in kilobytes"
                 className="w-32 text-4xl sm:text-5xl font-extrabold font-mono tabular-nums text-center bg-transparent outline-none text-white tracking-tight"
               />
-              <span className="text-xl sm:text-2xl font-black text-blue-400 font-mono">KB</span>
+              <span className="text-xl sm:text-2xl font-black font-mono chromatic-accent">KB</span>
             </div>
           ) : (
             <button
@@ -169,29 +162,23 @@ export default function TargetScrubber({
                 setIsEditing(true);
               }}
               disabled={disabled}
-              className="group flex items-baseline gap-2 px-4 py-1 rounded-xl hover:bg-white/[0.06] transition-all cursor-text"
+              className="group flex items-baseline gap-2 px-4 py-1 rounded-xl hover:bg-white/[0.08] transition-all cursor-text"
               aria-label={`Target: ${value} KB. Click to directly type size.`}
               title="Click to type exact byte size"
             >
               <span className="text-4xl sm:text-5xl font-extrabold font-mono tabular-nums text-white tracking-tight drop-shadow-md">
                 {value.toLocaleString()}
               </span>
-              <span className="text-xl sm:text-2xl font-bold text-blue-400 font-mono">KB</span>
-              <span className="opacity-0 group-hover:opacity-100 text-[10px] text-slate-400 font-mono transition-opacity ml-1.5">
+              <span className="text-xl sm:text-2xl font-black font-mono chromatic-accent">KB</span>
+              <span className="opacity-0 group-hover:opacity-100 text-[10px] text-[#C7D4FF] font-mono transition-opacity ml-1.5">
                 [EDIT]
               </span>
             </button>
           )}
 
-          {/* Dual-Unit Live Telemetry Badges */}
-          <div className="flex items-center gap-2 mt-2 text-xs font-mono tabular-nums text-slate-400">
-            <span className="px-2 py-0.5 rounded-md bg-white/[0.06] border border-white/10 text-slate-200 font-semibold text-[11px]">
-              {targetBytes.toLocaleString()} bytes
-            </span>
-            <span>•</span>
-            <span className="px-2 py-0.5 rounded-md bg-white/[0.06] border border-white/10 text-slate-200 font-semibold text-[11px]">
-              {(targetBytes / 1024).toFixed(1)} KiB
-            </span>
+          {/* Clean Sub-Text: Your file will be saved under {value} KB */}
+          <div className="mt-2 text-xs font-mono text-[#C7D2FE]">
+            Your file will be saved under {value} KB
           </div>
         </div>
       </div>
@@ -200,16 +187,16 @@ export default function TargetScrubber({
       <div className="space-y-1.5 pt-0.5">
         <div className="relative py-2 flex items-center">
           {/* Single unified custom slider track */}
-          <div className="relative h-2 w-full rounded-full bg-slate-200 dark:bg-white/10 overflow-hidden">
+          <div className="relative h-2 w-full rounded-full bg-[#E2E8F8] overflow-hidden">
             <div
-              className="absolute left-0 top-0 h-full rounded-full bg-blue-600"
+              className="absolute left-0 top-0 h-full rounded-full bg-[#5268FF]"
               style={{ width: `${sliderPercent}%` }}
             />
           </div>
 
           {/* Active Thumb centered vertically on track */}
           <div
-            className="pointer-events-none absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-white dark:bg-[#1E2028] border-2 border-blue-600 shadow-[0_2px_8px_rgba(37,99,235,0.45)] z-10 transition-transform active:scale-110"
+            className="pointer-events-none absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-white border-2 border-[#5268FF] shadow-[0_2px_8px_rgba(82,104,255,0.45)] z-10 transition-transform active:scale-110"
             style={{ left: `calc(10px + (${sliderPercent} / 100) * (100% - 20px))` }}
           />
 
@@ -241,7 +228,7 @@ export default function TargetScrubber({
                   y2={i % 4 === 0 ? 8 : 4}
                   stroke="currentColor"
                   strokeWidth="1"
-                  className="text-slate-300 dark:text-zinc-700"
+                  className="text-[#C7D4FF]"
                 />
               );
             })}
@@ -265,9 +252,8 @@ export default function TargetScrubber({
                     y1={0}
                     x2={x}
                     y2={isSelected ? 16 : 10}
-                    stroke={isSelected ? '#3B82F6' : 'currentColor'}
+                    stroke={isSelected ? '#5268FF' : '#A0AEC0'}
                     strokeWidth={isSelected ? '2.5' : '1.5'}
-                    className={isSelected ? '' : 'text-slate-400 dark:text-zinc-600'}
                   />
                   <text
                     x={x}
@@ -275,8 +261,7 @@ export default function TargetScrubber({
                     textAnchor="middle"
                     fontSize="9.5"
                     fontWeight={isSelected ? 'bold' : 'normal'}
-                    fill={isSelected ? '#3B82F6' : 'currentColor'}
-                    className={isSelected ? '' : 'text-slate-400 dark:text-zinc-500 hover:text-slate-700'}
+                    fill={isSelected ? '#5268FF' : '#5A628A'}
                     fontFamily="ui-monospace, monospace"
                   >
                     {d.label}
@@ -288,9 +273,9 @@ export default function TargetScrubber({
         </div>
       </div>
 
-      {/* ─── Quick Portal Presets Grid (2-Column Bento Tiles with lucide-react vector icons) ─── */}
+      {/* ─── Quick Portal Presets Grid (2-Column Bento Tiles) ─── */}
       <div className="space-y-2 pt-0.5">
-        <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-bold block">
+        <span className="text-[10px] font-mono uppercase tracking-wider text-[#848DB3] font-bold block">
           QUICK PORTAL LIMITS
         </span>
         <div className="grid grid-cols-2 gap-2">
@@ -305,26 +290,26 @@ export default function TargetScrubber({
                   onChange(p.kb);
                   haptic(10);
                 }}
-                className={`p-2.5 rounded-xl text-left transition-all border flex items-center gap-2.5 ${
+                className={`p-2.5 rounded-xl text-left transition-all border flex items-center gap-2.5 cursor-pointer ${
                   isCurrent
-                    ? 'bg-blue-500/10 border-blue-500/60 shadow-xs'
-                    : 'bg-white dark:bg-[#141824]/90 border-slate-200/80 dark:border-white/[0.07] hover:border-slate-300 dark:hover:border-blue-500/40 hover:bg-slate-50 dark:hover:bg-[#191E2D]'
+                    ? 'bg-[#EEF2FF] border-[#5268FF] shadow-xs'
+                    : 'bg-white border-[#E2E8F8] hover:border-[#5268FF]/50 hover:bg-[#F6F8FC]'
                 }`}
               >
                 <div
                   className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
                     isCurrent
-                      ? 'bg-blue-500 text-white shadow-xs'
-                      : 'bg-blue-500/10 dark:bg-blue-500/15 text-blue-600 dark:text-blue-400'
+                      ? 'bg-[#5268FF] text-white shadow-xs'
+                      : 'bg-[#EEF2FF] text-[#5268FF]'
                   }`}
                 >
                   <IconComp className="w-4 h-4" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                  <div className="text-xs font-bold text-[#2D325A] truncate">
                     {p.label}
                   </div>
-                  <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400 font-medium">
+                  <div className="text-[10px] font-mono text-[#5A628A] font-medium">
                     {p.sub}
                   </div>
                 </div>

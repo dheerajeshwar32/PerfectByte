@@ -55,7 +55,7 @@ function BeforeAfterSlider({ originalUrl, compressedUrl }: { originalUrl: string
       </div>
 
       <div className="absolute top-0 bottom-0 w-0.5 bg-white shadow-[0_0_12px_rgba(0,0,0,0.5)] pointer-events-none" style={{ left: `${position}%` }}>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-7 h-7 bg-white dark:bg-zinc-900 rounded-full shadow-lg flex items-center justify-center text-[#5668FF] text-xs font-bold border border-zinc-200 dark:border-zinc-700">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-7 h-7 bg-white dark:bg-[#12182B] rounded-full shadow-lg flex items-center justify-center text-[#5268FF] text-xs font-bold border border-[#E2E8F8] dark:border-white/10">
           ↔
         </div>
       </div>
@@ -95,14 +95,14 @@ function BeforeAfterSlider({ originalUrl, compressedUrl }: { originalUrl: string
         onClick={() => setShowLoupe(!showLoupe)}
         aria-label="Toggle Magnifier Loupe"
         className={`hidden sm:block absolute bottom-3 left-3 z-30 px-2.5 py-1 rounded-lg text-[11px] font-bold font-mono transition-colors ${
-          showLoupe ? 'bg-[#5668FF] text-white shadow-md' : 'bg-black/60 text-white/90 hover:bg-black/80'
+          showLoupe ? 'bg-[#5268FF] text-white shadow-md' : 'bg-[#2D325A]/80 text-white hover:bg-[#2D325A]'
         }`}
       >
         🔍 2.5x Loupe
       </button>
 
-      <span className="absolute top-3 left-3 bg-black/60 backdrop-blur text-white text-[10px] px-2.5 py-1 rounded-md pointer-events-none font-mono">Original</span>
-      <span className="absolute top-3 right-3 bg-black/60 backdrop-blur text-white text-[10px] px-2.5 py-1 rounded-md pointer-events-none font-mono">Compressed</span>
+      <span className="absolute top-3 left-3 bg-[#2D325A]/80 backdrop-blur text-white text-[10px] px-2.5 py-1 rounded-md pointer-events-none font-mono">Original</span>
+      <span className="absolute top-3 right-3 bg-[#2D325A]/80 backdrop-blur text-white text-[10px] px-2.5 py-1 rounded-md pointer-events-none font-mono">Compressed</span>
     </div>
   );
 }
@@ -293,8 +293,8 @@ export default function TargetCompressor() {
           onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
           onDragLeave={() => setIsDragging(false)}
           onClick={() => fileInputRef.current?.click()}
-          title="Drop image or PDF to compress to exact byte size"
-          subtitle="Precision binary search compression algorithm fits your file under the strict byte ceiling"
+          title="Drop an image or PDF to shrink"
+          subtitle="Automatically compresses your file to fit under your exact size limit."
           formats={['PNG', 'JPEG', 'WebP', 'PDF']}
           isProcessing={isProcessing}
           processingMessage={progressMsg || `Running convergence search (Pass ${passCount})...`}
@@ -350,17 +350,17 @@ export default function TargetCompressor() {
         />
       ) : (
         <div className="space-y-5">
-          <div className="p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white/60 dark:bg-[#141824]/90 backdrop-blur-md shadow-xs dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-4">
+          <div className="p-5 rounded-2xl border border-[#E2E8F8] bg-white/95 backdrop-blur-xl shadow-[0_10px_35px_-10px_rgba(45,50,90,0.06)] space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-[#848DB3] font-bold">
                 CONVERGENCE TELEMETRY
               </span>
               {result.isAlreadyUnderTarget ? (
-                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 text-[9px] font-mono font-bold">
+                <span className="px-2.5 py-0.5 rounded-full bg-[#EEF2FF] text-[#5268FF] border border-[#C7D4FF] text-[9px] font-mono font-bold">
                   UNTOUCHED
                 </span>
               ) : (
-                <span className="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/20 text-[9px] font-mono font-bold">
+                <span className="px-2.5 py-0.5 rounded-full bg-[#EEF2FF] text-[#5268FF] border border-[#C7D4FF] text-[9px] font-mono font-bold">
                   PASS {result.iterations || 1} CONVERGED
                 </span>
               )}
@@ -369,50 +369,50 @@ export default function TargetCompressor() {
             {/* Reduction Callout */}
             <div className="flex items-baseline justify-between">
               <div>
-                <span className="text-[10px] font-mono text-slate-400 block font-bold">REDUCTION</span>
-                <span className="text-5xl font-black font-mono tabular-nums text-slate-900 dark:text-white">
+                <span className="text-[10px] font-mono text-[#848DB3] block font-bold">REDUCTION</span>
+                <span className="text-5xl font-black font-mono tabular-nums text-[#2D325A]">
                   {result.originalSize > 0
                     ? `-${Math.max(0, ((result.originalSize - result.compressedSize) / result.originalSize * 100)).toFixed(0)}%`
                     : '0%'}
                 </span>
               </div>
               <div className="text-right">
-                <span className="text-[10px] font-mono text-slate-400 block font-bold">SPACE FREED</span>
-                <span className="text-xl font-bold font-mono text-emerald-500">
+                <span className="text-[10px] font-mono text-[#848DB3] block font-bold">SPACE FREED</span>
+                <span className="text-xl font-bold font-mono text-[#5268FF]">
                   {formatBytes(Math.max(0, result.originalSize - result.compressedSize))}
                 </span>
               </div>
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-2 gap-2 text-xs font-mono tabular-nums pt-2 border-t border-slate-200/60 dark:border-white/[0.06]">
-              <div className="p-3 rounded-xl bg-slate-100/70 dark:bg-[#0C0E14] border border-slate-200/60 dark:border-white/[0.06]">
-                <span className="text-slate-400 text-[10px] block font-bold">ORIGINAL</span>
-                <span className="font-bold text-slate-800 dark:text-slate-200">{formatBytes(result.originalSize)}</span>
-                <span className="text-[10px] text-slate-400 block">{result.originalSize.toLocaleString()} B</span>
+            <div className="grid grid-cols-2 gap-2 text-xs font-mono tabular-nums pt-2 border-t border-[#E2E8F8]">
+              <div className="p-3 rounded-xl bg-[#EEF2FF] border border-[#E2E8F8]">
+                <span className="text-[#848DB3] text-[10px] block font-bold">ORIGINAL</span>
+                <span className="font-bold text-[#2D325A]">{formatBytes(result.originalSize)}</span>
+                <span className="text-[10px] text-[#848DB3] block">{result.originalSize.toLocaleString()} B</span>
               </div>
-              <div className="p-3 rounded-xl bg-slate-100/70 dark:bg-[#0C0E14] border border-slate-200/60 dark:border-white/[0.06] text-right">
-                <span className="text-slate-400 text-[10px] block font-bold">OUTPUT</span>
-                <span className="font-bold text-blue-500">{formatBytes(result.compressedSize)}</span>
-                <span className="text-[10px] text-slate-400 block">{result.compressedSize.toLocaleString()} B</span>
+              <div className="p-3 rounded-xl bg-[#EEF2FF] border border-[#E2E8F8] text-right">
+                <span className="text-[#848DB3] text-[10px] block font-bold">OUTPUT</span>
+                <span className="font-bold text-[#5268FF]">{formatBytes(result.compressedSize)}</span>
+                <span className="text-[10px] text-[#848DB3] block">{result.compressedSize.toLocaleString()} B</span>
               </div>
             </div>
 
             {/* Quota Meter */}
             <div className="space-y-1.5 pt-1">
               <div className="flex justify-between text-[11px] font-mono">
-                <span className="text-slate-400 font-semibold">Target Ceiling</span>
-                <span className="font-bold text-slate-700 dark:text-slate-300">
+                <span className="text-[#848DB3] font-semibold">Target Ceiling</span>
+                <span className="font-bold text-[#2D325A]">
                   {result.compressedSize.toLocaleString()} / {result.targetBytes.toLocaleString()} B
                 </span>
               </div>
-              <div className="w-full h-2 rounded-full bg-slate-200 dark:bg-zinc-800 overflow-hidden">
+              <div className="w-full h-2 rounded-full bg-[#E2E8F8] overflow-hidden">
                 <div
-                  className="h-full rounded-full transition-all duration-500 bg-blue-500"
+                  className="h-full rounded-full transition-all duration-500 bg-[#5268FF]"
                   style={{ width: `${Math.min(100, (result.compressedSize / result.targetBytes) * 100)}%` }}
                 />
               </div>
-              <div className="text-[10px] font-mono text-right text-slate-400">
+              <div className="text-[10px] font-mono text-right text-[#848DB3]">
                 {((result.compressedSize / result.targetBytes) * 100).toFixed(1)}% of maximum budget used
               </div>
             </div>
@@ -431,7 +431,7 @@ export default function TargetCompressor() {
                   a.click();
                 }
               }}
-              className="w-full py-3.5 rounded-xl font-bold text-sm transition-all bg-gradient-to-b from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-[0_8px_24px_-4px_rgba(37,99,235,0.45),inset_0_1px_0_rgba(255,255,255,0.25)] active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-3.5 rounded-xl font-bold text-sm transition-all bg-[#5268FF] hover:bg-[#4256E8] text-white shadow-[0_6px_20px_rgba(82,104,255,0.28)] active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
@@ -448,7 +448,7 @@ export default function TargetCompressor() {
                 compressedFileRef.current = null;
                 setResult(null);
               }}
-              className="w-full py-2.5 text-xs font-mono text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-colors rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-[#0C0E14] dark:hover:bg-[#191E2D] border border-transparent dark:border-white/[0.06] text-center"
+              className="w-full py-2.5 text-xs font-mono text-[#5A628A] hover:text-[#2D325A] transition-colors rounded-xl bg-[#EEF2FF] hover:bg-[#E0E7FF] border border-[#E2E8F8] text-center cursor-pointer"
             >
               ← Compress Another File
             </button>
@@ -460,17 +460,17 @@ export default function TargetCompressor() {
 
   // ─── Collapsible AI Assistant Command Drawer ───
   const aiDrawerContent = (
-    <div className="space-y-2 rounded-xl p-3 bg-purple-500/[0.04] dark:bg-[#141824]/90 border border-purple-500/20 dark:border-purple-500/30 dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
+    <div className="space-y-2 rounded-xl p-3 bg-[#EEF2FF] border border-[#C7D4FF]">
       <button
         type="button"
         onClick={() => setIsAiDrawerOpen(!isAiDrawerOpen)}
-        className="w-full flex items-center justify-between text-xs font-mono font-bold text-slate-700 dark:text-slate-300 hover:text-purple-500 transition-colors cursor-pointer"
+        className="w-full flex items-center justify-between text-xs font-mono font-bold text-[#2D325A] hover:text-[#5268FF] transition-colors cursor-pointer"
       >
         <span className="flex items-center gap-2">
-          <Sparkles className="w-3.5 h-3.5 text-purple-500" />
+          <Sparkles className="w-3.5 h-3.5 text-[#5268FF]" />
           <span>AI ASSISTANT COMMAND DRAWER</span>
         </span>
-        <span className="text-[10px] text-slate-400 flex items-center gap-1">
+        <span className="text-[10px] text-[#848DB3] flex items-center gap-1">
           {isAiDrawerOpen ? (
             <>
               <ChevronUp className="w-3 h-3" />
@@ -494,12 +494,12 @@ export default function TargetCompressor() {
               onChange={(e) => setAiPrompt(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') handleAiCommandSubmit(); }}
               placeholder="e.g. Fit SSC photo 50KB or shrink 80%"
-              className="flex-1 px-3 py-1.5 text-xs font-mono rounded-lg outline-none border border-slate-200 dark:border-white/10 bg-white dark:bg-black/30 focus:border-purple-500 text-slate-900 dark:text-white"
+              className="flex-1 px-3 py-1.5 text-xs font-mono rounded-lg outline-none border border-[#C7D4FF] bg-white focus:border-[#5268FF] text-[#2D325A]"
             />
             <button
               type="button"
               onClick={handleAiCommandSubmit}
-              className="px-3 py-1.5 text-xs font-mono font-bold bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors shadow-xs"
+              className="px-3 py-1.5 text-xs font-mono font-bold bg-[#5268FF] hover:bg-[#4256E8] text-white rounded-lg transition-colors shadow-xs"
             >
               Set
             </button>
@@ -518,7 +518,7 @@ export default function TargetCompressor() {
                   setTargetKB(c.kb);
                   toast.success(`Loaded ${c.label}`);
                 }}
-                className="px-2 py-1 text-[10px] font-mono bg-white dark:bg-[#10131C] text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 rounded-md border border-slate-200/60 dark:border-white/[0.07] hover:border-slate-300 dark:hover:border-purple-500/40 transition-colors"
+                className="px-2 py-1 text-[10px] font-mono bg-white text-[#5A628A] hover:text-[#2D325A] rounded-md border border-[#E2E8F8] hover:border-[#5268FF] transition-colors"
               >
                 {c.label}
               </button>

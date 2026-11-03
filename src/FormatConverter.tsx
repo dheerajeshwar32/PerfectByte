@@ -198,13 +198,13 @@ export default function FormatConverter() {
               />
 
               {/* Floating Badges */}
-              <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-black/70 backdrop-blur-md text-white font-mono text-[10px] font-bold border border-white/15 flex items-center gap-1.5 shadow-md">
+              <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-[#2D325A]/80 backdrop-blur-md text-white font-mono text-[10px] font-bold border border-white/15 flex items-center gap-1.5 shadow-md">
                 <span className={`w-1.5 h-1.5 rounded-full ${result ? 'bg-emerald-400' : 'bg-cyan-400'}`} />
                 <span>{result ? `${result.format} OUTPUT` : 'SOURCE IMAGE'}</span>
               </div>
 
               {meta && (
-                <div className="absolute bottom-3 left-3 px-2.5 py-1 rounded-lg bg-black/70 backdrop-blur-md text-white font-mono text-[10px] border border-white/15 shadow-md">
+                <div className="absolute bottom-3 left-3 px-2.5 py-1 rounded-lg bg-[#2D325A]/80 backdrop-blur-md text-white font-mono text-[10px] border border-white/15 shadow-md">
                   {meta.width} × {meta.height} px
                 </div>
               )}

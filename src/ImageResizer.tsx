@@ -164,9 +164,9 @@ export default function ImageResizer() {
           onDrop={handleDrop}
           onClick={() => fileInputRef.current?.click()}
           title="Drop an image to resize"
-          subtitle="Precision dimension resizing with high-fidelity Lanczos-3 interpolation"
+          subtitle="Enter custom pixel dimensions or pick a ready-made social media size."
           formats={['PNG', 'JPEG', 'WebP', 'AVIF']}
-          iconColor="text-rose-500"
+          iconColor="text-[#5268FF]"
           fileInput={
             <input
               ref={fileInputRef}
@@ -227,16 +227,16 @@ export default function ImageResizer() {
               />
 
               {/* Floating Status Badges */}
-              <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-black/70 backdrop-blur-md text-white font-mono text-[10px] font-bold border border-white/15 flex items-center gap-1.5 shadow-md">
-                <span className={`w-1.5 h-1.5 rounded-full ${resultUrl ? 'bg-emerald-400' : 'bg-blue-400'}`} />
+              <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-[#2D325A]/80 backdrop-blur-md text-white font-mono text-[10px] font-bold border border-white/15 flex items-center gap-1.5 shadow-md">
+                <span className={`w-1.5 h-1.5 rounded-full ${resultUrl ? 'bg-emerald-400' : 'bg-[#5268FF]'}`} />
                 <span>{resultUrl ? 'RESIZED OUTPUT' : 'LIVE PREVIEW'}</span>
               </div>
 
-              <div className="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-black/70 backdrop-blur-md text-white font-mono text-[10px] border border-white/15 shadow-md">
+              <div className="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-[#2D325A]/80 backdrop-blur-md text-white font-mono text-[10px] border border-white/15 shadow-md">
                 {resultUrl ? `${width} × ${height} px` : `Target: ${width || '—'} × ${height || '—'} px`}
               </div>
 
-              <div className="absolute bottom-3 left-3 px-2.5 py-1 rounded-lg bg-black/70 backdrop-blur-md text-white font-mono text-[10px] border border-white/15 shadow-md">
+              <div className="absolute bottom-3 left-3 px-2.5 py-1 rounded-lg bg-[#2D325A]/80 backdrop-blur-md text-white font-mono text-[10px] border border-white/15 shadow-md">
                 Ratio: {calculateCurrentRatio()}
               </div>
 
@@ -269,12 +269,12 @@ export default function ImageResizer() {
 
   // ─── 5-Column Right Inspector Console ───
   const inspectorContent = (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-4">
       {/* Dimension Studio Console */}
-      <div className="p-5 rounded-2xl bg-slate-50/90 dark:bg-[#141824]/90 border border-slate-200/80 dark:border-white/[0.07] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-4">
+      <div className="p-5 rounded-2xl bg-white/95 dark:bg-[#141824]/90 border border-[#E2E8F8] dark:border-white/[0.08] space-y-4 shadow-xs">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 block font-bold">
-            DIMENSION STUDIO
+          <span className="text-[10px] font-mono uppercase tracking-wider text-[#2D325A] dark:text-white block font-bold">
+            IMAGE DIMENSIONS
           </span>
           <button
             type="button"
@@ -284,13 +284,13 @@ export default function ImageResizer() {
             }}
             className={`text-xs font-mono font-semibold px-2.5 py-1 rounded-lg transition-all border flex items-center gap-1.5 cursor-pointer ${
               lockRatio
-                ? 'bg-blue-500/15 border-blue-500/40 text-blue-600 dark:text-blue-400 shadow-xs'
-                : 'bg-slate-200/60 dark:bg-[#10131C] border-slate-300 dark:border-white/[0.08] text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
+                ? 'bg-[#5268FF]/15 border-[#5268FF]/40 text-[#5268FF] shadow-xs'
+                : 'bg-[#EEF2FF] dark:bg-[#10131C] border-[#E2E8F8] dark:border-white/[0.08] text-[#5A628A] hover:text-[#2D325A] dark:text-slate-400 dark:hover:text-white'
             }`}
           >
             {lockRatio ? (
               <>
-                <Lock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                <Lock className="w-3.5 h-3.5 text-[#5268FF]" />
                 <span>Locked 1:1</span>
               </>
             ) : (
@@ -305,7 +305,7 @@ export default function ImageResizer() {
         {/* Width & Height Number Inputs with integrated inline "PX" badge */}
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="text-[11px] font-mono text-slate-500 dark:text-slate-400 block mb-1.5 font-semibold">
+            <label className="text-[11px] font-mono text-[#5A628A] dark:text-slate-400 block mb-1.5 font-semibold">
               WIDTH
             </label>
             <div className="relative flex items-center">
@@ -317,16 +317,16 @@ export default function ImageResizer() {
                 onChange={(e) => handleWidthChange(e.target.value)}
                 placeholder="Width"
                 aria-label="Target width in pixels"
-                className="w-full pl-3 pr-10 py-2.5 rounded-xl text-sm font-mono font-bold bg-white dark:bg-[#0B0E1B] text-slate-900 dark:text-white border border-slate-300 dark:border-white/10 focus:border-[#5668FF] focus:ring-2 focus:ring-[#5668FF]/20 outline-none transition-all shadow-inner"
+                className="w-full pl-3 pr-10 py-2.5 rounded-xl text-sm font-mono font-bold bg-[#EEF2FF]/60 dark:bg-[#0B0E1B] text-[#2D325A] dark:text-white border border-[#E2E8F8] dark:border-white/10 focus:border-[#5268FF] focus:ring-2 focus:ring-[#5268FF]/20 outline-none transition-all shadow-inner"
               />
-              <span className="absolute right-3 text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 pointer-events-none select-none">
+              <span className="absolute right-3 text-[10px] font-mono font-bold text-[#848DB3] pointer-events-none select-none">
                 PX
               </span>
             </div>
           </div>
 
           <div>
-            <label className="text-[11px] font-mono text-slate-500 dark:text-slate-400 block mb-1.5 font-semibold">
+            <label className="text-[11px] font-mono text-[#5A628A] dark:text-slate-400 block mb-1.5 font-semibold">
               HEIGHT
             </label>
             <div className="relative flex items-center">
@@ -338,9 +338,9 @@ export default function ImageResizer() {
                 onChange={(e) => handleHeightChange(e.target.value)}
                 placeholder="Height"
                 aria-label="Target height in pixels"
-                className="w-full pl-3 pr-10 py-2.5 rounded-xl text-sm font-mono font-bold bg-white dark:bg-[#0B0E1B] text-slate-900 dark:text-white border border-slate-300 dark:border-white/10 focus:border-[#5668FF] focus:ring-2 focus:ring-[#5668FF]/20 outline-none transition-all shadow-inner"
+                className="w-full pl-3 pr-10 py-2.5 rounded-xl text-sm font-mono font-bold bg-[#EEF2FF]/60 dark:bg-[#0B0E1B] text-[#2D325A] dark:text-white border border-[#E2E8F8] dark:border-white/10 focus:border-[#5268FF] focus:ring-2 focus:ring-[#5268FF]/20 outline-none transition-all shadow-inner"
               />
-              <span className="absolute right-3 text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 pointer-events-none select-none">
+              <span className="absolute right-3 text-[10px] font-mono font-bold text-[#848DB3] pointer-events-none select-none">
                 PX
               </span>
             </div>
@@ -348,15 +348,15 @@ export default function ImageResizer() {
         </div>
 
         {/* Live Ratio & Scale Calculation Readout */}
-        <div className="pt-2 border-t border-slate-200/80 dark:border-white/10 flex items-center justify-between text-xs font-mono text-slate-500 dark:text-slate-400">
+        <div className="pt-2 border-t border-[#E2E8F8] dark:border-white/10 flex items-center justify-between text-xs font-mono text-[#5A628A] dark:text-slate-400">
           <span>Active Aspect Ratio</span>
-          <span className="font-bold text-slate-900 dark:text-white">{calculateCurrentRatio()}</span>
+          <span className="font-bold text-[#2D325A] dark:text-white">{calculateCurrentRatio()}</span>
         </div>
       </div>
 
       {/* Visual Aspect-Ratio Bento Presets */}
-      <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/90 dark:bg-[#141824]/90 border border-slate-200/80 dark:border-white/[0.07] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-3">
-        <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 block font-bold">
+      <div className="p-4 sm:p-5 rounded-2xl bg-white/95 dark:bg-[#141824]/90 border border-[#E2E8F8] dark:border-white/[0.08] space-y-3 shadow-xs">
+        <span className="text-[10px] font-mono uppercase tracking-wider text-[#848DB3] block font-bold">
           STANDARD PRESETS
         </span>
 
@@ -370,19 +370,19 @@ export default function ImageResizer() {
                 onClick={() => handlePresetClick(p)}
                 className={`p-2.5 rounded-xl text-left transition-all border flex flex-col justify-between cursor-pointer ${
                   isSelected
-                    ? 'bg-blue-500/10 border-blue-500/60 shadow-xs'
-                    : 'bg-white dark:bg-[#10131C] border-slate-200/80 dark:border-white/[0.06] hover:border-slate-300 dark:hover:border-blue-500/40 hover:bg-slate-50 dark:hover:bg-[#191E2D]'
+                    ? 'bg-[#5268FF]/10 border-[#5268FF]/60 shadow-xs'
+                    : 'bg-[#EEF2FF]/50 dark:bg-[#10131C] border-[#E2E8F8] dark:border-white/[0.06] hover:border-[#5268FF]/40 hover:bg-[#EEF2FF] dark:hover:bg-[#191E2D]'
                 }`}
               >
                 <div className="flex items-center justify-between gap-1 mb-1">
-                  <span className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                  <span className="text-xs font-bold text-[#2D325A] dark:text-white truncate">
                     {p.label}
                   </span>
-                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-400 shrink-0">
+                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white dark:bg-white/10 text-[#5A628A] dark:text-slate-400 shrink-0 border border-[#E2E8F8] dark:border-transparent">
                     {p.ratio}
                   </span>
                 </div>
-                <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400 font-medium">
+                <span className="text-[10px] font-mono text-[#5A628A] dark:text-slate-400 font-medium">
                   {p.width} × {p.height} px
                 </span>
               </button>
@@ -392,13 +392,13 @@ export default function ImageResizer() {
       </div>
 
       {/* Primary Action Button */}
-      <div className="space-y-2">
+      <div className="space-y-2 pt-1">
         {resultUrl ? (
           <>
             <a
               href={resultUrl}
               download={file ? `resized_${file.name}` : 'resized_image.png'}
-              className="w-full py-4 rounded-xl font-bold text-sm text-center block transition-all bg-gradient-to-b from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-[0_8px_24px_-4px_rgba(37,99,235,0.45),inset_0_1px_0_rgba(255,255,255,0.25)]"
+              className="w-full py-4 rounded-xl font-bold text-sm text-center block transition-all bg-[#5268FF] hover:bg-[#4256E8] text-white shadow-[0_6px_20px_rgba(82,104,255,0.28)]"
             >
               Download Resized Image
             </a>
@@ -409,7 +409,7 @@ export default function ImageResizer() {
                 setResultUrl('');
                 setResultBlob(null);
               }}
-              className="w-full py-2.5 text-xs font-mono text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors text-center"
+              className="w-full py-2.5 text-xs font-mono text-[#5A628A] hover:text-[#2D325A] dark:hover:text-white transition-colors text-center cursor-pointer"
             >
               ← Resize Another Image
             </button>
@@ -419,7 +419,7 @@ export default function ImageResizer() {
             type="button"
             onClick={processImage}
             disabled={!file || !width || !height || isProcessing}
-            className="w-full py-4 rounded-xl font-bold text-sm transition-all bg-gradient-to-b from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-[0_8px_24px_-4px_rgba(37,99,235,0.45),inset_0_1px_0_rgba(255,255,255,0.25)] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:dark:bg-blue-500/10 disabled:dark:text-blue-300/40 disabled:dark:border disabled:dark:border-blue-500/20 disabled:dark:shadow-none flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full py-4 rounded-xl font-bold text-sm transition-all bg-[#5268FF] hover:bg-[#4256E8] text-white shadow-[0_6px_20px_rgba(82,104,255,0.28)] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
           >
             {isProcessing ? (
               <>
@@ -427,26 +427,10 @@ export default function ImageResizer() {
                 <span>Resizing Image...</span>
               </>
             ) : (
-              <span>Resize &amp; Render</span>
+              <span>Resize Image</span>
             )}
           </button>
         )}
-      </div>
-
-      {/* Micro-Trust & Specs Card */}
-      <div className="p-4 rounded-2xl bg-slate-50/60 dark:bg-[#141824]/90 border border-slate-200/60 dark:border-white/[0.07] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-2 text-xs font-mono text-slate-500 dark:text-slate-400">
-        <div className="flex items-center justify-between">
-          <span>Resampling</span>
-          <span className="text-slate-700 dark:text-slate-300 font-semibold">Bicubic / Lanczos-3</span>
-        </div>
-        <div className="flex items-center justify-between">
-          <span>Memory Boundary</span>
-          <span className="text-emerald-600 dark:text-emerald-400 font-semibold">100% In-Browser Memory</span>
-        </div>
-        <div className="flex items-center justify-between">
-          <span>Server Uploads</span>
-          <span className="text-emerald-600 dark:text-emerald-400 font-semibold">0 Bytes</span>
-        </div>
       </div>
     </div>
   );
@@ -454,8 +438,8 @@ export default function ImageResizer() {
   return (
     <ToolShell
       title="Image Resizer"
-      accentColor="bg-rose-500"
-      badgeText="LANCZOS-3 INTERPOLATION"
+      accentColor="bg-[#5268FF]"
+      badgeText="PIXEL PRECISION"
       canvas={canvasContent}
       inspector={inspectorContent}
     />

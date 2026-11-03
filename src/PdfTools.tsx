@@ -228,10 +228,10 @@ export default function PdfTools() {
             onDragLeave={() => setIsMergeDragging(false)}
             onDrop={handleMergeDrop}
             onClick={() => mergeFileInputRef.current?.click()}
-            title="Drop PDF documents to merge"
-            subtitle="Queue two or more documents to assemble into a single vector-lossless PDF"
+            title="Drop PDF files here to combine them"
+            subtitle="Select two or more PDFs to merge them into a single clean document."
             formats={['PDF']}
-            iconColor="text-orange-500"
+            iconColor="text-[#5268FF]"
             fileInput={
               <input
                 ref={mergeFileInputRef}
@@ -404,10 +404,10 @@ export default function PdfTools() {
             onDragLeave={() => setIsSplitDragging(false)}
             onDrop={handleSplitDrop}
             onClick={() => splitFileInputRef.current?.click()}
-            title="Drop a PDF document to split"
-            subtitle="Extract page ranges or individual pages into a standalone vector document"
+            title="Drop a PDF to extract pages"
+            subtitle="Choose page numbers to create a new, separate PDF file."
             formats={['PDF']}
-            iconColor="text-orange-500"
+            iconColor="text-[#5268FF]"
             fileInput={
               <input
                 ref={splitFileInputRef}
@@ -593,43 +593,39 @@ export default function PdfTools() {
       </div>
 
       {/* Summary Bento Tile */}
-      <div className="p-5 rounded-2xl bg-slate-50/90 dark:bg-[#141824]/90 border border-slate-200/80 dark:border-white/[0.07] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-3">
-        <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 block font-bold">
-          {activeTab === 'merge' ? 'ASSEMBLY SPECIFICATION' : 'EXTRACTION CONSOLE'}
+      <div className="p-5 rounded-2xl bg-white/95 dark:bg-[#141824]/90 border border-[#E2E8F8] dark:border-white/[0.08] space-y-3 shadow-xs">
+        <span className="text-[10px] font-mono uppercase tracking-wider text-[#848DB3] block font-bold">
+          SUMMARY
         </span>
 
         {activeTab === 'merge' ? (
           <div className="space-y-2 text-xs font-mono">
-            <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
-              <span>Mode</span>
-              <span className="font-semibold text-slate-900 dark:text-white">Linear Assembly</span>
+            <div className="flex justify-between items-center text-[#5A628A] dark:text-slate-400">
+              <span>Files Selected</span>
+              <span className="font-semibold text-[#2D325A] dark:text-white">{mergeFiles.length} files</span>
             </div>
-            <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
-              <span>Documents Queued</span>
-              <span className="font-semibold text-slate-900 dark:text-white">{mergeFiles.length} files</span>
-            </div>
-            <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
-              <span>Total Payload</span>
-              <span className="font-semibold text-slate-900 dark:text-white">{formatBytes(totalMergeBytes)}</span>
+            <div className="flex justify-between items-center text-[#5A628A] dark:text-slate-400">
+              <span>Total Size</span>
+              <span className="font-semibold text-[#2D325A] dark:text-white">{formatBytes(totalMergeBytes)}</span>
             </div>
           </div>
         ) : (
           <div className="space-y-2 text-xs font-mono">
-            <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
+            <div className="flex justify-between items-center text-[#5A628A] dark:text-slate-400">
               <span>Active Document</span>
-              <span className="font-semibold text-slate-900 dark:text-white truncate max-w-[140px]">
-                {splitFile ? splitFile.name : 'None mounted'}
+              <span className="font-semibold text-[#2D325A] dark:text-white truncate max-w-[140px]">
+                {splitFile ? splitFile.name : 'None selected'}
               </span>
             </div>
-            <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
+            <div className="flex justify-between items-center text-[#5A628A] dark:text-slate-400">
               <span>Total Pages</span>
-              <span className="font-semibold text-slate-900 dark:text-white">
+              <span className="font-semibold text-[#2D325A] dark:text-white">
                 {splitFile ? `${splitTotalPages} pages` : '—'}
               </span>
             </div>
-            <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
-              <span>Target Selection</span>
-              <span className="font-semibold text-blue-600 dark:text-blue-400">
+            <div className="flex justify-between items-center text-[#5A628A] dark:text-slate-400">
+              <span>Pages to Keep</span>
+              <span className="font-semibold text-[#5268FF]">
                 {pageRange || '—'}
               </span>
             </div>
@@ -637,26 +633,26 @@ export default function PdfTools() {
         )}
       </div>
 
-      {/* Output & Compression Options Card (Balances Height) */}
-      <div className="p-5 rounded-2xl bg-slate-50/90 dark:bg-[#141824]/90 border border-slate-200/80 dark:border-white/[0.07] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-3">
+      {/* Document Options Card */}
+      <div className="p-5 rounded-2xl bg-white/95 dark:bg-[#141824]/90 border border-[#E2E8F8] dark:border-white/[0.08] space-y-3 shadow-xs">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold block">
-            OUTPUT &amp; COMPRESSION OPTIONS
+          <span className="text-[10px] font-mono uppercase tracking-wider text-[#2D325A] dark:text-white font-bold block">
+            DOCUMENT OPTIONS
           </span>
-          <SlidersHorizontal className="w-3.5 h-3.5 text-slate-400" />
+          <SlidersHorizontal className="w-3.5 h-3.5 text-[#5A628A]" />
         </div>
 
         <div className="space-y-2 text-xs font-mono">
           <button
             type="button"
             onClick={() => { setStripMetadata(!stripMetadata); haptic(8); }}
-            className="w-full flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-[#10131C] border border-slate-200/70 dark:border-white/[0.06] hover:bg-slate-50 dark:hover:bg-[#191E2D] dark:hover:border-blue-500/30 transition-colors cursor-pointer"
+            className="w-full flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-[#10131C] border border-[#E2E8F8] dark:border-white/[0.06] hover:bg-slate-50 dark:hover:bg-[#191E2D] transition-colors cursor-pointer"
           >
             <div className="text-left">
-              <div className="font-bold text-slate-800 dark:text-slate-200">Strip Metadata &amp; XMP</div>
-              <div className="text-[10px] text-slate-400">Purges privacy trackers &amp; bloated XML</div>
+              <div className="font-bold text-[#2D325A] dark:text-slate-200">Remove Hidden Data</div>
+              <div className="text-[10px] text-[#848DB3]">Clears private info to reduce file size</div>
             </div>
-            <span className={`w-8 h-4 rounded-full transition-colors flex items-center p-0.5 ${stripMetadata ? 'bg-orange-500 justify-end' : 'bg-slate-300 dark:bg-zinc-700 justify-start'}`}>
+            <span className={`w-8 h-4 rounded-full transition-colors flex items-center p-0.5 ${stripMetadata ? 'bg-[#5268FF] justify-end' : 'bg-slate-300 dark:bg-zinc-700 justify-start'}`}>
               <span className="w-3 h-3 rounded-full bg-white shadow-xs" />
             </span>
           </button>
@@ -664,13 +660,13 @@ export default function PdfTools() {
           <button
             type="button"
             onClick={() => { setLinearize(!linearize); haptic(8); }}
-            className="w-full flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-[#10131C] border border-slate-200/70 dark:border-white/[0.06] hover:bg-slate-50 dark:hover:bg-[#191E2D] dark:hover:border-blue-500/30 transition-colors cursor-pointer"
+            className="w-full flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-[#10131C] border border-[#E2E8F8] dark:border-white/[0.06] hover:bg-slate-50 dark:hover:bg-[#191E2D] transition-colors cursor-pointer"
           >
             <div className="text-left">
-              <div className="font-bold text-slate-800 dark:text-slate-200">Linearize Fast Web View</div>
-              <div className="text-[10px] text-slate-400">Byte-serving stream optimization</div>
+              <div className="font-bold text-[#2D325A] dark:text-slate-200">Fast Web Opening</div>
+              <div className="text-[10px] text-[#848DB3]">Loads pages faster in web browsers</div>
             </div>
-            <span className={`w-8 h-4 rounded-full transition-colors flex items-center p-0.5 ${linearize ? 'bg-orange-500 justify-end' : 'bg-slate-300 dark:bg-zinc-700 justify-start'}`}>
+            <span className={`w-8 h-4 rounded-full transition-colors flex items-center p-0.5 ${linearize ? 'bg-[#5268FF] justify-end' : 'bg-slate-300 dark:bg-zinc-700 justify-start'}`}>
               <span className="w-3 h-3 rounded-full bg-white shadow-xs" />
             </span>
           </button>
@@ -678,13 +674,13 @@ export default function PdfTools() {
           <button
             type="button"
             onClick={() => { setPreserveVectors(!preserveVectors); haptic(8); }}
-            className="w-full flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-[#10131C] border border-slate-200/70 dark:border-white/[0.06] hover:bg-slate-50 dark:hover:bg-[#191E2D] dark:hover:border-blue-500/30 transition-colors cursor-pointer"
+            className="w-full flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-[#10131C] border border-[#E2E8F8] dark:border-white/[0.06] hover:bg-slate-50 dark:hover:bg-[#191E2D] transition-colors cursor-pointer"
           >
             <div className="text-left">
-              <div className="font-bold text-slate-800 dark:text-slate-200">Preserve Vector Fonts</div>
-              <div className="text-[10px] text-slate-400">100% loss-free glyph retention</div>
+              <div className="font-bold text-[#2D325A] dark:text-slate-200">Keep Sharp Text &amp; Fonts</div>
+              <div className="text-[10px] text-[#848DB3]">Keeps text crisp at any zoom level</div>
             </div>
-            <span className={`w-8 h-4 rounded-full transition-colors flex items-center p-0.5 ${preserveVectors ? 'bg-orange-500 justify-end' : 'bg-slate-300 dark:bg-zinc-700 justify-start'}`}>
+            <span className={`w-8 h-4 rounded-full transition-colors flex items-center p-0.5 ${preserveVectors ? 'bg-[#5268FF] justify-end' : 'bg-slate-300 dark:bg-zinc-700 justify-start'}`}>
               <span className="w-3 h-3 rounded-full bg-white shadow-xs" />
             </span>
           </button>
@@ -699,9 +695,9 @@ export default function PdfTools() {
               <a
                 href={mergedPdfUrl}
                 download="perfectbyte_assembled.pdf"
-                className="w-full py-4 rounded-xl font-bold text-sm text-center block transition-all bg-gradient-to-b from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-[0_8px_24px_-4px_rgba(37,99,235,0.45),inset_0_1px_0_rgba(255,255,255,0.25)]"
+                className="w-full py-4 rounded-xl font-bold text-sm text-center block transition-all bg-[#5268FF] hover:bg-[#4256E8] text-white shadow-[0_6px_20px_rgba(82,104,255,0.28)]"
               >
-                Download Assembled PDF
+                Download Combined PDF
               </a>
               <button
                 type="button"
@@ -709,9 +705,9 @@ export default function PdfTools() {
                   setMergeFiles([]);
                   setMergedPdfUrl('');
                 }}
-                className="w-full py-2.5 text-xs font-mono text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors text-center cursor-pointer"
+                className="w-full py-2.5 text-xs font-mono text-[#5A628A] hover:text-[#2D325A] dark:hover:text-white transition-colors text-center cursor-pointer"
               >
-                ← Assemble Another Set
+                ← Combine More Files
               </button>
             </>
           ) : (
@@ -719,15 +715,15 @@ export default function PdfTools() {
               type="button"
               onClick={mergePdfs}
               disabled={isMerging || mergeFiles.length < 2}
-              className="w-full py-4 rounded-xl font-bold text-sm transition-all bg-gradient-to-b from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-[0_8px_24px_-4px_rgba(37,99,235,0.45),inset_0_1px_0_rgba(255,255,255,0.25)] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:dark:bg-blue-500/10 disabled:dark:text-blue-300/40 disabled:dark:border disabled:dark:border-blue-500/20 disabled:dark:shadow-none flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-4 rounded-xl font-bold text-sm transition-all bg-[#5268FF] hover:bg-[#4256E8] text-white shadow-[0_6px_20px_rgba(82,104,255,0.28)] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
             >
               {isMerging ? (
                 <>
                   <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                  <span>Assembling Documents...</span>
+                  <span>Combining PDFs...</span>
                 </>
               ) : (
-                <span>Merge {mergeFiles.length > 0 ? `${mergeFiles.length} PDFs` : 'Documents'}</span>
+                <span>Combine {mergeFiles.length > 0 ? `${mergeFiles.length} PDFs` : 'PDFs'}</span>
               )}
             </button>
           )
@@ -736,7 +732,7 @@ export default function PdfTools() {
             <a
               href={splitPdfUrl}
               download={`extracted_${splitFile?.name || 'document'}`}
-              className="w-full py-4 rounded-xl font-bold text-sm text-center block transition-all bg-gradient-to-b from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-[0_8px_24px_-4px_rgba(37,99,235,0.45),inset_0_1px_0_rgba(255,255,255,0.25)]"
+              className="w-full py-4 rounded-xl font-bold text-sm text-center block transition-all bg-[#5268FF] hover:bg-[#4256E8] text-white shadow-[0_6px_20px_rgba(82,104,255,0.28)]"
             >
               Download Extracted PDF
             </a>
@@ -747,7 +743,7 @@ export default function PdfTools() {
                 setSplitPdfUrl('');
                 setPageRange('');
               }}
-              className="w-full py-2.5 text-xs font-mono text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors text-center cursor-pointer"
+              className="w-full py-2.5 text-xs font-mono text-[#5A628A] hover:text-[#2D325A] dark:hover:text-white transition-colors text-center cursor-pointer"
             >
               ← Split Another PDF
             </button>
@@ -757,7 +753,7 @@ export default function PdfTools() {
             type="button"
             onClick={splitPdf}
             disabled={isSplitting || !splitFile || !pageRange}
-            className="w-full py-4 rounded-xl font-bold text-sm transition-all bg-gradient-to-b from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-[0_8px_24px_-4px_rgba(37,99,235,0.45),inset_0_1px_0_rgba(255,255,255,0.25)] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:dark:bg-blue-500/10 disabled:dark:text-blue-300/40 disabled:dark:border disabled:dark:border-blue-500/20 disabled:dark:shadow-none flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full py-4 rounded-xl font-bold text-sm transition-all bg-[#5268FF] hover:bg-[#4256E8] text-white shadow-[0_6px_20px_rgba(82,104,255,0.28)] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
           >
             {isSplitting ? (
               <>
@@ -770,30 +766,14 @@ export default function PdfTools() {
           </button>
         )}
       </div>
-
-      {/* Micro-Trust & Specs Card */}
-      <div className="p-4 rounded-2xl bg-slate-50/60 dark:bg-[#141824]/90 border border-slate-200/60 dark:border-white/[0.07] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] space-y-2 text-xs font-mono text-slate-500 dark:text-slate-400">
-        <div className="flex items-center justify-between">
-          <span>Engine</span>
-          <span className="text-slate-700 dark:text-slate-300 font-semibold">pdf-lib Client WASM</span>
-        </div>
-        <div className="flex items-center justify-between">
-          <span>Vector Stream</span>
-          <span className="text-emerald-600 dark:text-emerald-400 font-semibold">100% Lossless</span>
-        </div>
-        <div className="flex items-center justify-between">
-          <span>Server Uploads</span>
-          <span className="text-emerald-600 dark:text-emerald-400 font-semibold">0 Bytes • Absolute Local</span>
-        </div>
-      </div>
     </div>
   );
 
   return (
     <ToolShell
       title="PDF Studio"
-      accentColor="bg-orange-500"
-      badgeText="VECTOR LOSSLESS"
+      accentColor="bg-[#5268FF]"
+      badgeText="PDF TOOLS"
       canvas={canvasContent}
       inspector={inspectorContent}
     />
