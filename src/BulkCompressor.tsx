@@ -309,7 +309,6 @@ export default function BulkCompressor() {
         {compressedFiles.length > 0 ? (
           <div className="space-y-2">
             <div>
-              <span className="text-[10px] font-mono text-[#848DB3] block font-bold">LIFETIME STORAGE SAVED</span>
               <span className="text-4xl sm:text-5xl font-black font-mono tabular-nums text-[#5268FF] chromatic-accent tracking-tight">
                 {formatBytes(totalReduction)}
               </span>
@@ -322,7 +321,6 @@ export default function BulkCompressor() {
         ) : (
           <div className="space-y-3">
             <div>
-              <span className="text-[10px] font-mono text-[#848DB3] block font-bold">LIFETIME STORAGE SAVED</span>
               <span className="text-4xl sm:text-5xl font-black font-mono tabular-nums text-[#5268FF] chromatic-accent tracking-tight">
                 {formatBytes(Math.max(0, stats.totalOriginal - stats.totalCompressed))}
               </span>

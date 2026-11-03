@@ -374,17 +374,15 @@ export default function ImageResizer() {
                     : 'bg-[#EEF2FF]/50 dark:bg-[#1B2244] border-[#E2E8F8] dark:border-[#2B3566] hover:border-[#5268FF]/40 hover:bg-[#EEF2FF] dark:hover:bg-[#232C56]'
                 }`}
               >
-                <div className="flex items-center justify-between gap-1 mb-1">
-                  <span className="text-xs font-bold text-[#2D325A] dark:text-[#F0F4FF] truncate">
-                    {p.label}
-                  </span>
-                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white dark:bg-[#232C56] text-[#5A628A] dark:text-[#9BA6D1] shrink-0 border border-[#E2E8F8] dark:border-[#2B3566]">
+                <div className="text-[12px] font-semibold leading-tight text-[#2D325A] dark:text-[#F0F4FF] mb-1">
+                  {p.label}
+                </div>
+                <div className="flex items-center justify-between gap-1 text-[10px] font-mono text-[#5A628A] dark:text-[#9BA6D1]">
+                  <span>{p.width} × {p.height} px</span>
+                  <span className="text-[9px] font-mono px-1 py-0.5 rounded bg-white/80 dark:bg-[#232C56] text-[#5A628A] dark:text-[#9BA6D1] shrink-0 border border-[#E2E8F8] dark:border-[#2B3566]">
                     {p.ratio}
                   </span>
                 </div>
-                <span className="text-[10px] font-mono text-[#5A628A] dark:text-[#9BA6D1] font-medium">
-                  {p.width} × {p.height} px
-                </span>
               </button>
             );
           })}

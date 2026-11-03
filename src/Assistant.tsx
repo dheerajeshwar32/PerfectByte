@@ -288,7 +288,7 @@ export default function Assistant() {
       onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
       onDragLeave={() => setIsDragging(false)}
       onDrop={handleDrop}
-      className={`flex flex-col h-[600px] w-full rounded-2xl border transition-all overflow-hidden relative shadow-xs ${
+      className={`flex flex-col min-h-[480px] md:h-[600px] w-full rounded-2xl border transition-all overflow-hidden relative shadow-xs ${
         isDragging
           ? 'border-purple-500 ring-2 ring-purple-500/30 bg-purple-500/5'
           : 'border-[#E2E8F8] dark:border-[#262E5A] bg-white/60 dark:bg-[#151A36]/90 backdrop-blur-md'
@@ -339,15 +339,15 @@ export default function Assistant() {
       <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 font-sans [&::-webkit-scrollbar]:hidden scrollbar-none">
         {/* If chat is empty, show 2x2 Interactive Starter Intent Cards */}
         {messages.length === 0 ? (
-          <div className="h-full flex flex-col justify-center py-6">
-            <div className="text-center mb-6">
-              <div className="w-12 h-12 rounded-2xl bg-[#EEF2FF] text-[#5268FF] border border-[#C7D4FF] flex items-center justify-center mx-auto mb-3 shadow-xs">
+          <div className="flex flex-col pt-5 pb-4 px-4 md:p-8 gap-4">
+            <div className="text-center mb-2">
+              <div className="w-12 h-12 rounded-2xl bg-[#EEF2FF] dark:bg-[#1B2244] text-[#5268FF] border border-[#C7D4FF] dark:border-[#2B3566] flex items-center justify-center mx-auto mb-3 shadow-xs">
                 <Sparkles className="w-6 h-6 text-[#5268FF]" />
               </div>
-              <h4 className="text-lg font-bold text-[#2D325A] dark:text-slate-100 mb-1">
+              <h4 className="text-lg md:text-xl font-bold text-[#2D325A] dark:text-[#F0F4FF] text-center mb-1">
                 Tell PerfectByte what you need
               </h4>
-              <p className="text-xs text-[#5A628A] dark:text-slate-400 max-w-sm mx-auto">
+              <p className="text-xs md:text-sm text-[#5A628A] dark:text-[#9BA6D1] text-center max-w-sm mx-auto">
                 Pick a quick action below or type what you want in plain English.
               </p>
             </div>
@@ -476,21 +476,21 @@ export default function Assistant() {
       </div>
 
       {/* ─── Floating Command Input Dock ─── */}
-      <form onSubmit={handleSubmit} className="p-3 border-t border-[#E2E8F8] dark:border-[#252D58] bg-slate-100/70 dark:bg-[#11152B]/90">
-        <div className="flex items-center gap-2">
+      <form onSubmit={handleSubmit} className="p-3 border-t border-[#E2E8F8] dark:border-[#252D58] bg-slate-100/70 dark:bg-[#11152B]/90 w-full">
+        <div className="flex items-center gap-2 w-full">
           <input
             ref={commandInputRef}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             disabled={isBusy}
-            placeholder='Type a command (e.g. "compress to 100KB" or "remove blank pages")...'
-            className="flex-1 px-4 py-2.5 text-base md:text-sm font-mono rounded-xl outline-none border border-[#E2E8F8] dark:border-[#2B3566] bg-white dark:bg-[#1B2244] focus:border-[#5268FF] focus:ring-2 focus:ring-[#5268FF]/20 text-[#2D325A] dark:text-[#F0F4FF] transition-all"
+            placeholder='Type a command (e.g. "compress to 100KB")...'
+            className="flex-1 min-w-0 h-11 px-3.5 text-base md:text-sm font-mono rounded-xl border border-[#DCE6FA] dark:border-[#2B3566] bg-white dark:bg-[#1B2244] text-[#2D325A] dark:text-[#F0F4FF] focus:border-[#5268FF] focus:ring-2 focus:ring-[#5268FF]/20 outline-none transition-all shadow-inner"
           />
           <button
             type="submit"
             disabled={isBusy || !input.trim()}
-            className="h-12 md:h-10 px-4 bg-[#5268FF] hover:bg-[#4256E8] text-white rounded-xl text-xs font-mono font-bold transition-all shadow-[0_6px_20px_rgba(82,104,255,0.3)] disabled:bg-[#E8EEFF] disabled:text-[#5268FF]/70 disabled:border disabled:border-[#C7D4FF] disabled:shadow-none dark:disabled:bg-[#1E264D] dark:disabled:text-[#7C8EE8] dark:disabled:border-[#2E3B75] disabled:cursor-not-allowed cursor-pointer flex items-center justify-center shrink-0"
+            className="h-11 px-4 shrink-0 rounded-xl bg-[#5268FF] hover:bg-[#4256E8] text-white font-semibold text-sm transition-all shadow-[0_6px_20px_rgba(82,104,255,0.3)] disabled:bg-[#E8EEFF] disabled:text-[#5268FF]/70 disabled:border disabled:border-[#C7D4FF] disabled:shadow-none dark:disabled:bg-[#1E264D] dark:disabled:text-[#7C8EE8] dark:disabled:border-[#2E3B75] disabled:cursor-not-allowed cursor-pointer flex items-center justify-center"
           >
             Run ↵
           </button>

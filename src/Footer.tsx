@@ -138,7 +138,7 @@ export default function Footer() {
 
         {/* Bottom Copyright Bar */}
         <div className="border-t border-slate-200/60 dark:border-white/[0.04]">
-          <div className="max-w-7xl mx-auto px-6 md:px-12 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-center">
             <div className="flex items-center gap-2.5 text-xs font-medium text-slate-500 dark:text-slate-400">
               <span
                 className="text-base font-semibold text-[#5668FF] dark:text-[#7888FF] leading-none"
@@ -151,9 +151,9 @@ export default function Footer() {
               </span>
               <span>PerfectByte © {new Date().getFullYear()}</span>
             </div>
-            <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium tracking-wider uppercase">
+            <div className="text-[11px] font-medium text-[#848DB3] whitespace-nowrap">
               <Link to="/privacy" className="hover:text-[#5668FF] dark:hover:text-[#7888FF] transition-colors">
-                Architected for local-first privacy · Privacy Policy
+                100% Private On-Device Processing • Privacy Policy
               </Link>
             </div>
           </div>

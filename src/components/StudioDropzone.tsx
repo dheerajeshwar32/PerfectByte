@@ -49,7 +49,7 @@ export default function StudioDropzone({
         }
       }}
       aria-label={title}
-      className={`group relative w-full min-h-[175px] py-5 px-4 md:min-h-[500px] md:p-8 flex-1 rounded-2xl md:rounded-3xl border-2 border-dashed transition-all duration-300 flex flex-col items-center justify-between cursor-pointer overflow-hidden ${
+      className={`group relative w-full min-h-0 py-5 px-4 md:min-h-[480px] md:py-12 md:px-8 md:flex-1 rounded-2xl md:rounded-3xl border-2 border-dashed transition-all duration-300 flex flex-col items-center justify-center cursor-pointer overflow-hidden ${
         isDragging
           ? 'border-[#5268FF] bg-[#EEF2FF] dark:bg-[#1D254E] scale-[1.008] shadow-[0_0_35px_rgba(82,104,255,0.25)]'
           : 'bg-[radial-gradient(circle_at_50%_45%,#EBF0FF_0%,#F6F8FC_55%,#FFFFFF_100%)] dark:bg-[radial-gradient(circle_at_50%_45%,#1D254E_0%,#131836_60%,#0E1229_100%)] border-[#C7D4FF] dark:border-[#334185] hover:border-[#5268FF] dark:hover:border-[#5268FF] hover:shadow-[0_12px_40px_-15px_rgba(82,104,255,0.18)]'

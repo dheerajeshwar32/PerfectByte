@@ -72,7 +72,7 @@ export default function ToolShell({
   }, [onToggleAiDrawer, navigate, location.pathname]);
 
   return (
-    <div className="min-h-screen pb-24 md:pb-8 relative flex flex-col bg-[#F6F8FC] dark:bg-[#0E1229] text-[#2D325A] dark:text-[#E2E8F8] selection:bg-[#5268FF] selection:text-white transition-colors duration-300">
+    <div className="min-h-screen pb-24 md:pb-8 relative flex flex-col bg-[#F6F8FC] dark:bg-[#0E1229] text-[#2D325A] dark:text-[#E2E8F8] selection:bg-[#5268FF] selection:text-white transition-colors duration-300 w-full max-w-[100vw] overflow-x-hidden mx-auto box-border">
       {/* ─── Ambient Sapphire/Violet Illumination & Architectural Dot Matrix ─── */}
       <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[95vw] max-w-[1400px] h-[550px] bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(82,104,255,0.09),transparent)] dark:bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(82,104,255,0.18),transparent)]" />
@@ -82,16 +82,16 @@ export default function ToolShell({
 
       {/* ─── Unified Collision-Free Top Navigation Header ─── */}
       <header
-        className="pwa-header sticky top-0 z-40 w-full h-14 px-3 md:px-6 bg-[#F6F8FC]/85 dark:bg-[#0E1229]/85 backdrop-blur-2xl border-b border-[#E2E8F8] dark:border-[#252D58] flex items-center justify-between transition-colors"
+        className="pwa-header sticky top-0 z-40 w-full h-14 bg-[#F6F8FC]/85 dark:bg-[#0E1229]/85 backdrop-blur-2xl border-b border-[#E2E8F8] dark:border-[#252D58] transition-colors box-border"
         style={{ boxShadow: 'inset 0 1px 0 0 var(--pb-specular)' }}
       >
-        <div className="max-w-[1360px] h-full mx-auto px-4 sm:px-6 flex items-center justify-between gap-3">
+        <div className="max-w-[1360px] h-full mx-auto px-3.5 sm:px-6 flex items-center justify-between gap-2 box-border">
           {/* Left: Home Pill + Title + Status */}
-          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0 min-w-0">
             <Link
               to="/"
               aria-label="Back to Home"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#EEF2FF] hover:bg-[#E0E7FF] dark:bg-[#161D33] dark:hover:bg-[#1D2642] text-xs font-semibold text-[#2D325A] dark:text-[#E2E8F8] transition-all border border-[#E2E8F8] dark:border-white/[0.08] shadow-xs"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#EEF2FF] hover:bg-[#E0E7FF] dark:bg-[#161D33] dark:hover:bg-[#1D2642] text-xs font-semibold text-[#2D325A] dark:text-[#E2E8F8] transition-all border border-[#E2E8F8] dark:border-white/[0.08] shadow-xs shrink-0"
             >
               <ArrowLeft className="w-3.5 h-3.5 text-[#5A628A] dark:text-slate-400" />
               <span>Home</span>
@@ -99,9 +99,9 @@ export default function ToolShell({
 
             <div className="h-4 w-px bg-[#E2E8F8] dark:bg-white/[0.08] hidden sm:block" />
 
-            <div className="flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${accentColor} shadow-[0_0_8px_rgba(82,104,255,0.5)]`} />
-              <span className="text-xs sm:text-sm font-bold text-[#2D325A] dark:text-white tracking-tight uppercase font-mono truncate max-w-[140px] sm:max-w-none">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <div className={`w-2 h-2 rounded-full ${accentColor} shadow-[0_0_8px_rgba(82,104,255,0.5)] shrink-0`} />
+              <span className="text-xs sm:text-sm font-bold text-[#2D325A] dark:text-[#F0F4FF] tracking-tight uppercase font-mono truncate max-w-[130px] sm:max-w-none">
                 {title}
               </span>
             </div>
@@ -142,8 +142,8 @@ export default function ToolShell({
           </nav>
 
           {/* Right: AI Drawer Trigger + History + Theme Toggle */}
-          <div className="flex items-center gap-2 shrink-0">
-            {/* ⌘J AI Trigger */}
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            {/* ⌘J AI Trigger (hidden on mobile, present in bottom dock) */}
             <button
               onClick={() => {
                 if (onToggleAiDrawer) {
@@ -153,7 +153,7 @@ export default function ToolShell({
                 }
               }}
               title="AI Command (⌘J)"
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-[#EEF2FF] hover:bg-[#E0E7FF] dark:bg-[#161D33] dark:hover:bg-[#1D2642] text-[#5268FF] dark:text-[#7888FF] border border-[#C7D4FF] dark:border-indigo-400/30 text-xs font-semibold font-mono transition-all shadow-xs cursor-pointer"
+              className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-[#EEF2FF] hover:bg-[#E0E7FF] dark:bg-[#161D33] dark:hover:bg-[#1D2642] text-[#5268FF] dark:text-[#7888FF] border border-[#C7D4FF] dark:border-indigo-400/30 text-xs font-semibold font-mono transition-all shadow-xs cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5 text-[#5268FF] dark:text-[#7888FF]" />
               <span>AI</span>
@@ -164,7 +164,7 @@ export default function ToolShell({
             <Link
               to="/history"
               aria-label="View History"
-              className="px-2.5 sm:px-3 py-1.5 rounded-full bg-[#EEF2FF] hover:bg-[#E0E7FF] dark:bg-[#161D33] dark:hover:bg-[#1D2642] text-xs font-semibold text-[#2D325A] dark:text-[#E2E8F8] border border-[#E2E8F8] dark:border-white/[0.08] flex items-center gap-1.5 transition-all shadow-xs"
+              className="w-8 h-8 sm:w-auto sm:h-auto sm:px-3 sm:py-1.5 rounded-full bg-[#EEF2FF] hover:bg-[#E0E7FF] dark:bg-[#161D33] dark:hover:bg-[#1D2642] text-xs font-semibold text-[#2D325A] dark:text-[#E2E8F8] border border-[#E2E8F8] dark:border-white/[0.08] flex items-center justify-center gap-1.5 transition-all shadow-xs shrink-0"
             >
               <HistoryIcon className="w-3.5 h-3.5 text-[#5A628A] dark:text-slate-400" />
               <span className="hidden sm:inline">History</span>
@@ -174,7 +174,7 @@ export default function ToolShell({
             <button
               onClick={toggleTheme}
               aria-label="Toggle Theme"
-              className="p-1.5 sm:p-2 rounded-full bg-[#EEF2FF] hover:bg-[#E0E7FF] dark:bg-[#161D33] dark:hover:bg-[#1D2642] text-[#2D325A] dark:text-[#E2E8F8] border border-[#E2E8F8] dark:border-white/[0.08] transition-all shadow-xs cursor-pointer"
+              className="w-8 h-8 rounded-full bg-[#EEF2FF] hover:bg-[#E0E7FF] dark:bg-[#161D33] dark:hover:bg-[#1D2642] text-[#2D325A] dark:text-[#E2E8F8] border border-[#E2E8F8] dark:border-white/[0.08] flex items-center justify-center transition-all shadow-xs cursor-pointer shrink-0"
             >
               {isDark ? (
                 <Sun className="w-4 h-4 text-amber-500" />
@@ -187,10 +187,10 @@ export default function ToolShell({
       </header>
 
       {/* ─── Main Studio Stage (Centered 12-Column Glassmorphic Bento Frame) ─── */}
-      <main className="flex-1 w-full max-w-[1360px] mx-auto px-3 sm:px-6 py-4 sm:py-6 flex flex-col pb-28 md:pb-8">
+      <main className="flex-1 w-full max-w-[1360px] mx-auto px-3.5 sm:px-5 md:px-8 py-3 sm:py-6 flex flex-col pb-28 md:pb-8 box-border overflow-x-hidden">
         <div className="w-full flex-1 p-3 sm:p-4 md:p-8 rounded-2xl md:rounded-3xl border-0 md:border border-[#E2E8F8] dark:border-[#262E5A] bg-transparent md:bg-white/95 md:dark:bg-[#11152B]/95 shadow-none md:shadow-[0_10px_35px_-10px_rgba(45,50,90,0.06)] dark:md:shadow-[0_24px_80px_-15px_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.08)] backdrop-blur-2xl relative overflow-hidden flex flex-col">
-          {/* Studio Top Sub-Header Bar */}
-          <div className="flex items-center justify-between pb-4 mb-5 border-b border-[#E2E8F8] dark:border-[#262E5A]/60 text-xs font-mono text-[#5A628A] dark:text-[#9BA6D1]">
+          {/* Studio Top Sub-Header Bar (Hidden on mobile to eliminate duplication with navbar) */}
+          <div className="hidden md:flex items-center justify-between pb-4 mb-5 border-b border-[#E2E8F8] dark:border-[#262E5A]/60 text-xs font-mono text-[#5A628A] dark:text-[#9BA6D1]">
             <div className="flex items-center gap-2">
               <span className="hidden sm:inline text-[#5268FF] dark:text-[#7888FF] font-semibold">PERFECTBYTE STUDIO / </span>
               <span className="text-[#2D325A] dark:text-[#F0F4FF] font-semibold">{title}</span>

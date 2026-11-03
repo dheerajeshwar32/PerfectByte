@@ -111,19 +111,19 @@ export default function TargetScrubber({
   const isAtDetent = DETENTS.some((d) => d.kb === value);
 
   return (
-    <div className="space-y-4 rounded-2xl p-4 sm:p-5 border border-[#E2E8F8] dark:border-[#252D58] bg-white/95 dark:bg-[#151A36] backdrop-blur-xl shadow-[0_10px_35px_-10px_rgba(45,50,90,0.06)]">
+    <div className="space-y-3 md:space-y-4 rounded-2xl p-3.5 sm:p-5 border border-[#E2E8F8] dark:border-[#252D58] bg-white/95 dark:bg-[#151A36] backdrop-blur-xl shadow-[0_10px_35px_-10px_rgba(45,50,90,0.06)]">
       {/* ─── Digital Byte Readout Hardware Card ─── */}
-      <div className="relative overflow-hidden rounded-2xl p-4 md:p-6 bg-gradient-to-br from-[#343A68] via-[#2D325A] to-[#222647] text-white shadow-[0_14px_32px_-8px_rgba(45,50,90,0.28)] border border-[#5268FF]/30">
+      <div className="relative overflow-hidden rounded-2xl p-3.5 md:p-6 bg-gradient-to-br from-[#343A68] via-[#2D325A] to-[#222647] text-white shadow-[0_14px_32px_-8px_rgba(45,50,90,0.28)] border border-[#5268FF]/30">
         {/* Subtle grid mesh background */}
         <div className="absolute inset-0 pb-dot-matrix opacity-20 pointer-events-none" />
 
-        <div className="relative z-10 flex items-center justify-between mb-2">
-          <span className="text-[10px] font-mono uppercase font-bold tracking-widest text-[#C7D4FF]">
+        <div className="relative z-10 flex items-center justify-between gap-2 whitespace-nowrap text-[10px] sm:text-[11px] mb-1.5">
+          <span className="text-[10px] sm:text-[11px] font-mono uppercase font-bold tracking-widest text-[#C7D4FF]">
             MAXIMUM FILE SIZE
           </span>
 
           {isAtDetent && (
-            <span className="text-[10px] font-mono text-[#C7D2FE] font-bold flex items-center gap-1">
+            <span className="text-[10px] sm:text-[11px] font-mono text-[#C7D2FE] font-bold flex items-center gap-1 shrink-0">
               <Zap className="w-3 h-3 text-[#5268FF]" />
               <span>Guaranteed Under Limit</span>
             </span>
@@ -131,7 +131,7 @@ export default function TargetScrubber({
         </div>
 
         {/* Center Readout */}
-        <div className="relative z-10 flex flex-col items-center justify-center py-2">
+        <div className="relative z-10 flex flex-col items-center justify-center py-1">
           {isEditing ? (
             <div className="flex items-baseline gap-2 px-4 py-1.5 rounded-xl bg-white/10 border border-[#5268FF] shadow-[0_0_20px_rgba(82,104,255,0.3)]">
               <input
@@ -162,7 +162,7 @@ export default function TargetScrubber({
                 setIsEditing(true);
               }}
               disabled={disabled}
-              className="group flex items-baseline gap-2 px-4 py-1 rounded-xl hover:bg-white/[0.08] transition-all cursor-text"
+              className="group flex items-baseline gap-2 px-4 py-0.5 rounded-xl hover:bg-white/[0.08] transition-all cursor-text"
               aria-label={`Target: ${value} KB. Click to directly type size.`}
               title="Click to type exact byte size"
             >
@@ -177,7 +177,7 @@ export default function TargetScrubber({
           )}
 
           {/* Clean Sub-Text: Your file will be saved under {value} KB */}
-          <div className="mt-2 text-xs font-mono text-[#C7D2FE]">
+          <div className="mt-1 text-xs font-mono text-[#C7D2FE]">
             Your file will be saved under {value} KB
           </div>
         </div>

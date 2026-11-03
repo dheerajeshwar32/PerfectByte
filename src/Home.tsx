@@ -23,52 +23,52 @@ export default function Home() {
     {
       id: 'target-compress',
       title: 'Target File Size',
-      desc: 'Compress an image or PDF to an exact byte size with micro-convergent precision. Built for strict portal limits.',
+      desc: 'Shrink any image or PDF to fit under strict portal and form upload limits.',
       path: '/target-size',
-      iconColor: 'text-blue-600 dark:text-blue-400',
-      glowColor: 'bg-blue-500',
+      iconColor: 'text-[#5268FF]',
+      glowColor: 'bg-[#5268FF]',
       badge: {
         icon: (
-          <svg className="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-3.5 h-3.5 text-[#5268FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
           </svg>
         ),
-        label: <span className="text-[11px] font-mono font-semibold tracking-wider text-slate-700 dark:text-slate-300 uppercase">100% LOCAL PROCESSING</span>
+        label: <span className="text-[11px] font-mono font-semibold tracking-wider text-[#2D325A] dark:text-[#F0F4FF] uppercase">100% PRIVATE • ON-DEVICE</span>
       },
       svg: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
     },
     {
       id: 'bulk-compress',
       title: 'Bulk Compression',
-      desc: 'Process entire folders of images instantly with zero network roundtrips. Concurrently optimized in browser WASM.',
+      desc: 'Compress dozens of photos at once in seconds without losing visual quality.',
       path: '/bulk-compress',
-      iconColor: 'text-teal-600 dark:text-teal-400',
-      glowColor: 'bg-teal-500',
+      iconColor: 'text-[#5268FF]',
+      glowColor: 'bg-[#5268FF]',
       badge: {
         icon: (
-          <svg className="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-3.5 h-3.5 text-[#5268FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
           </svg>
         ),
-        label: <span className="text-[11px] font-mono font-semibold tracking-wider text-slate-700 dark:text-slate-300 uppercase">ZERO-SERVER RUNTIME</span>
+        label: <span className="text-[11px] font-mono font-semibold tracking-wider text-[#2D325A] dark:text-[#F0F4FF] uppercase">100% PRIVATE • ON-DEVICE</span>
       },
       svg: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
     },
     {
       id: 'ai-assistant',
-      title: 'AI File Assistant',
-      desc: 'Type natural language instructions—"compress PDF to 100KB" or "remove margins"—powered by Gemini AI.',
+      title: 'AI Command Center',
+      desc: 'Type what you want to do in plain English and let AI handle the settings.',
       path: '/assistant',
-      iconColor: 'text-purple-600 dark:text-purple-400',
-      glowColor: 'bg-purple-500',
+      iconColor: 'text-[#5268FF]',
+      glowColor: 'bg-[#5268FF]',
       badge: {
         icon: (
-          <svg className="w-3.5 h-3.5 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <svg className="w-3.5 h-3.5 text-[#5268FF]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M12 2L15 9L22 12L15 15L12 22L9 15L2 12L9 9L12 2Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         ),
         label: (
-          <span className="text-[11px] font-mono font-semibold tracking-wider text-slate-700 dark:text-slate-300 uppercase">
+          <span className="text-[11px] font-mono font-semibold tracking-wider text-[#2D325A] dark:text-[#F0F4FF] uppercase">
             GEMINI ENGINE
           </span>
         )
@@ -78,51 +78,51 @@ export default function Home() {
     {
       id: 'format-converter',
       title: 'Format Converter',
-      desc: 'Convert seamlessly between WebP, PNG, JPEG, and AVIF formats entirely client-side using native SIMD WASM.',
+      desc: 'Convert seamlessly between WebP, PNG, JPEG, and AVIF formats entirely on your device.',
       path: '/convert',
-      iconColor: 'text-cyan-600 dark:text-cyan-400',
-      glowColor: 'bg-cyan-500',
+      iconColor: 'text-[#5268FF]',
+      glowColor: 'bg-[#5268FF]',
       badge: {
         icon: (
-          <svg className="w-3.5 h-3.5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-3.5 h-3.5 text-[#5268FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
           </svg>
         ),
-        label: <span className="text-[11px] font-mono font-semibold tracking-wider text-slate-700 dark:text-slate-300 uppercase">MULTI-FORMAT CODECS</span>
+        label: <span className="text-[11px] font-mono font-semibold tracking-wider text-[#2D325A] dark:text-[#F0F4FF] uppercase">MULTI-FORMAT CODECS</span>
       },
       svg: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
     },
     {
       id: 'image-resizer',
       title: 'Image Resizer',
-      desc: 'Resize images by pixel dimensions or scale percentage while maintaining perfect aspect ratios.',
+      desc: 'Resize images to exact pixel dimensions or ready-made social media presets.',
       path: '/resize',
-      iconColor: 'text-rose-600 dark:text-rose-400',
-      glowColor: 'bg-rose-500',
+      iconColor: 'text-[#5268FF]',
+      glowColor: 'bg-[#5268FF]',
       badge: {
         icon: (
-          <svg className="w-3.5 h-3.5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-3.5 h-3.5 text-[#5268FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
           </svg>
         ),
-        label: <span className="text-[11px] font-mono font-semibold tracking-wider text-slate-700 dark:text-slate-300 uppercase">PIXEL-PERFECT SCALING</span>
+        label: <span className="text-[11px] font-mono font-semibold tracking-wider text-[#2D325A] dark:text-[#F0F4FF] uppercase">PIXEL-PERFECT SCALING</span>
       },
       svg: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
     },
     {
       id: 'pdf-tools',
       title: 'PDF Studio',
-      desc: 'Merge, split, compress, and manipulate PDF documents locally with zero privacy compromises.',
+      desc: 'Combine multiple PDFs or extract specific pages into a single clean document.',
       path: '/pdf-tools',
-      iconColor: 'text-orange-600 dark:text-orange-400',
-      glowColor: 'bg-orange-500',
+      iconColor: 'text-[#5268FF]',
+      glowColor: 'bg-[#5268FF]',
       badge: {
         icon: (
-          <svg className="w-3.5 h-3.5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-3.5 h-3.5 text-[#5268FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
         ),
-        label: <span className="text-[11px] font-mono font-semibold tracking-wider text-slate-700 dark:text-slate-300 uppercase">LOCAL PDF MANIPULATION</span>
+        label: <span className="text-[11px] font-mono font-semibold tracking-wider text-[#2D325A] dark:text-[#F0F4FF] uppercase">LOCAL PDF MANIPULATION</span>
       },
       svg: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
     }
@@ -275,40 +275,40 @@ export default function Home() {
                 onClick={() => {
                   if (!isActive) setActiveIndex(index);
                 }}
-                className={`relative overflow-hidden bg-white/70 dark:bg-[#151A36] backdrop-blur-3xl p-5 sm:p-6 md:p-10 rounded-3xl md:rounded-[2.5rem] border ${
+                className={`relative overflow-hidden bg-[radial-gradient(120%_100%_at_85%_15%,#E8F0FE_0%,#F6F9FF_45%,#FFFFFF_100%)] dark:bg-[radial-gradient(120%_100%_at_85%_15%,#1E264D_0%,#151A36_60%,#11152B_100%)] border border-[#DCE6FA] dark:border-[#262E5A] backdrop-blur-3xl p-5 sm:p-6 md:p-10 rounded-3xl md:rounded-[2.5rem] ${
                   isActive
-                    ? 'border-white/80 dark:border-[#252D58] shadow-[0_30px_60px_-15px_rgba(86,104,255,0.15)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.6)] ring-1 ring-[#5668FF]/20 cursor-default'
-                    : 'border-white/40 dark:border-[#252D58]/40 cursor-pointer shadow-none'
+                    ? 'shadow-[0_30px_60px_-15px_rgba(82,104,255,0.18)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.6)] ring-1 ring-[#5268FF]/30 cursor-default'
+                    : 'cursor-pointer shadow-none'
                 } flex flex-col items-start text-left transition-all duration-500 h-[360px] md:h-[420px] group`}
               >
                 {/* Soft ambient corner glow (Apple Frosted Glass Highlight) */}
                 <div
-                  className={`absolute -top-24 -right-24 w-64 h-64 rounded-full blur-[75px] pointer-events-none transition-opacity duration-700 ${
-                    isActive ? 'opacity-40 dark:opacity-35' : 'opacity-0'
-                  } ${tool.glowColor}`}
+                  className={`absolute -top-24 -right-24 w-64 h-64 rounded-full blur-[75px] pointer-events-none transition-opacity duration-700 bg-[#5268FF] ${
+                    isActive ? 'opacity-25 dark:opacity-20' : 'opacity-0'
+                  }`}
                 />
                 <div
-                  className={`absolute -top-12 -left-12 w-48 h-48 rounded-full blur-[50px] pointer-events-none transition-opacity duration-700 ${
-                    isActive ? 'opacity-25 dark:opacity-20' : 'opacity-0'
-                  } ${tool.glowColor}`}
+                  className={`absolute -top-12 -left-12 w-48 h-48 rounded-full blur-[50px] pointer-events-none transition-opacity duration-700 bg-[#5268FF] ${
+                    isActive ? 'opacity-15 dark:opacity-10' : 'opacity-0'
+                  }`}
                 />
 
                 <div className="relative z-10 w-full flex flex-col flex-grow">
                   <div
-                    className={`w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl flex items-center justify-center mb-5 md:mb-8 shadow-sm border border-slate-200/50 dark:border-white/10 bg-gradient-to-br from-white to-slate-50 dark:from-white/10 dark:to-white/5 transition-transform duration-500 ${
+                    className={`w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl flex items-center justify-center mb-5 md:mb-8 bg-white dark:bg-[#1B2244] text-[#5268FF] shadow-sm border border-[#E2E8F8] dark:border-[#2B3566] transition-transform duration-500 ${
                       isActive ? 'scale-100' : 'scale-95'
-                    } ${tool.iconColor}`}
+                    }`}
                   >
                     <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       {tool.svg}
                     </svg>
                   </div>
 
-                  <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-slate-900 dark:text-white mb-2 md:mb-4">
+                  <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[#2D325A] dark:text-[#F0F4FF] mb-2 md:mb-4">
                     {tool.title}
                   </h2>
 
-                  <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base font-light leading-relaxed line-clamp-3 md:line-clamp-none">
+                  <p className="text-slate-600 dark:text-slate-300 text-sm md:text-base font-normal leading-relaxed line-clamp-3 md:line-clamp-none">
                     {tool.desc}
                   </p>
                 </div>
@@ -318,17 +318,17 @@ export default function Home() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="relative z-10 w-full flex items-center justify-between mt-auto pt-4 md:pt-6 border-t border-slate-200/60 dark:border-white/10 group/btn cursor-pointer bg-transparent"
+                    className="relative z-10 w-full flex items-center justify-between mt-auto pt-4 md:pt-6 border-t border-[#E2E8F8] dark:border-[#262E5A] group/btn cursor-pointer bg-transparent"
                     aria-label={`Open ${tool.title}`}
                     onClick={(e) => {
                       e.stopPropagation();
                       navigate(tool.path);
                     }}
                   >
-                    <span className="text-[11px] font-mono font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider group-hover/btn:text-[#5668FF] transition-colors">
-                      LAUNCH WORKSPACE →
+                    <span className="text-xs font-bold tracking-wider text-[#2D325A] dark:text-[#F0F4FF] uppercase group-hover/btn:text-[#5268FF] transition-colors">
+                      OPEN TOOL
                     </span>
-                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/20 border border-slate-200/60 dark:border-white/10 flex items-center justify-center text-slate-700 dark:text-slate-200 transition-all duration-300 group-hover/btn:translate-x-1 shadow-xs">
+                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-[#5268FF] to-[#2D325A] text-white shadow-[0_6px_16px_rgba(82,104,255,0.35)] flex items-center justify-center transition-all duration-300 group-hover/btn:scale-105 group-hover/btn:translate-x-1">
                       <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                       </svg>

@@ -274,7 +274,7 @@ export default function TargetCompressor() {
 
   // ─── Left Canvas Stage (7 Columns) ───
   const canvasContent = (
-    <div className="flex flex-col w-full h-full min-h-[460px] justify-center items-center gap-4">
+    <div className="flex flex-col w-full h-auto md:h-full md:min-h-[460px] justify-center items-center gap-4">
       {result && (
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 dark:bg-white/[0.06] font-mono text-xs border border-slate-200 dark:border-white/10 shadow-xs animate-fade-in">
           <span className="text-slate-400 line-through">{formatBytes(result.originalSize)}</span>
