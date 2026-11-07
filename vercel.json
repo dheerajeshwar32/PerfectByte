@@ -1,10 +1,44 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    },
+    {
+      "source": "/ai-catalog.json",
+      "headers": [
+        { "key": "Content-Type", "value": "application/json; charset=utf-8" }
+      ]
+    },
+    {
+      "source": "/llms.txt",
+      "headers": [
+        { "key": "Content-Type", "value": "text/markdown; charset=utf-8" }
+      ]
+    },
+    {
+      "source": "/robots.txt",
+      "headers": [
+        { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
+      ]
+    },
+    {
+      "source": "/sitemap.xml",
+      "headers": [
+        { "key": "Content-Type", "value": "application/xml; charset=utf-8" }
+      ]
+    }
+  ],
   "rewrites": [
     {
-      "source": "/((?!api/.*).*)",
+      "source": "/((?!assets/|robots\\.txt|llms\\.txt|ai-catalog\\.json|\\.well-known/|sitemap\\.xml|manifest\\.webmanifest|registerSW\\.js|sw\\.js|workbox-.*\\.js|favicon\\.svg|pwa-.*\\.png|og-image\\.png).*)",
       "destination": "/index.html"
     }
   ]
 }
-

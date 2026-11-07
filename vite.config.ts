@@ -7,6 +7,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      injectRegister: 'script-defer',
       includeAssets: ['favicon.svg', 'pwa-192x192.png', 'pwa-512x512.png'],
       manifest: {
         name: 'PerfectByte | Zero Compromise Compression',
@@ -49,5 +50,19 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024
       }
     })
-  ]
+  ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/pdf-lib') || id.includes('node_modules/@pdf-lib')) {
+            return 'pdf-lib';
+          }
+          if (id.includes('node_modules/lucide-react')) {
+            return 'lucide-icons';
+          }
+        }
+      }
+    }
+  }
 });

@@ -252,7 +252,7 @@ export default function Home() {
           } else if (isRight) {
             xOffset = "75%"; scale = 0.85; zIndex = 10; opacity = 0.3; blur = "blur(8px)";
           } else {
-            xOffset = "0%"; scale = 0.7; zIndex = 0; opacity = 0; blur = "blur(10px)";
+            xOffset = "0%"; scale = 0.7; zIndex = 0; opacity = 0; blur = "none";
           }
 
           return (
@@ -262,7 +262,7 @@ export default function Home() {
               transition={{ type: "spring", stiffness: 260, damping: 25 }}
               className={`absolute w-full max-w-[345px] sm:max-w-[390px] md:max-w-[460px] mx-auto ${
                 isActive ? 'block' : 'hidden md:block'
-              }`}
+              } ${opacity === 0 ? 'pointer-events-none' : ''}`}
             >
               <div
                 onClick={() => {
@@ -272,7 +272,7 @@ export default function Home() {
                   isActive
                     ? 'shadow-[0_30px_60px_-15px_rgba(82,104,255,0.18)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.6)] ring-1 ring-[#5268FF]/30 cursor-default'
                     : 'cursor-pointer shadow-none'
-                } flex flex-col items-start text-left transition-all duration-500 h-[360px] md:h-[420px] group`}
+                } flex flex-col items-start text-left transition-[transform,opacity] duration-500 will-change-[transform,opacity] h-[360px] md:h-[420px] group`}
               >
                 {/* Soft ambient corner glow (Apple Frosted Glass Highlight) */}
                 <div
@@ -321,7 +321,7 @@ export default function Home() {
                     <span className="text-xs font-bold tracking-wider text-[#2D325A] dark:text-[#F0F4FF] uppercase group-hover/btn:text-[#5268FF] transition-colors">
                       OPEN TOOL
                     </span>
-                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-[#5268FF] to-[#2D325A] text-white shadow-[0_6px_16px_rgba(82,104,255,0.35)] flex items-center justify-center transition-all duration-300 group-hover/btn:scale-105 group-hover/btn:translate-x-1">
+                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-[#5268FF] to-[#2D325A] text-white shadow-[0_6px_16px_rgba(82,104,255,0.35)] flex items-center justify-center transition-transform duration-300 group-hover/btn:scale-105 group-hover/btn:translate-x-1">
                       <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                       </svg>
@@ -339,7 +339,7 @@ export default function Home() {
         <button
           onClick={handlePrev}
           aria-label="Previous tool"
-          className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white dark:bg-[#12182B] border border-slate-200 dark:border-white/10 shadow-sm flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:scale-105 transition-all active:scale-95 cursor-pointer"
+          className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white dark:bg-[#12182B] border border-slate-200 dark:border-white/10 shadow-sm flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:scale-105 transition-transform duration-200 active:scale-95 cursor-pointer"
         >
           <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
@@ -350,23 +350,28 @@ export default function Home() {
           {tools.map((tool, idx) => (
             <button
               key={tool.id}
-              onClick={() => setActiveIndex(idx)}
-              aria-label={`Jump to ${tool.title}`}
-              aria-selected={idx === activeIndex}
+              type="button"
               role="tab"
-              className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
-                idx === activeIndex
-                  ? 'w-8 bg-[#5668FF] shadow-[0_0_12px_rgba(86,104,255,0.4)]'
-                  : 'w-2.5 bg-slate-300/80 dark:bg-slate-700/80 hover:bg-slate-400 dark:hover:bg-slate-600'
-              }`}
-            />
+              aria-selected={idx === activeIndex}
+              aria-label={`Jump to ${tool.title}`}
+              onClick={() => setActiveIndex(idx)}
+              className="min-w-[28px] min-h-[28px] p-1.5 flex items-center justify-center rounded-full cursor-pointer focus:outline-none"
+            >
+              <span
+                className={`h-2.5 rounded-full transition-transform duration-300 ${
+                  idx === activeIndex
+                    ? 'w-8 bg-[#5268FF] shadow-[0_0_12px_rgba(86,104,255,0.4)]'
+                    : 'w-2.5 bg-slate-300/80 dark:bg-slate-700/80 hover:bg-slate-400 dark:hover:bg-slate-600'
+                }`}
+              />
+            </button>
           ))}
         </div>
 
         <button
           onClick={handleNext}
           aria-label="Next tool"
-          className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white dark:bg-[#12182B] border border-slate-200 dark:border-white/10 shadow-sm flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:scale-105 transition-all active:scale-95 cursor-pointer"
+          className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white dark:bg-[#12182B] border border-slate-200 dark:border-white/10 shadow-sm flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:scale-105 transition-transform duration-200 active:scale-95 cursor-pointer"
         >
           <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://schemas.ai-catalog.org/v1/catalog.json",
+  "version": "1.0",
+  "name": "PerfectByte",
+  "description": "Client-side WebAssembly image compression, resizing, and PDF manipulation platform with zero server uploads.",
+  "url": "https://perfectbyte.vercel.app",
+  "documentation": "https://perfectbyte.vercel.app/llms.txt",
+  "resources": [
+    {
+      "name": "Target File Size Compressor",
+      "type": "web-application",
+      "url": "https://perfectbyte.vercel.app/",
+      "description": "Shrink images and PDFs to an exact KB or MB limit locally in the browser."
+    },
+    {
+      "name": "LLMs Documentation",
+      "type": "documentation",
+      "url": "https://perfectbyte.vercel.app/llms.txt",
+      "description": "Markdown documentation of PerfectByte capabilities for AI agents."
+    }
+  ]
+}

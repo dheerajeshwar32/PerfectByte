@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://perfectbyte.vercel.app/sitemap.xml

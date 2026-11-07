@@ -20,8 +20,8 @@ const NotFound = lazy(() => import('./NotFound'));
 
 function LoadingSpinner() {
   return (
-    <div className="h-dvh flex items-center justify-center pb-canvas transition-colors">
-      <div className="w-8 h-8 border-4 border-zinc-300 dark:border-zinc-700 border-t-[#5668FF] rounded-full animate-spin" />
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#F6F8FC] dark:bg-[#0E1229] transition-colors">
+      <div className="w-8 h-8 border-4 border-slate-300 dark:border-slate-700 border-t-[#5268FF] rounded-full animate-spin" />
     </div>
   );
 }
@@ -51,12 +51,15 @@ function MainLayout() {
             <Routes location={location}>
               <Route path="/" element={<Home />} />
               <Route path="/target-size" element={<TargetCompressor />} />
+              <Route path="/compress" element={<TargetCompressor />} />
               <Route path="/bulk-compress" element={<BulkCompressor />} />
+              <Route path="/bulk" element={<BulkCompressor />} />
               <Route path="/assistant" element={<Assistant />} />
               <Route path="/history" element={<History />} />
               <Route path="/convert" element={<FormatConverter />} />
               <Route path="/resize" element={<ImageResizer />} />
               <Route path="/pdf-tools" element={<PdfTools />} />
+              <Route path="/pdf" element={<PdfTools />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

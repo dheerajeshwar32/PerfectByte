@@ -1,0 +1,13 @@
+# PerfectByte
+
+> PerfectByte is a 100% client-side, privacy-first file compression, image resizing, and PDF manipulation studio powered by in-browser WebAssembly and Gemini AI intent routing. Zero files are ever uploaded to external servers.
+
+## Core Tools
+
+- [PerfectByte Studio Home](https://perfectbyte.vercel.app/): Overview of all local-first file utilities.
+- [Target File Size Compressor](https://perfectbyte.vercel.app/compress): Compress images (JPEG, PNG, WebP) and PDFs to fit under an exact target byte/KB ceiling for government, exam, and university portals.
+- [Bulk Image Compression](https://perfectbyte.vercel.app/bulk): Batch-compress multiple images concurrently in local browser memory.
+- [PDF Studio](https://perfectbyte.vercel.app/pdf): Merge multiple PDF documents or split and extract specific pages losslessly.
+- [Precision Image Resizer](https://perfectbyte.vercel.app/resize): Resize images to custom pixel dimensions or standard social media and passport presets.
+- [AI Command Center](https://perfectbyte.vercel.app/assistant): Natural-language file manipulation powered by zero-knowledge metadata routing.
+- [Privacy & Security Architecture](https://perfectbyte.vercel.app/privacy): Technical documentation on client-side sandboxing and EXIF metadata scrubbing.
